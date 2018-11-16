@@ -86,9 +86,10 @@ class AirVisualCard extends HTMLElement {
           grid-row-end: 3;
           grid-column-start: 1;
           grid-column-end: 2;
-          padding: 20px;
+          padding: 50px;
           color: #B25826;
           background-color: #FE9B57;
+          border: 1px;
        }
   
        .aqi {
@@ -101,6 +102,7 @@ class AirVisualCard extends HTMLElement {
           text-align: center;
           color: #B25826; 
           margin: auto;
+          
         }
 
         .apl {
@@ -129,6 +131,10 @@ class AirVisualCard extends HTMLElement {
         }
 
         img {
+          display: block;
+          margin-left: auto;
+          margin-right: auto;
+          
         }
       `
       content.innerHTML = `
@@ -167,9 +173,9 @@ class AirVisualCard extends HTMLElement {
           <div class="grid-container">
             <div class="city">${city}</div>
             <div class="temp">${temp}º</div>
-            <div class="face"><img src="/local/icons/aqi_icons/ic-face-3-orange.svg"></img></div>  
+            <div class="face"><img src="/local/icons/aqi_icons/ic-face-3-orange.svg" height="75"></img></div>  
             <div class="aqi">
-              <div style="font-size:4vw;">126</div>
+              <div style="font-size:4vw;">${air_quality_index}</div>
               US AQI
             </div>
             <div class="apl">
