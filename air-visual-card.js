@@ -50,35 +50,38 @@ class AirVisualCard extends HTMLElement {
 
         .grid-container {
           display: grid;
-          grid-template-columns: auto auto 300px;
+          grid-template-columns: auto auto auto;
           grid-gap: 0;
           background-color: #FFA968;
           border: 1px solid white;
         }
 
-        .grid-container > div { 
-        }
-
         .city {
+
           grid-column-start: 1;
           grid-column-end: 3;
           text-align: left;
           background-color: #FFFFFF;
           color: #414141;
-          font-size: 38px;
-          padding: 15px 35px;  
+          font-size: 2em;
+          font-weight: 300;
+          height: .8em;
+          padding: .2em .2em;  
+      
         }
 
         .temp {
-          grid-row-start: 1;
-          grid-row-end: 2;
+
           grid-column-start: 3;
           grid-column-end: 4;
           background-color: #FFFFFF;
           text-align: right;
-          font-size: 30px;
+          font-size: 1.5em;
+          font-weight: 300;
           color: #414141;
-          padding: 15px 35px;
+          padding: .2em .2em;
+     
+          
         }
   
         .face {
@@ -86,10 +89,11 @@ class AirVisualCard extends HTMLElement {
           grid-row-end: 3;
           grid-column-start: 1;
           grid-column-end: 2;
-          padding: 50px;
+          
           color: #B25826;
           background-color: #FE9B57;
-          border: 1px;
+          width: 4em;
+      
        }
   
        .aqi {
@@ -97,11 +101,13 @@ class AirVisualCard extends HTMLElement {
           grid-row-end: 3;
           grid-column-start: 2;
           grid-column-end: 3;
-          padding: 30px;
+          padding: 0.3em 0.3em;
+          height: 5em;
           line-height: 1.1;
           text-align: center;
           color: #B25826; 
           margin: auto;
+      
           
         }
 
@@ -112,29 +118,32 @@ class AirVisualCard extends HTMLElement {
           grid-column-end: 4;
           text-align: center;
           line-height: 1;
-          padding: 25px 1px;
-          font-size: 2vw;
-          color: #B25826;
+          padding: .1em .1em;
+          font-size: 2em;
+          color: #B25826;         
           margin: auto;
+      
         }  
+
 
         button {
           float: center;
           border: 0;
-          padding: 10px 10px;
+          padding: .1em .1em;
           color: rgb(120, 120, 120);
           background-color: white;
           border-radius: 4px;
           color: #B25826;
-          font-weight: bold;
-          padding: 5px;          
+          font-weight: bold;        
         }
 
         img {
           display: block;
           margin-left: auto;
           margin-right: auto;
-          
+          height: auto;
+          width: auto;
+      
         }
       `
       content.innerHTML = `
@@ -172,10 +181,10 @@ class AirVisualCard extends HTMLElement {
         card_content += `
           <div class="grid-container">
             <div class="city">${city}</div>
-            <div class="temp">${temp}º</div>
-            <div class="face"><img src="/local/icons/aqi_icons/ic-face-3-orange.svg" height="75"></img></div>  
+            <div class="temp">${temp}ºF</div>
+            <div class="face"><img src="/local/icons/aqi_icons/ic-face-3-orange.svg"></img></div>  
             <div class="aqi">
-              <div style="font-size:4vw;">${air_quality_index}</div>
+              <div style="font-size:3em;">${air_quality_index}</div>
               US AQI
             </div>
             <div class="apl">
