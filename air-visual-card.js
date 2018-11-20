@@ -57,7 +57,6 @@ class AirVisualCard extends HTMLElement {
         }
 
         .city {
-
           grid-column-start: 1;
           grid-column-end: 3;
           text-align: left;
@@ -66,22 +65,18 @@ class AirVisualCard extends HTMLElement {
           font-size: 2em;
           font-weight: 300;
           height: .8em;
-          padding: .2em .2em;  
-      
+          padding: .2em .2em;      
         }
 
         .temp {
-
           grid-column-start: 3;
           grid-column-end: 4;
           background-color: #FFFFFF;
           text-align: right;
-          font-size: 1.5em;
+          font-size: 1.7em;
           font-weight: 300;
           color: #414141;
-          padding: .2em .2em;
-     
-          
+          padding: .2em .2em;       
         }
   
         .face {
@@ -89,14 +84,23 @@ class AirVisualCard extends HTMLElement {
           grid-row-end: 3;
           grid-column-start: 1;
           grid-column-end: 2;
-          
+          justify-items: center;
+          align-items: center;
+          display: grid;        
           color: #B25826;
           background-color: #FE9B57;
-          width: 4em;
-      
-       }
+          width: 4em;      
+        }
+
+        .face img {
+          display: block;
+          margin-left: auto;
+          margin-right: auto;
+          height: auto;
+          width: auto;  
+        }
   
-       .aqi {
+        .aqi {
           grid-row-start: 2;
           grid-row-end: 3;
           grid-column-start: 2;
@@ -105,6 +109,8 @@ class AirVisualCard extends HTMLElement {
           height: 5em;
           line-height: 1.1;
           text-align: center;
+          justify-items: center;
+          align-items: center;
           color: #B25826; 
           margin: auto;
       
@@ -126,7 +132,7 @@ class AirVisualCard extends HTMLElement {
         }  
 
 
-        button {
+        .pollutant {
           float: center;
           border: 0;
           padding: .1em .1em;
@@ -134,17 +140,11 @@ class AirVisualCard extends HTMLElement {
           background-color: white;
           border-radius: 4px;
           color: #B25826;
+          font-size: 0.4em;
           font-weight: bold;        
         }
 
-        img {
-          display: block;
-          margin-left: auto;
-          margin-right: auto;
-          height: auto;
-          width: auto;
-      
-        }
+
       `
       content.innerHTML = `
       <div id='content'>
@@ -188,8 +188,10 @@ class AirVisualCard extends HTMLElement {
               US AQI
             </div>
             <div class="apl">
-              ${air_pollution_level}<br>
-              <button>${main_pollutant} | 00.0 µg/m³</button>
+              ${air_pollution_level}
+              <div class="pollutant">
+                ${main_pollutant} | 00.0 µg/m³
+              </div>
             </div>
           </div> 
         `
