@@ -1,7 +1,7 @@
 # Air-Visual-Card
 Home Assistant Lovelace card showing air quality data from AirVisual
 
-![example](images/example.jpg)
+![example](images/example.JPG)
 
 This is a Home Assistant Lovelace card that takes uses the [AirVisual Sensor](https://www.home-assistant.io/components/sensor.airvisual/) and creates a card like the ones found on [AirVisual website](https://www.airvisual.com). Requires the [AirVisual Sensor](https://www.home-assistant.io/components/sensor.airvisual/) to be setup.
 
