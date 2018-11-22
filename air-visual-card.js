@@ -221,7 +221,9 @@ class AirVisualCard extends HTMLElement {
         <div class="grid-container" style="background-color: ${AQIbgColor[getAQI()]};">
           <div class="city" style="background-color: #FFFFFF;">${city}</div>
           <div class="temp">${temp}</div>
-          <div class="face" style="background-color: ${AQIfaceColor[getAQI()]};"><img src="/local/icons/aqi_icons/ic-face-${getAQI()}.svg"></img></div>  
+          <div class="face" style="background-color: ${AQIfaceColor[getAQI()]};">
+            <ha-icon style="width: 4.5em; height: 4.5em;" icon="${ICON[getAQI()]}"></ha-icon>
+          </div>  
           <div class="aqi" style="background-color: ${AQIbgColor[getAQI()]}; color: ${AQIfontColor[getAQI()]}">
             <div style="font-size:3em;">${air_quality_index}</div>
             US AQI
