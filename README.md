@@ -2,7 +2,7 @@
 
 ![example](images/example.JPG)
 
-This is a Home Assistant Lovelace card that takes uses the [AirVisual Sensor](https://www.home-assistant.io/components/sensor.airvisual/) and creates a card like the ones found on [AirVisual website](https://www.airvisual.com). Requires the [AirVisual Sensor](https://www.home-assistant.io/components/sensor.airvisual/) to be setup.
+This is a Home Assistant Lovelace card that uses the [AirVisual Sensor](https://www.home-assistant.io/components/sensor.airvisual/) and creates a card like the ones found on [AirVisual website](https://www.airvisual.com). Requires the [AirVisual Sensor](https://www.home-assistant.io/components/sensor.airvisual/) to be setup.
 
 ## Features
   - Card colors and icons change depending on AQI level
@@ -12,11 +12,11 @@ This is a Home Assistant Lovelace card that takes uses the [AirVisual Sensor](ht
 
 | Name | Type | Default | Description
 | ---- | ---- | ------- | -----------
-| entity_air_pollution_level | string | **Required** | Name of the Air Pollution Level sensor created by Airvisual component.
-| entity_air_quality_index | string | **Required** | Name of the Air Quality Index sensor created by Airvisual component.
-| entity_main_pollutant | int | **Required** | Name of the Main Pollutant sensor created by Airvisual component.
-| entity_temp | string | '' | Name of the temperature sensor from a weather component, such as [Yahoo Weather Sensor](https://www.home-assistant.io/components/sensor.yweather/) 
-| city | string | '' | Name of the city that AirVisual is collecting AQI data from.
+| air_pollution_level | string | **Required** | Name of the Air Pollution Level sensor created by Airvisual component.
+| air_quality_index | string | **Required** | Name of the Air Quality Index sensor created by Airvisual component.
+| main_pollutant | int | **Required** | Name of the Main Pollutant sensor created by Airvisual component.
+| temp | string | | Name of the temperature sensor from a weather sensor, such as [Yahoo Weather Sensor](https://www.home-assistant.io/components/sensor.yweather/) 
+| city | string | **Required** | Name of the city that AirVisual is collecting AQI data from.
 
 
 ## Instructions
@@ -26,17 +26,17 @@ This is a Home Assistant Lovelace card that takes uses the [AirVisual Sensor](ht
 3. Include the card code in your `ui-lovelace-card.yaml`
 ```yaml
 resources:
-  - url: /local/air-visual-card.js?v=0
+  - url: /local/air-visual-card.js
     type: js
 ```
-4. Write configuration for the card in your `ui-lovelace.yaml` and add your sensor and Spotify media player.
+4. Write configuration for the card in your `ui-lovelace.yaml` and add your AirVisual sensors
 
 ```yaml
   - type: custom:air-visual-card
-    entity_air_pollution_level: sensor.us_air_pollution_level
-    entity_air_quality_index: sensor.us_air_quality_index
-    entity_main_pollutant: sensor.us_main_pollutant
-    entity_temp: sensor.yweather_temperature
+    air_pollution_level: sensor.us_air_pollution_level
+    air_quality_index: sensor.us_air_quality_index
+    main_pollutant: sensor.us_main_pollutant
+    temp: sensor.yweather_temperature
     city: 'San Francisco'
 ```
 
@@ -47,11 +47,10 @@ resources:
 
  
 ## Support
-I am studying Python as a hobby and this is my first public project. Unfortunately, I know nothing about Javascript and relied on studying other Lovelace custom cards to write this. Suggestions are welcome but no promises if I can fix anything! If you're familiar with CSS, then you can edit the CSS style in the .js file directly!
+I am studying programming as a hobby and this is my first set of Home Assistant projects. Unfortunately, I know nothing about Javascript and relied on studying other Lovelace custom cards to write this. Suggestions are welcome but no promises if I can fix anything! If you're familiar with CSS, then you can edit the CSS style in the .js file directly.
 
 ## Credits
-  - [Tracker-card](https://github.com/custom-cards/tracker-card) which I studied and re-used the button code.
-  - [@Arsaboo's Animated Weather card](https://github.com/arsaboo/homeassistant-config/blob/master/www/custom_ui/weather-card.js)
+  - [@Arsaboo's Animated Weather card](https://github.com/arsaboo/homeassistant-config/blob/master/www/custom_ui/weather-card.js) - Great resource to study from
   - [airvisual.com](https://www.airvisual.com/)
   - [Home Assistant Air Visual sensor](https://www.home-assistant.io/components/sensor.airvisual/)
 
