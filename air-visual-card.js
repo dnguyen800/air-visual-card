@@ -102,8 +102,7 @@ class AirVisualCard extends HTMLElement {
           height: 5em;
           line-height: 1.1;
           text-align: center;
-          justify-items: center;
-          align-items: center;           
+          justify-items: center;       
           margin: auto;         
         }
 
@@ -113,9 +112,9 @@ class AirVisualCard extends HTMLElement {
           grid-column-start: 3;
           grid-column-end: 4;
           text-align: center;
-          line-height: 1;
+          line-height: 1.5;
           padding: .1em .1em;
-          font-size: 2em;      
+          font-size: 1.8em;      
           margin: auto;    
         }  
 
