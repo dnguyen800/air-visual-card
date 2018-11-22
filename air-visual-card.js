@@ -55,11 +55,11 @@ class AirVisualCard extends HTMLElement {
           grid-column-start: 1;
           grid-column-end: 3;
           text-align: left;
-          text-indent: 0.5em;
+          text-indent: 0.3em;
           color: #414141;
-          font-size: 2em;
+          font-size: 1.8em;
           font-weight: 300;
-          height: .8em;
+          height: 1em;
           padding: .2em .2em;      
         }
 
@@ -82,14 +82,14 @@ class AirVisualCard extends HTMLElement {
           justify-items: center;
           align-items: center;
           display: grid;                  
-          width: 4em;      
+          width: 4.5em;      
         }
 
         .face img {
           display: block;
           margin-left: auto;
           margin-right: auto;
-          height: auto;
+          height: 4.5em;
           width: auto;  
         }
   
@@ -156,6 +156,39 @@ class AirVisualCard extends HTMLElement {
       const temp = hass.states[config.temp].state;
       const city = config.city;
 
+      const ICON = {
+        '1': 'mdi:emoticon-excited',
+        '2': 'mdi:emoticon-happy',
+        '3': 'mdi:emoticon-neutral',
+        '4': 'mdi:emoticon-sad',
+        '5': 'mdi:emoticon-poop',
+        '6': 'mdi:emoticon-dead'
+      };
+      const AQIbgColor = {
+        '1': `#A8E05F`,
+        '2': '#FDD74B',
+        '3': '#FE9B57',
+        '4': '#FE6A69',
+        '5': '#A97ABC',
+        '6': '#A87383',
+      }
+      const AQIfaceColor = {
+        '1': `#B0E867`,
+        '2': '#A57F23',
+        '3': '#E3C143',
+        '4': '#E48B4E',
+        '5': '#986EA9',
+        '6': '#986EA9',
+      }
+      const AQIfontColor = {
+        '1': `#718B3A`,
+        '2': '#A57F23',
+        '3': '#B25826',
+        '4': '#AF2C3B',
+        '5': '#634675',
+        '6': '#683E51',
+      }
+
       let card_content = ''
              
       if (air_pollution_level && air_quality_index && main_pollutant && city && temp) {
@@ -179,29 +212,13 @@ class AirVisualCard extends HTMLElement {
           }
         };
         
-        const AQIbgColor = {
-          '1': `#A8E05F`,
-          '2': '#FDD74B',
-          '3': '#FE9B57',
-          '4': '#FE6A69',
-          '5': '#A97ABC',
-          '6': '#A87383',
-        }
 
-        const AQIfontColor = {
-          '1': `#718B3A`,
-          '2': '#A57F23',
-          '3': '#B25826',
-          '4': '#AF2C3B',
-          '5': '#634675',
-          '6': '#683E51',
-        }
 
         card_content += `
           <div class="grid-container" style="background-color: ${AQIbgColor[getAQI()]};">
             <div class="city" style="background-color: #FFFFFF;">${city}</div>
-            <div class="temp">${temp}ºF</div>
-            <div class="face" style="background-color: ${AQIbgColor[getAQI()]};"><img src="/local/icons/aqi_icons/ic-face-${getAQI()}.svg"></img></div>  
+            <div class="temp">${temp}º</div>
+            <div class="face" style="background-color: ${AQIfaceColor[getAQI()]};"><img src="/local/icons/aqi_icons/ic-face-${getAQI()}.svg"></img></div>  
             <div class="aqi" style="background-color: ${AQIbgColor[getAQI()]}; color: ${AQIfontColor[getAQI()]}">
               <div style="font-size:3em;">${air_quality_index}</div>
               US AQI
@@ -209,7 +226,7 @@ class AirVisualCard extends HTMLElement {
             <div class="apl" style="background-color: ${AQIbgColor[getAQI()]}; color: ${AQIfontColor[getAQI()]}">
               ${air_pollution_level}
               <div class="pollutant">
-                ${main_pollutant} | 00.0 µg/m³
+                ${main_pollutant}
               </div>
             </div>
           </div> 
