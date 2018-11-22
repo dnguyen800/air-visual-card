@@ -1,4 +1,4 @@
-# Air-Visual-Card
+# Air Visual Card
 
 ![example](images/example.JPG)
 
