@@ -42,6 +42,7 @@ resources:
     temp: weather.yweather
     city: 'San Francisco'
 ```
+5. Restart Home Assistant to load the card.
 
 ## FAQ
  - The card doesn't show the temperature properly
