@@ -6,21 +6,21 @@ class AirVisualCard extends HTMLElement {
     }
   
     setConfig(config) {
-      if (!config.air_pollution_level) {
+      if (!config.air_pollution_level || config.air_pollution_level.split('.')[0] !== 'sensor') {
         throw new Error("Please include the 'air pollution level' sensor.");
       }
-      if (!config.air_quality_index) {
+      if (!config.air_quality_index || config.air_quality_index.split('.')[0] !== 'sensor')  {
         throw new Error("Please include the 'air quality index' sensor.");
       }
-      if (!config.main_pollutant) {
+      if (!config.main_pollutant || config.main_pollutant.split('.')[0] !== 'sensor')  {
         throw new Error("Please include the 'main pollutant' sensor.");
       }
       if (!config.city) {
-        throw new Error("Please list the city.");
+        config.city = '';
       }
 
       if (!config.temp) {
-        throw new Error("Please include a weather temperature sensor.");
+        config.temp = '';
       }
       
       const root = this.shadowRoot;
@@ -28,7 +28,7 @@ class AirVisualCard extends HTMLElement {
   
       const cardConfig = Object.assign({}, config);
       if (!cardConfig.title) {
-        cardConfig.title = `Quote of the Day`;
+        cardConfig.title = `Air Quality Index`;
       } 
     
       const card = document.createElement('ha-card');
@@ -118,7 +118,6 @@ class AirVisualCard extends HTMLElement {
           margin: auto;    
         }  
 
-
         .pollutant {
           float: center;
           border: 0;
@@ -151,10 +150,8 @@ class AirVisualCard extends HTMLElement {
       this.myhass = hass;
       const air_pollution_level = hass.states[config.air_pollution_level].state;
       const air_quality_index = hass.states[config.air_quality_index].state;
-      const main_pollutant = hass.states[config.main_pollutant].state;
-      const temp = hass.states[config.temp].state;
-      const city = config.city;
-
+      const main_pollutant = hass.states[config.main_pollutant].state;  
+      const city = config.city || '';
       const ICON = {
         '1': 'mdi:emoticon-excited',
         '2': 'mdi:emoticon-happy',
@@ -188,51 +185,57 @@ class AirVisualCard extends HTMLElement {
         '6': '#683E51',
       }
 
-      let card_content = ''
-             
-      if (air_pollution_level && air_quality_index && main_pollutant && city && temp) {
-        let getAQI = function () {
-          var AQIlevel = ``;
-          switch (true) {
-            case (air_quality_index < 50):
-              return AQIlevel = '1';
-            case (air_quality_index < 100):
-              return AQIlevel = '2';
-            case (air_quality_index < 150):
-              return AQIlevel = '3';
-            case (air_quality_index < 200):
-              return AQIlevel = '4';
-            case (air_quality_index < 300):
-              return AQIlevel = '5';
-            case (air_quality_index < 9999):
-              return AQIlevel = '6';
-            default:
-              return AQIlevel = '1';
-          }
-        };
+      let temp = ''
+      if (config.temp.split('.')[0] == 'sensor') {
+        temp = hass.states[config.temp].state;
+        temp += 'º';
+
+      }
+      else if (config.temp.split('.')[0] == 'weather') {
+        temp = hass.states[config.temp].attributes['temperature'];     
+        temp += 'º';  
+      }
         
-
-
-        card_content += `
-          <div class="grid-container" style="background-color: ${AQIbgColor[getAQI()]};">
-            <div class="city" style="background-color: #FFFFFF;">${city}</div>
-            <div class="temp">${temp}º</div>
-            <div class="face" style="background-color: ${AQIfaceColor[getAQI()]};"><img src="/local/icons/aqi_icons/ic-face-${getAQI()}.svg"></img></div>  
-            <div class="aqi" style="background-color: ${AQIbgColor[getAQI()]}; color: ${AQIfontColor[getAQI()]}">
-              <div style="font-size:3em;">${air_quality_index}</div>
-              US AQI
-            </div>
-            <div class="apl" style="background-color: ${AQIbgColor[getAQI()]}; color: ${AQIfontColor[getAQI()]}">
-              ${air_pollution_level}
-              <div class="pollutant">
-                ${main_pollutant}
-              </div>
-            </div>
-          </div> 
-        `
+      let getAQI = function () {
+        var AQIlevel = ``;
+        switch (true) {
+          case (air_quality_index < 50):
+            return AQIlevel = '1';
+          case (air_quality_index < 100):
+            return AQIlevel = '2';
+          case (air_quality_index < 150):
+            return AQIlevel = '3';
+          case (air_quality_index < 200):
+            return AQIlevel = '4';
+          case (air_quality_index < 300):
+            return AQIlevel = '5';
+          case (air_quality_index < 9999):
+            return AQIlevel = '6';
+          default:
+            return AQIlevel = '1';
+        }
       };
-      root.lastChild.hass = hass;
-      root.getElementById('content').innerHTML = card_content;      
+
+      let card_content = ''
+      card_content += `
+        <div class="grid-container" style="background-color: ${AQIbgColor[getAQI()]};">
+          <div class="city" style="background-color: #FFFFFF;">${city}</div>
+          <div class="temp">${temp}</div>
+          <div class="face" style="background-color: ${AQIfaceColor[getAQI()]};"><img src="/local/icons/aqi_icons/ic-face-${getAQI()}.svg"></img></div>  
+          <div class="aqi" style="background-color: ${AQIbgColor[getAQI()]}; color: ${AQIfontColor[getAQI()]}">
+            <div style="font-size:3em;">${air_quality_index}</div>
+            US AQI
+          </div>
+          <div class="apl" style="background-color: ${AQIbgColor[getAQI()]}; color: ${AQIfontColor[getAQI()]}">
+            ${air_pollution_level}
+            <div class="pollutant">
+              ${main_pollutant}
+            </div>
+          </div>
+        </div> 
+      `      
+    root.lastChild.hass = hass;
+    root.getElementById('content').innerHTML = card_content;      
     }
     getCardSize() {
       return 1;
