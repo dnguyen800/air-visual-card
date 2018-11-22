@@ -21,6 +21,7 @@ This is a Home Assistant Lovelace card that uses the [AirVisual Sensor](https://
 
 ## Instructions
 1. Install the [AirVisual sensor](https://www.home-assistant.io/components/sensor.airvisual/) and confirm AQI, APL, and Main Pollutant sensors are created, like below.
+
 ![sensors](images/airvisual_sensors.JPG)
 
 1. Download the [AirVisual Card](https://raw.githubusercontent.com/dnguyen800/Air-Visual-Card/master/air-visual-card.js)
