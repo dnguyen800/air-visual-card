@@ -112,7 +112,7 @@ class AirVisualCard extends HTMLElement {
           grid-column-start: 3;
           grid-column-end: 4;
           text-align: center;
-          line-height: 1.5;
+          line-height: 1;
           padding: .1em .1em;
           font-size: 1.8em;      
           margin: auto;    
@@ -170,11 +170,11 @@ class AirVisualCard extends HTMLElement {
       }
       const AQIfaceColor = {
         '1': `#B0E867`,
-        '2': '#A57F23',
-        '3': '#E3C143',
-        '4': '#E48B4E',
+        '2': '#E3C143',
+        '3': '#E48B4E',
+        '4': '#E45F5E',
         '5': '#986EA9',
-        '6': '#986EA9',
+        '6': '#A5516B',
       }
       const AQIfontColor = {
         '1': `#718B3A`,
@@ -230,6 +230,7 @@ class AirVisualCard extends HTMLElement {
           </div>
           <div class="apl" style="background-color: ${AQIbgColor[getAQI()]}; color: ${AQIfontColor[getAQI()]}">
             ${air_pollution_level}
+            <br>
             <div class="pollutant">
               ${main_pollutant}
             </div>
