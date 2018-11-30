@@ -1,4 +1,4 @@
-# Air-Visual-Card
+# Air Visual Card
 
 ![example](images/example.JPG)
 
@@ -42,6 +42,7 @@ resources:
     temp: weather.yweather
     city: 'San Francisco'
 ```
+5. Restart Home Assistant to load the card.
 
 ## FAQ
  - The card doesn't show the temperature properly
@@ -57,7 +58,7 @@ resources:
 I am studying programming as a hobby and this is my first set of Home Assistant projects. Unfortunately, I know nothing about Javascript and relied on studying other Lovelace custom cards to write this. Suggestions are welcome but no promises if I can fix anything! If you're familiar with CSS, then you can edit the CSS style in the .js file directly.
 
 ## Credits
-  - [@Arsaboo's Animated Weather card](https://github.com/arsaboo/homeassistant-config/blob/master/www/custom_ui/weather-card.js) - Great resource to study from
-  - [airvisual.com](https://www.airvisual.com/)
+  - All the custom HA cards and components I studied from, including [@Arsaboo's Animated Weather card](https://github.com/arsaboo/homeassistant-config/blob/master/www/custom_ui/weather-card.js) and [Mini Media Player](https://github.com/kalkih/mini-media-player)
+  - [airvisual.com](https://www.airvisual.com/) - For the card design and data
   - [Home Assistant Air Visual sensor](https://www.home-assistant.io/components/sensor.airvisual/)
 
