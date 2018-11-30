@@ -185,17 +185,40 @@ class AirVisualCard extends HTMLElement {
         '6': '#683E51',
       }
 
-      let temp = ''
+      const weatherIcons = {
+        'clear-night': 'mdi:weather-night',
+        'cloudy': 'mdi:weather-cloudy',
+        'fog': 'mdi:weather-fog',
+        'hail': 'mdi:weather-hail',
+        'lightning': 'mdi:weather-lightning',
+        'lightning-rainy': 'mdi:weather-lightning-rainy',
+        'partlycloudy': 'mdi:weather-partlycloudy',
+        'pouring': 'mdi:weather-pouring',
+        'rainy': 'mdi:weather-rainy',
+        'snowy': 'mdi:weather-snowy',
+        'snowy-rainy': 'mdi:weather-snowy-rainy',
+        'sunny': 'mdi:weather-sunny',
+        'windy': 'mdi:weather-windy',
+        'windy-variant': `mdi:weather-windy-variant`,
+        'exceptional': '!!',
+      }
+
+      
+      let currentCondition = '';
+      let temp = '';
       if (config.temp.split('.')[0] == 'sensor') {
         temp = hass.states[config.temp].state;
         temp += 'º';
-
       }
       else if (config.temp.split('.')[0] == 'weather') {
         temp = hass.states[config.temp].attributes['temperature'];     
         temp += 'º';  
+        currentCondition = hass.states[config.temp].state;
       }
         
+
+
+
       let getAQI = function () {
         var AQIlevel = ``;
         switch (true) {
@@ -217,10 +240,11 @@ class AirVisualCard extends HTMLElement {
       };
 
       let card_content = ''
+      
       card_content += `
         <div class="grid-container" style="background-color: ${AQIbgColor[getAQI()]};">
           <div class="city" style="background-color: #FFFFFF;">${city}</div>
-          <div class="temp">${temp}</div>
+          <div class="temp"><ha-icon icon="${weatherIcons[currentCondition]}"></ha-icon>   ${temp}</div>
           <div class="face" style="background-color: ${AQIfaceColor[getAQI()]};">
             <ha-icon style="color:${AQIfontColor[getAQI()]}; width: 4.5em; height: 4.5em;" icon="${ICON[getAQI()]}"></ha-icon>
           </div>  
