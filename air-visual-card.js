@@ -59,7 +59,6 @@ class AirVisualCard extends HTMLElement {
           color: #414141;
           font-size: 1.8em;
           font-weight: 300;
-          height: 1em;
           padding: .2em .2em;      
         }
 
