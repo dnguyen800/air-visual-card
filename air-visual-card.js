@@ -19,6 +19,10 @@ class AirVisualCard extends HTMLElement {
         config.city = '';
       }
 
+      if (!config.svg_location) {
+        config.svg_location = 'default';
+      }
+
       if (!config.temp) {
         config.temp = '';
       }
@@ -59,7 +63,6 @@ class AirVisualCard extends HTMLElement {
           color: #414141;
           font-size: 1.8em;
           font-weight: 300;
-          height: 1em;
           padding: .2em .2em;      
         }
 
@@ -151,8 +154,9 @@ class AirVisualCard extends HTMLElement {
       const air_pollution_level = hass.states[config.air_pollution_level].state;
       const air_quality_index = hass.states[config.air_quality_index].state;
       const main_pollutant = hass.states[config.main_pollutant].state;  
+      const svg_location = config.svg_location;
       const city = config.city || '';
-      const ICON = {
+      const faceIcon = {
         '1': 'mdi:emoticon-excited',
         '2': 'mdi:emoticon-happy',
         '3': 'mdi:emoticon-neutral',
@@ -205,6 +209,7 @@ class AirVisualCard extends HTMLElement {
 
       
       let currentCondition = '';
+      let faceHTML = '';
       let temp = '';
       if (config.temp.split('.')[0] == 'sensor') {
         temp = hass.states[config.temp].state;
@@ -239,14 +244,21 @@ class AirVisualCard extends HTMLElement {
         }
       };
 
-      let card_content = ''
-      
+      if (config.svg_location != 'default') {
+        faceHTML = `<img src="${svg_location}/ic-face-${getAQI()}.svg"></img>`;
+      }
+      else {
+        faceHTML = `<ha-icon style="color:${AQIfontColor[getAQI()]}; width: 4.5em; height: 4.5em;" icon="${faceIcon[getAQI()]}"></ha-icon>`;
+      }
+
+      let card_content = ''     
       card_content += `
         <div class="grid-container" style="background-color: ${AQIbgColor[getAQI()]};">
           <div class="city" style="background-color: #FFFFFF;">${city}</div>
           <div class="temp"><ha-icon icon="${weatherIcons[currentCondition]}"></ha-icon>   ${temp}</div>
-          <div class="face" style="background-color: ${AQIfaceColor[getAQI()]};">
-            <ha-icon style="color:${AQIfontColor[getAQI()]}; width: 4.5em; height: 4.5em;" icon="${ICON[getAQI()]}"></ha-icon>
+          <div class="face" style="background-color: ${AQIfaceColor[getAQI()]};">`
+      card_content += faceHTML;
+      card_content += `
           </div>  
           <div class="aqi" style="background-color: ${AQIbgColor[getAQI()]}; color: ${AQIfontColor[getAQI()]}">
             <div style="font-size:3em;">${air_quality_index}</div>
