@@ -25,7 +25,6 @@ This is a Home Assistant Lovelace card that uses the [AirVisual Sensor](https://
 | main_pollutant | string | **Required** | Name of the Main Pollutant sensor created by Airvisual component.
 | temp | string | Optional| Name of the temperature sensor or weather entity, such as 'weather.yweather' or 'sensor.yweather_temperature'
 | city | string | Optional | Name of the city that AirVisual is collecting AQI data from.
-
 | svg_location | string | Optional | The directory where the .svg files are located. For example, "svg_location: "/local/icons/aqi_icons" is appropriate. Files should be named as 'ic-face-1.svg,' 'ic-face-2.svg,', to 6.
 
 
