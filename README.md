@@ -6,8 +6,16 @@ This is a Home Assistant Lovelace card that uses the [AirVisual Sensor](https://
 
 ## Features
   - Card colors and icons change depending on AQI level
-  
-  
+
+
+
+## Releases
+
+- v0.0.3 - Added option to use AirVisual .svg files instead of MDI icons. See Options and Instructions for details.
+- v0.0.2 - Weather icon added next to temperature
+- v0.0.1 - Initial release
+
+
 ## Options
 
 | Name | Type | Default | Description
@@ -17,6 +25,8 @@ This is a Home Assistant Lovelace card that uses the [AirVisual Sensor](https://
 | main_pollutant | string | **Required** | Name of the Main Pollutant sensor created by Airvisual component.
 | temp | string | Optional| Name of the temperature sensor or weather entity, such as 'weather.yweather' or 'sensor.yweather_temperature'
 | city | string | Optional | Name of the city that AirVisual is collecting AQI data from.
+
+| svg_location | string | Optional | The directory where the .svg files are located. For example, "svg_location: "/local/icons/aqi_icons" is appropriate. Files should be named as 'ic-face-1.svg,' 'ic-face-2.svg,', to 6.
 
 
 ## Instructions
@@ -44,16 +54,27 @@ resources:
 ```
 5. Restart Home Assistant to load the card.
 
+6. **Optional:** If you wish to use the .svg icons found on airvisual.com, then download the icons [here](https://github.com/dnguyen800/Air-Visual-Card/tree/master/aqi_icons).
+
+7. Save the icons in a directory in Home Assistant, such as ''/local/icons/aqi_icons"
+
+8. Update the card configuration in `ui-lovelace.yaml`  to include the following (use directory name in step #7):
+
+   ```yaml
+    svg_location: "/local/icons/aqi_icons"
+   ```
+
+
 ## FAQ
  - The card doesn't show the temperature properly
   
    Let me know which weather provider you are using and I'll try to fix the issue. I have only tested with the Yahoo! Weather component. Optionally, if you create a template sensor that reports the temperature as its state, you can use that sensor as for the temp config.
- 
+
  - This card doesn't work in Fully Kiosk Browser on Amazon Fire tablets. Why?
 
    This card uses a new CSS function, CSS Grid Layout, which was implemented in October 2018, and isn't compatible with browsers using old versions of Android WebView. That's my guess anyways.
 
- 
+
 ## Support
 I am studying programming as a hobby and this is my first set of Home Assistant projects. Unfortunately, I know nothing about Javascript and relied on studying other Lovelace custom cards to write this. Suggestions are welcome but no promises if I can fix anything! If you're familiar with CSS, then you can edit the CSS style in the .js file directly.
 
