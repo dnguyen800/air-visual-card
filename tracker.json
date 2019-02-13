@@ -1,7 +1,7 @@
 {
     "air-visual-card": {
-      "updated_at": "2018-11-29",
-      "version": "0.0.2",
+      "updated_at": "2019-02-13",
+      "version": "0.0.3",
       "remote_location": "https://raw.githubusercontent.com/dnguyen800/Air-Visual-Card/master/air-visual-card.js",
       "visit_repo": "https://github.com/dnguyen800/Air-Visual-Card",
       "changelog": "https://github.com/dnguyen800/Air-Visual-Card/releases/latest"
