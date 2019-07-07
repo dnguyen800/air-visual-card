@@ -6,15 +6,6 @@ class AirVisualCard extends HTMLElement {
     }
   
     setConfig(config) {
-      if (!config.air_pollution_level || config.air_pollution_level.split('.')[0] !== 'sensor') {
-        throw new Error("Please include the 'air pollution level' sensor.");
-      }
-      if (!config.air_quality_index || config.air_quality_index.split('.')[0] !== 'sensor')  {
-        throw new Error("Please include the 'air quality index' sensor.");
-      }
-      if (!config.main_pollutant || config.main_pollutant.split('.')[0] !== 'sensor')  {
-        throw new Error("Please include the 'main pollutant' sensor.");
-      }
       if (!config.city) {
         config.city = '';
       }
@@ -151,9 +142,8 @@ class AirVisualCard extends HTMLElement {
       const root = this.shadowRoot;
       const card = root.lastChild;
       this.myhass = hass;
-      const air_pollution_level = hass.states[config.air_pollution_level].state;
-      const air_quality_index = hass.states[config.air_quality_index].state;
-      const main_pollutant = hass.states[config.main_pollutant].state;  
+
+
       const svg_location = config.svg_location;
       const city = config.city || '';
       const faceIcon = {
@@ -207,10 +197,21 @@ class AirVisualCard extends HTMLElement {
         'exceptional': '!!',
       }
 
-      
+      let air_pollution_level = '';
+      let air_quality_index = 'Unknown';
+      let main_pollutant = '';       
       let currentCondition = '';
       let faceHTML = '';
       let temp = '';
+      if (config.air_pollution_level) {
+        air_pollution_level = hass.states[config.air_pollution_level].state;
+      }
+      if (config.air_quality_index) {
+        air_quality_index = hass.states[config.air_quality_index].state;
+      }
+      if (config.main_pollutant) {
+        main_pollutant = hass.states[config.main_pollutant].state;
+      }
       if (config.temp.split('.')[0] == 'sensor') {
         temp = hass.states[config.temp].state;
         temp += 'º';
