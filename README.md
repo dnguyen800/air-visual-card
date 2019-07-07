@@ -8,14 +8,6 @@ This is a Home Assistant Lovelace card that uses the [AirVisual Sensor](https://
   - Card colors and icons change depending on AQI level
 
 
-
-## Releases
-
-- v0.0.3 - Added option to use AirVisual .svg files instead of MDI icons. See Options and Instructions for details.
-- v0.0.2 - Weather icon added next to temperature
-- v0.0.1 - Initial release
-
-
 ## Options
 
 | Name | Type | Default | Description
