@@ -25,7 +25,7 @@ This is a Home Assistant Lovelace card that uses the [AirVisual Sensor](https://
 
 ![sensors](images/airvisual_sensors.JPG)
 
-1. Download the [AirVisual Card](https://raw.githubusercontent.com/dnguyen800/Air-Visual-Card/master/air-visual-card.js)
+1. Download the [AirVisual Card](https://raw.githubusercontent.com/dnguyen800/air-visual-card/master/dist/air-visual-card.js)
 2. Place the file in your `config/www` folder
 3. Include the card code in the Resources section of your `ui-lovelace-card.yaml`
 ```yaml
