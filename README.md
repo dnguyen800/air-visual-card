@@ -45,7 +45,7 @@ resources:
 ```
 5. Restart Home Assistant to load the card.
 
-6. **Optional:** If you wish to use the .svg icons found on airvisual.com, then download the icons [here](https://github.com/dnguyen800/Air-Visual-Card/tree/master/aqi_icons).
+6. **Optional:** If you wish to use the .svg icons found on airvisual.com, then download the icons [here](https://github.com/dnguyen800/air-visual-card/tree/master/dist).
 
 7. Save the icons in a directory in Home Assistant, such as ''/local/icons/aqi_icons"
 
