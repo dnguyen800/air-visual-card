@@ -43,13 +43,22 @@ resources:
   - url: /local/air-visual-card.js
     type: js
 ```
+4. **Optional:** If you wish to store the Airvisual icons locally, then download the icons [here](https://github.com/dnguyen800/air-visual-card/tree/master/dist).
+
+5. Save the icons in a directory in Home Assistant, such as ''/local/icons/aqi_icons"
+
+6. Update the card configuration in `ui-lovelace.yaml`  to include the following (use directory name in step #7):
+
+   ```yaml
+    icons: "/local/icons/aqi_icons"
+   ```
 
 ## Instructions
 1. Install the [AirVisual sensor](https://www.home-assistant.io/components/sensor.airvisual/) and confirm AQI, APL, and Main Pollutant sensors are created, like below.
 
 ![sensors](images/airvisual_sensors.JPG)
 
-4. Write configuration for the card in your `ui-lovelace.yaml` and list your AirVisual sensors. An example is provided below:
+2. Write configuration for the card in your `ui-lovelace.yaml` and list your AirVisual sensors. An example is provided below:
 
 ```yaml
   - type: custom:air-visual-card
@@ -59,17 +68,7 @@ resources:
     temp: weather.dark_sky
     city: 'San Francisco'
 ```
-5. Restart Home Assistant to load the card.
-
-6. **Optional:** If you wish to store the Airvisual icons locally, then download the icons [here](https://github.com/dnguyen800/air-visual-card/tree/master/dist).
-
-7. Save the icons in a directory in Home Assistant, such as ''/local/icons/aqi_icons"
-
-8. Update the card configuration in `ui-lovelace.yaml`  to include the following (use directory name in step #7):
-
-   ```yaml
-    icons: "/local/icons/aqi_icons"
-   ```
+3. Restart Home Assistant to load the card.
 
 
 ## FAQ
