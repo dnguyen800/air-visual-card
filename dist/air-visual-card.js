@@ -1,3 +1,18 @@
+
+// From weather-card
+const fireEvent = (node, type, detail, options) => {
+  options = options || {};
+  detail = detail === null || detail === undefined ? {} : detail;
+  const event = new Event(type, {
+    bubbles: options.bubbles === undefined ? true : options.bubbles,
+    cancelable: Boolean(options.cancelable),
+    composed: options.composed === undefined ? true : options.composed
+  });
+  event.detail = detail;
+  node.dispatchEvent(event);
+  return event;
+};
+
 class AirVisualCard extends HTMLElement {
 
     constructor() {
@@ -5,6 +20,7 @@ class AirVisualCard extends HTMLElement {
       this.attachShadow({ mode: 'open' });
     }
   
+
     setConfig(config) {
       if (!config.city) {
         config.city = '';
@@ -209,7 +225,6 @@ class AirVisualCard extends HTMLElement {
       let mainPollutant = '';       
       let currentCondition = '';
       let temp = '';
-      let faceHTML = `<img src="${iconDirectory}/ic-face-${getAQI()}.svg"></img>`;     
 
       if (config.air_pollution_level.split('.')[0] == 'sensor') {
         airPollutionLevel = hass.states[config.air_pollution_level].state;
@@ -228,29 +243,31 @@ class AirVisualCard extends HTMLElement {
         temp = hass.states[config.temp].attributes['temperature'] + 'º';     
         currentCondition = hass.states[config.temp].state;
       }
-        
-
-
-
+ 
       let getAQI = function () {
         switch (true) {
-          case (air_quality_index < 50):
+          case (airQualityIndex < 50):
             return '1'; // return 1 to pull appropriate AQI icon filename ('ic-face-1.svg') in HTML
-          case (air_quality_index < 100):
+          case (airQualityIndex < 100):
             return '2';
-          case (air_quality_index < 150):
+          case (airQualityIndex < 150):
             return '3';
-          case (air_quality_index < 200):
+          case (airQualityIndex < 200):
             return '4';
-          case (air_quality_index < 300):
+          case (airQualityIndex < 300):
             return '5';
-          case (air_quality_index < 9999):
+          case (airQualityIndex < 9999):
             return '6';
           default:
             return '1';
         }
       };
 
+// figuring out click for more info code
+//      card.querySelector('aqi').addEventListener('click', event => {     
+//  fireEvent(this, "hass-more-info", { entityId: config.air_pollution_level });
+
+      let faceHTML = `<img src="${iconDirectory}/ic-face-${getAQI()}.svg"></img>`;     
 
 
 
@@ -264,15 +281,15 @@ class AirVisualCard extends HTMLElement {
       card_content += faceHTML;
       card_content += `
           </div>  
-          <div class="aqi" style="background-color: ${AQIbgColor[getAQI()]}; color: ${AQIfontColor[getAQI()]}">
-            <div style="font-size:3em;">${air_quality_index}</div>
+          <div class="aqi" id="aqi" style="background-color: ${AQIbgColor[getAQI()]}; color: ${AQIfontColor[getAQI()]}">
+            <div style="font-size:3em;">${airQualityIndex}</div>
             US AQI
           </div>
-          <div class="apl" style="background-color: ${AQIbgColor[getAQI()]}; color: ${AQIfontColor[getAQI()]}">
-            ${air_pollution_level}
+          <div class="apl" id="apl" style="background-color: ${AQIbgColor[getAQI()]}; color: ${AQIfontColor[getAQI()]}">
+            ${airPollutionLevel}
             <br>
-            <div class="pollutant">
-              ${main_pollutant}
+            <div class="pollutant" id="pollutant">
+              ${mainPollutant}
             </div>
           </div>
         </div> 
