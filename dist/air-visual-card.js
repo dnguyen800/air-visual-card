@@ -10,14 +10,22 @@ class AirVisualCard extends HTMLElement {
         config.city = '';
       }
 
-      if (!config.svg_location) {
-        config.svg_location = 'default';
+      if (!config.icons) {
+        config.icons = "https://cdn.jsdelivr.net/gh/dnguyen800/air-visual-card@0.0.4/dist";
       }
 
-      if (!config.temp) {
-        config.temp = '';
+      if (!config.air_pollution_level) {
+        config.air_pollution_level = '';
       }
-      
+
+      if (!config.air_quality_index) {
+        config.air_quality_index = '';
+      }
+      if (!config.main_pollutant) {
+        config.main_pollutant = '';
+      }
+
+
       const root = this.shadowRoot;
       if (root.lastChild) root.removeChild(root.lastChild);
   
@@ -143,8 +151,7 @@ class AirVisualCard extends HTMLElement {
       const card = root.lastChild;
       this.myhass = hass;
 
-
-      const svg_location = config.svg_location;
+      const iconDirectory = config.icons
       const city = config.city || '';
       const faceIcon = {
         '1': 'mdi:emoticon-excited',
@@ -197,28 +204,28 @@ class AirVisualCard extends HTMLElement {
         'exceptional': '!!',
       }
 
-      let air_pollution_level = '';
-      let air_quality_index = 'Unknown';
-      let main_pollutant = '';       
+      let airPollutionLevel = '';
+      let airQualityIndex = 'Unknown';
+      let mainPollutant = '';       
       let currentCondition = '';
-      let faceHTML = '';
       let temp = '';
-      if (config.air_pollution_level) {
-        air_pollution_level = hass.states[config.air_pollution_level].state;
-      }
-      if (config.air_quality_index) {
-        air_quality_index = hass.states[config.air_quality_index].state;
-      }
-      if (config.main_pollutant) {
-        main_pollutant = hass.states[config.main_pollutant].state;
-      }
+      let faceHTML = `<img src="${iconDirectory}/ic-face-${getAQI()}.svg"></img>`;     
+
+      if (config.air_pollution_level.split('.')[0] == 'sensor') {
+        airPollutionLevel = hass.states[config.air_pollution_level].state;
+      } else { airPollutionLevel = ''; }
+      if (config.air_quality_index.split('.')[0] == 'sensor') {
+        airQualityIndex = hass.states[config.air_quality_index].state;
+      } else { airQualityIndex = ''; }
+      if (config.main_pollutant.split('.')[0] == 'sensor') {
+        mainPollutant = hass.states[config.main_pollutant].state;
+      } else { mainPollutant = ''; }
       if (config.temp.split('.')[0] == 'sensor') {
-        temp = hass.states[config.temp].state;
-        temp += 'º';
+        temp = hass.states[config.temp].state + 'º';
+
       }
       else if (config.temp.split('.')[0] == 'weather') {
-        temp = hass.states[config.temp].attributes['temperature'];     
-        temp += 'º';  
+        temp = hass.states[config.temp].attributes['temperature'] + 'º';     
         currentCondition = hass.states[config.temp].state;
       }
         
@@ -226,31 +233,27 @@ class AirVisualCard extends HTMLElement {
 
 
       let getAQI = function () {
-        var AQIlevel = ``;
         switch (true) {
           case (air_quality_index < 50):
-            return AQIlevel = '1';
+            return '1'; // return 1 to pull appropriate AQI icon filename ('ic-face-1.svg') in HTML
           case (air_quality_index < 100):
-            return AQIlevel = '2';
+            return '2';
           case (air_quality_index < 150):
-            return AQIlevel = '3';
+            return '3';
           case (air_quality_index < 200):
-            return AQIlevel = '4';
+            return '4';
           case (air_quality_index < 300):
-            return AQIlevel = '5';
+            return '5';
           case (air_quality_index < 9999):
-            return AQIlevel = '6';
+            return '6';
           default:
-            return AQIlevel = '1';
+            return '1';
         }
       };
 
-      if (config.svg_location != 'default') {
-        faceHTML = `<img src="${svg_location}/ic-face-${getAQI()}.svg"></img>`;
-      }
-      else {
-        faceHTML = `<ha-icon style="color:${AQIfontColor[getAQI()]}; width: 4.5em; height: 4.5em;" icon="${faceIcon[getAQI()]}"></ha-icon>`;
-      }
+
+
+
 
       let card_content = ''     
       card_content += `
