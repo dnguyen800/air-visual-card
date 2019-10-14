@@ -64,10 +64,11 @@ class AirVisualCard extends HTMLElement {
           grid-column-end: 3;
           text-align: left;
           text-indent: 0.3em;
-          color: #414141;
           font-size: 1.8em;
           font-weight: 300;
-          padding: .2em .2em;      
+          padding: .2em .2em;    
+          background-color: var(--background-color); 
+          text-color: var(--text-color);  
         }
 
         .temp {
@@ -77,7 +78,8 @@ class AirVisualCard extends HTMLElement {
           text-align: right;
           font-size: 1.7em;
           font-weight: 300;
-          color: #414141;
+          background-color: var(--background-color); 
+          text-color: var(--text-color);  
           padding: .2em .2em;       
         }
   
@@ -257,7 +259,7 @@ class AirVisualCard extends HTMLElement {
       };
 
 
-      let faceHTML = `<img src="${iconDirectory}/ic-face-${getAQI()}.svg"></img>`;     
+      let faceHTML = ``;     
 
 
 
@@ -265,11 +267,10 @@ class AirVisualCard extends HTMLElement {
       let card_content = ''     
       card_content += `
         <div class="grid-container" style="background-color: ${AQIbgColor[getAQI()]};">
-          <div class="city" style="background-color: #FFFFFF;">${city}</div>
+          <div class="city">${city}</div>
           <div class="temp"><ha-icon icon="${weatherIcons[currentCondition]}"></ha-icon>   ${tempValue}</div>
-          <div class="face" id="face" style="background-color: ${AQIfaceColor[getAQI()]};">`
-      card_content += faceHTML;
-      card_content += `
+          <div class="face" id="face" style="background-color: ${AQIfaceColor[getAQI()]};">
+            <img src="${iconDirectory}/ic-face-${getAQI()}.svg"></img>
           </div>  
           <div class="aqiSensor" id="aqiSensor" style="background-color: ${AQIbgColor[getAQI()]}; color: ${AQIfontColor[getAQI()]}">
             <div style="font-size:3em;">${aqiSensor.value}</div>
@@ -283,7 +284,7 @@ class AirVisualCard extends HTMLElement {
             </div>
           </div>
         </div> 
-      `
+      `;
 
 
 
