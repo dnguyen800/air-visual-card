@@ -23,9 +23,8 @@ class AirVisualCard extends HTMLElement {
 
 
     setConfig(config) {
-      if (!config.city) {
-        config.city = '';
-      }
+
+      
 
       if (!config.icons) {
         config.icons = "https://cdn.jsdelivr.net/gh/dnguyen800/air-visual-card@0.0.4/dist";
@@ -35,9 +34,6 @@ class AirVisualCard extends HTMLElement {
       if (root.lastChild) root.removeChild(root.lastChild);
   
       const cardConfig = Object.assign({}, config);
-      if (!cardConfig.title) {
-        cardConfig.title = `Air Quality Index`;
-      } 
     
       const card = document.createElement('ha-card');
       const content = document.createElement('div');
@@ -142,9 +138,6 @@ class AirVisualCard extends HTMLElement {
       </div>
       `;
       
-      if (config.show_title) {
-        card.header = cardConfig.title;
-      }
       card.appendChild(content);
       card.appendChild(style);
       root.appendChild(card);
@@ -158,8 +151,9 @@ class AirVisualCard extends HTMLElement {
       const card = root.lastChild;
       this.myhass = hass;
 
-      const iconDirectory = config.icons
-      const city = config.city || '';
+      const hideTitle = config.hide_title ? 1 : 0;
+      const iconDirectory = config.icons ? config.icons : "https://cdn.jsdelivr.net/gh/dnguyen800/air-visual-card@0.0.4/dist";
+      const city = config.city ? config.city : '';
       // value is used as a string instead of integer in order for 
       const aqiSensor = { name: 'aqiSensor', config: config.air_quality_index || '', value: 0 };
       const aplSensor = { name: 'aplSensor', config: config.air_pollution_level || '', value: 0 };
@@ -260,15 +254,18 @@ class AirVisualCard extends HTMLElement {
 
 
       let faceHTML = ``;     
-
-
-
-
-      let card_content = ''     
-      card_content += `
+ 
+      let card_content = `
         <div class="grid-container" style="background-color: ${AQIbgColor[getAQI()]};">
-          <div class="city">${city}</div>
-          <div class="temp"><ha-icon icon="${weatherIcons[currentCondition]}"></ha-icon>   ${tempValue}</div>
+        `;
+      if (!hideTitle) {
+        card_content += `
+        <div class="city">${city}</div>
+        <div class="temp"><ha-icon icon="${weatherIcons[currentCondition]}"></ha-icon>   ${tempValue}</div>
+        `;
+      }
+
+      card_content += `
           <div class="face" id="face" style="background-color: ${AQIfaceColor[getAQI()]};">
             <img src="${iconDirectory}/ic-face-${getAQI()}.svg"></img>
           </div>  
