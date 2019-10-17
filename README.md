@@ -16,6 +16,7 @@ This is a Home Assistant Lovelace card that uses the [AirVisual Sensor](https://
 | air_quality_index | string | Optional | Name of the Air Quality Index sensor created by Airvisual component. If sensor does not exist, do not add this config value.
 | main_pollutant | string | Optional | Name of the Main Pollutant sensor created by Airvisual component. If sensor does not exist, do not add this config value.
 | temp | string | Optional| Name of the temperature sensor or weather entity, such as 'weather.yweather' or 'sensor.yweather_temperature'
+| country | string | Optional | Name of the country that Airvisual is collecting AQI data from.
 | city | string | Optional | Name of the city that AirVisual is collecting AQI data from.
 | hide_title | boolean | Optional | Select whether to hide the title that includes city name and temperature.
 | icons | string | Optional | The local directory where the .svg files are located. For example, "icons: "/local/icons/aqi_icons" is appropriate. If left blank, icons will be loaded from Jsdeliver CDN. 
