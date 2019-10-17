@@ -150,17 +150,22 @@ class AirVisualCard extends HTMLElement {
       const root = this.shadowRoot;
       const card = root.lastChild;
       this.myhass = hass;
-
+      
       const hideTitle = config.hide_title ? 1 : 0;
       const iconDirectory = config.icons ? config.icons : "https://cdn.jsdelivr.net/gh/dnguyen800/air-visual-card@0.0.4/dist";
-      const city = config.city ? config.city : '';
+      const country = config.country || 'US';
+      const city = config.city || '';
+      const tempSensor = config.temp || '';
       // value is used as a string instead of integer in order for 
       const aqiSensor = { name: 'aqiSensor', config: config.air_quality_index || '', value: 0 };
       const aplSensor = { name: 'aplSensor', config: config.air_pollution_level || '', value: 0 };
       const mainPollutantSensor = { name: 'mainPollutantSensor', config: config.main_pollutant || '', value: 0 };
       const airvisualSensorList = [aqiSensor, aplSensor, mainPollutantSensor];
+      const unitOfMeasurement = hass.states[aqiSensor.config].attributes['unit_of_measurement'] || 'AQI';
+      const pollutantUnit = hass.states[mainPollutantSensor.config].attributes['pollutant'] || 'µg/m³';
 
-      const tempSensor = config.temp || '';
+
+      debugger;
       const faceIcon = {
         '1': 'mdi:emoticon-excited',
         '2': 'mdi:emoticon-happy',
@@ -201,7 +206,7 @@ class AirVisualCard extends HTMLElement {
         'hail': 'mdi:weather-hail',
         'lightning': 'mdi:weather-lightning',
         'lightning-rainy': 'mdi:weather-lightning-rainy',
-        'partlycloudy': 'mdi:weather-partlycloudy',
+        'partlycloudy': 'mdi:weather-partly-cloudy',
         'pouring': 'mdi:weather-pouring',
         'rainy': 'mdi:weather-rainy',
         'snowy': 'mdi:weather-snowy',
@@ -271,13 +276,13 @@ class AirVisualCard extends HTMLElement {
           </div>  
           <div class="aqiSensor" id="aqiSensor" style="background-color: ${AQIbgColor[getAQI()]}; color: ${AQIfontColor[getAQI()]}">
             <div style="font-size:3em;">${aqiSensor.value}</div>
-            US AQI
+            ${country} ${unitOfMeasurement}
           </div>
           <div class="aplSensor" id="aplSensor" style="background-color: ${AQIbgColor[getAQI()]}; color: ${AQIfontColor[getAQI()]}">
             ${aplSensor.value}
             <br>
             <div class="mainPollutantSensor" id="mainPollutantSensor">
-              ${mainPollutantSensor.value}
+              ${mainPollutantSensor.value} | ${pollutantUnit}
             </div>
           </div>
         </div> 
