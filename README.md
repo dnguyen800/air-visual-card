@@ -74,7 +74,7 @@ resources:
 
 
 ## FAQ
- - The card doesn't show the temperature properly
+ - The card doesn't show the temperature properly.
   
    Let me know which weather provider you are using and I'll try to fix the issue. I have only tested with the Yahoo! Weather component. Optionally, if you create a template sensor that reports the temperature as its state, you can use that sensor as for the temp config.
 
@@ -82,6 +82,9 @@ resources:
 
    This card uses a new CSS function, CSS Grid Layout, which was implemented in October 2018, and isn't compatible with browsers using old versions of Android WebView. That's my guess anyways.
 
+ - The card is showing the word 'unavailable' instead of the AQI data!
+   
+   Most likely your Airvisual key expired (it has a one-year expiration) and needs to be recreated. Delete and recreate a new key on airvisual.com and save the key in your HA config file.
 
 ## Support
 I am studying programming as a hobby and this is my first set of Home Assistant projects. Unfortunately, I know nothing about Javascript and relied on studying other Lovelace custom cards to write this. Suggestions are welcome but no promises if I can fix anything! If you're familiar with CSS, then you can edit the CSS style in the .js file directly.
