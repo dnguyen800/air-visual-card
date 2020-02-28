@@ -14,27 +14,17 @@ const fireEvent = (node, type, detail, options) => {
 };
 
 class AirVisualCard extends HTMLElement {
-
     constructor() {
       super();
       this.attachShadow({ mode: 'open' });
     }
   
-
-
-    setConfig(config) {
-
-      
-
-      if (!config.icons) {
-        config.icons = "https://cdn.jsdelivr.net/gh/dnguyen800/air-visual-card@0.0.4/dist";
-      }
-
+    setConfig(config) {  
       const root = this.shadowRoot;
       if (root.lastChild) root.removeChild(root.lastChild);
   
-      const cardConfig = Object.assign({}, config);
-    
+      const cardConfig = Object.assign({}, config);   
+
       const card = document.createElement('ha-card');
       const content = document.createElement('div');
       const style = document.createElement('style');
@@ -152,7 +142,7 @@ class AirVisualCard extends HTMLElement {
       this.myhass = hass;
       
       const hideTitle = config.hide_title ? 1 : 0;
-      const iconDirectory = config.icons ? config.icons : "https://cdn.jsdelivr.net/gh/dnguyen800/air-visual-card@0.0.4/dist";
+      const iconDirectory = config.icons || "https://cdn.jsdelivr.net/gh/dnguyen800/air-visual-card@0.0.4/dist";
       const country = config.country || 'US';
       const city = config.city || '';
       const tempSensor = config.temp || '';
