@@ -69,7 +69,7 @@ resources:
     temp: weather.dark_sky
     city: 'San Francisco'
 ```
-3. Restart Home Assistant to load the card.
+3. Refresh Lovelace to load the card.
 
 
 ## FAQ
