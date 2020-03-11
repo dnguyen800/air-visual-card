@@ -1,4 +1,11 @@
 
+// UPDATE FOR EACH RELEASE!!! From aftership-card. Version # is hard-coded for now.
+console.info(
+  `%c  AIR-VISUAL-CARD  \n%c  Version 0.0.11   `,
+  'color: orange; font-weight: bold; background: black',
+  'color: white; font-weight: bold; background: dimgray',
+);
+
 // From weather-card
 const fireEvent = (node, type, detail, options) => {
   options = options || {};
