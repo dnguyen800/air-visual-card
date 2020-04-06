@@ -59,8 +59,9 @@ resources:
 
 ![sensors](images/airvisual_sensors.JPG)
 
-2. Write configuration for the card in your `ui-lovelace.yaml` and list your AirVisual sensors. An example is provided below:
+2. Write configuration for the card and list your AirVisual sensors. An examples is provided below:
 
+Direct editing within the YAML files (`ui-lovelace.yaml`)
 ```yaml
   - type: custom:air-visual-card
     air_pollution_level: sensor.us_air_pollution_level
@@ -69,6 +70,17 @@ resources:
     temp: weather.dark_sky
     city: 'San Francisco'
 ```
+
+Adding via the Lovelace UI Card Configuration
+```
+type: 'custom:air-visual-card'
+air_pollution_level: sensor.u_s_air_pollution_level_2
+air_quality_index: sensor.u_s_air_quality_index_2
+city: Moscow
+main_pollutant: sensor.u_s_main_pollutant_2
+temp: weather.home
+```
+
 3. Refresh Lovelace to load the card.
 
 
