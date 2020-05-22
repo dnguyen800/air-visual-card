@@ -18,22 +18,15 @@ This is a Home Assistant Lovelace card that uses the [AirVisual Sensor](https://
 | temp | string | Optional| Name of the temperature sensor or weather entity, such as 'weather.yweather' or 'sensor.yweather_temperature'
 | country | string | Optional | Name of the country that Airvisual is collecting AQI data from.
 | city | string | Optional | Name of the city that AirVisual is collecting AQI data from.
-| icons | string | Optional | The local directory where the .svg files are located. For example, 'icons: "/community_plugin/air-visual-card"' is appropriate if this plugin is installed using HACS. If left blank, icons will be loaded from Jsdeliver CDN. 
+| icons | string | Optional | The local directory where the .svg files are located. For example, 'icons: "/hacsfiles/air-visual-card"' is appropriate if this plugin is installed using HACS. If left blank, icons will be loaded from Jsdeliver CDN. 
 | hide_title | boolean | Optional | Set to `true` if you want to hide the title that includes the city name and weather. Useful for minimalists or those using dark themes.
 | weather | string | Optional | If temp field does not use a weather entity (such as 'sensor.yweather_temperature'), this attribute allows you to specify a weather state for displaying the appropiate icon on the card.
 
 ## HACS Installation
 1. Open the HACS on your Home Assistant instance.
-2. Go to **`Settings`**
-3. Under **`Custom Repositories`**, paste the following URL: *https://github.com/dnguyen800/air-visual-card*
-4. Under **`Type`**, select **`Plugin`** and click the **`Save`** icon.
-5. Click on **`Install`**, and be sure to include the following in your **`ui-lovelace.yaml`**.
+2. Open the Plugins section and click on the Air Visual Card.
+3. Click on Install, then click on "Add to Lovelace"
 
-```yaml
-- url: /community_plugin/air-visual-card/air-visual-card.js
-  type: js
-
-```
 ## Manual Installation
 1. Download the [AirVisual Card](https://raw.githubusercontent.com/dnguyen800/air-visual-card/master/dist/air-visual-card.js)
 2. Place the file in your `config/www` folder
@@ -59,26 +52,26 @@ resources:
 
 ![sensors](images/airvisual_sensors.JPG)
 
-2. Write configuration for the card and list your AirVisual sensors. An examples is provided below:
+2. Write configuration for the card and list your AirVisual sensors. MAKE SUREAn examples is provided below:
 
 Direct editing within the YAML files (`ui-lovelace.yaml`)
 ```yaml
-  - type: custom:air-visual-card
-    air_pollution_level: sensor.us_air_pollution_level
-    air_quality_index: sensor.us_air_quality_index
-    main_pollutant: sensor.us_main_pollutant
-    temp: weather.dark_sky
+  - type: 'custom:air-visual-card'
+    air_pollution_level: sensor.use_the_actual_name_of_your_sensor_not_this_example
+    air_quality_index: sensor.use_the_actual_name_of_your_sensor_not_this_example
+    main_pollutant: sensor.use_the_actual_name_of_your_sensor_not_this_example
+    temp: weather.use_the_actual_name_of_your_weather_entity_not_this_example
     city: 'San Francisco'
 ```
 
 Adding via the Lovelace UI Card Configuration
 ```
 type: 'custom:air-visual-card'
-air_pollution_level: sensor.u_s_air_pollution_level_2
-air_quality_index: sensor.u_s_air_quality_index_2
+air_pollution_level: sensor.use_the_actual_name_of_your_sensor_not_this_example
+air_quality_index: sensor.use_the_actual_name_of_your_sensor_not_this_example
 city: Moscow
-main_pollutant: sensor.u_s_main_pollutant_2
-temp: weather.home
+main_pollutant: sensor.use_the_actual_name_of_your_sensor_not_this_example
+temp: weather.use_the_actual_name_of_your_weather_entity_not_this_example
 ```
 
 3. Refresh Lovelace to load the card.
