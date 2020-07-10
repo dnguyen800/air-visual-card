@@ -68,7 +68,6 @@ class AirVisualCard extends HTMLElement {
         .temp {
           grid-column-start: 3;
           grid-column-end: 4;
-          background-color: #FFFFFF;
           text-align: right;
           font-size: 1.7em;
           font-weight: 300;
