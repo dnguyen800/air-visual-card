@@ -150,6 +150,8 @@ class AirVisualCard extends HTMLElement {
 
       const hideTitle = config.hide_title ? 1 : 0;
       const hideFace = config.hide_face ? 1 : 0;
+      const hideAQI = config.hide_aqi ? 1 : 0;
+      const hideAPL = config.hide_apl ? 1 : 0;
       const iconDirectory = config.icons || "https://cdn.jsdelivr.net/gh/dnguyen800/air-visual-card@0.0.4/dist";
       const country = config.country || 'US';
       const city = config.city || '';
@@ -160,7 +162,6 @@ class AirVisualCard extends HTMLElement {
       const aplSensor = { name: 'aplSensor', config: config.air_pollution_level || null, value: 0 };
       const mainPollutantSensor = { name: 'mainPollutantSensor', config: config.main_pollutant || null, value: 0 };
       const airvisualSensorList = [aqiSensor, aplSensor, mainPollutantSensor];
-      // const unitOfMeasurement = hass.states[aqiSensor.config].attributes['unit_of_measurement'] || 'AQI';
       const unitOfMeasurement = hass.states[aqiSensor.config] ? hass.states[aqiSensor.config].attributes['unit_of_measurement'] : 'AQI';
       const pollutantUnit = hass.states[mainPollutantSensor.config] ? hass.states[mainPollutantSensor.config].attributes['pollutant_unit'] : 'µg/m³';
 
@@ -274,26 +275,31 @@ class AirVisualCard extends HTMLElement {
         <div class="face" id="face" style="background-color: ${AQIfaceColor[getAQI()]};">
             <img src="${iconDirectory}/ic-face-${getAQI()}.svg"></img>
           </div>
-          `;
+        `;
       }
 
-      card_content += `
+      if (!hideAQI){
+        card_content += `
           <div class="aqiSensor" id="aqiSensor" style="background-color: ${AQIbgColor[getAQI()]}; color: ${AQIfontColor[getAQI()]}">
             <div style="font-size:3em;">${aqiSensor.value}</div>
             ${country} ${unitOfMeasurement}
           </div>
+        `;
+      }
+      if (!hideAPL){        
+        card_content += `
           <div class="aplSensor" id="aplSensor" style="background-color: ${AQIbgColor[getAQI()]}; color: ${AQIfontColor[getAQI()]}">
             ${aplSensor.value}
             <br>
             <div class="mainPollutantSensor" id="mainPollutantSensor">
               ${mainPollutantSensor.value} | ${pollutantUnit}
             </div>
-          </div>
-        </div> 
+          </div>     
+        `;
+      }
+      card_content += `
+      </div> 
       `;
-
-
-
 
 
       root.lastChild.hass = hass;
@@ -305,36 +311,19 @@ class AirVisualCard extends HTMLElement {
         fireEvent(this, "hass-more-info", { entityId: aqiSensor.config });
         });
       }
-      card.querySelector('#aqiSensor').addEventListener('click', event => {   // when selecting HTML id, do not use dash '-'
+      if (!hideAQI){
+        card.querySelector('#aqiSensor').addEventListener('click', event => {   // when selecting HTML id, do not use dash '-'
         fireEvent(this, "hass-more-info", { entityId: aqiSensor.config });
-      });
-      card.querySelector('#aplSensor').addEventListener('click', event => {   // when selecting HTML id, do not use dash '-'
-        fireEvent(this, "hass-more-info", { entityId: aplSensor.config });
-      });
-      card.querySelector('#mainPollutantSensor').addEventListener('click', event => {   // when selecting HTML id, do not use dash '-'  
-        fireEvent(this, "hass-more-info", { entityId: mainPollutantSensor.config });
-      });
-
-/* not working - it did work, once.
-      const sensorList = [aqiSensor, aplSensor, mainPollutantSensor];
-      sensorList.forEach(setOnClick);
-      function setOnClick(sensor, index, array) {
-        console.log(`let sensor in sensorList: ${sensor}`);
-        console.log(`sensor.name: ${sensor.name}`);
-        console.log(`sensor.config: ${sensor.config}`);
-
-        if (sensor.config.split('.')[0] == 'sensor') {
-          console.log('IF statement running!');
-          card.querySelector(`#${sensor.name}`).addEventListener('click', event => {   // when selecting HTML id, do not use dash '-'  
-            fireEvent(this, "hass-more-info", { entityId: aqiSensor.config });
-            console.log('on-click if statement ran!');
-          });
-        }
+        });
       }
-
-*/
-
-
+      if (!hideAPL){
+        card.querySelector('#aplSensor').addEventListener('click', event => {   // when selecting HTML id, do not use dash '-'
+          fireEvent(this, "hass-more-info", { entityId: aplSensor.config });
+        });
+        card.querySelector('#mainPollutantSensor').addEventListener('click', event => {   // when selecting HTML id, do not use dash '-'  
+          fireEvent(this, "hass-more-info", { entityId: mainPollutantSensor.config });
+        });
+      }
     }
 
     getCardSize() {
