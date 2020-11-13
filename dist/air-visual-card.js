@@ -25,12 +25,12 @@ class AirVisualCard extends HTMLElement {
       super();
       this.attachShadow({ mode: 'open' });
     }
-  
-    setConfig(config) {  
+
+    setConfig(config) {
       const root = this.shadowRoot;
       if (root.lastChild) root.removeChild(root.lastChild);
-  
-      const cardConfig = Object.assign({}, config);   
+
+      const cardConfig = Object.assign({}, config);
 
       const card = document.createElement('ha-card');
       const content = document.createElement('div');
@@ -40,7 +40,7 @@ class AirVisualCard extends HTMLElement {
         ha-card {
           /* sample css */
         }
-     
+
         body {
           margin: 0;
           font-family: Arial, Helvetica, sans-serif;
@@ -60,9 +60,9 @@ class AirVisualCard extends HTMLElement {
           text-indent: 0.3em;
           font-size: 1.8em;
           font-weight: 300;
-          padding: .2em .2em;    
-          background-color: var(--background-color); 
-          color: var(--text-color);  
+          padding: .2em .2em;
+          background-color: var(--background-color);
+          color: var(--text-color);
         }
 
         .temp {
@@ -71,11 +71,11 @@ class AirVisualCard extends HTMLElement {
           text-align: right;
           font-size: 1.7em;
           font-weight: 300;
-          background-color: var(--background-color); 
-          color: var(--text-color);  
-          padding: .2em .2em;       
+          background-color: var(--background-color);
+          color: var(--text-color);
+          padding: .2em .2em;
         }
-  
+
         .face {
           border-radius: 0px 0px 0px var(--ha-card-border-radius);
           grid-row-start: 2;
@@ -84,8 +84,8 @@ class AirVisualCard extends HTMLElement {
           grid-column-end: 2;
           justify-items: center;
           align-items: center;
-          display: grid;                  
-          width: 4.5em;      
+          display: grid;
+          width: 4.5em;
         }
 
         .face img {
@@ -93,9 +93,9 @@ class AirVisualCard extends HTMLElement {
           margin-left: auto;
           margin-right: auto;
           height: 4.5em;
-          width: auto;  
+          width: auto;
         }
-  
+
         .aqiSensor {
           grid-row-start: 2;
           grid-row-end: 3;
@@ -105,8 +105,8 @@ class AirVisualCard extends HTMLElement {
           height: 5em;
           line-height: 1.1;
           text-align: center;
-          justify-items: center;       
-          margin: auto;         
+          justify-items: center;
+          margin: auto;
         }
 
         .aplSensor {
@@ -117,38 +117,37 @@ class AirVisualCard extends HTMLElement {
           text-align: center;
           line-height: 1;
           padding: .1em .1em;
-          font-size: 1.8em;      
-          margin: auto;    
-        }  
+          font-size: 1.8em;
+          margin: auto;
+        }
 
         .mainPollutantSensor {
           float: center;
           border: 0;
-          padding: .1em .1em;         
+          padding: .1em .1em;
           background-color: white;
-          border-radius: 4px;       
+          border-radius: 4px;
           font-size: 0.4em;
-          font-weight: bold;        
+          font-weight: bold;
         }
       `
       content.innerHTML = `
       <div id='content'>
       </div>
       `;
-      
+
       card.appendChild(content);
       card.appendChild(style);
       root.appendChild(card);
       this._config = cardConfig;
     }
-  
- 
+
     set hass(hass) {
       const config = this._config;
       const root = this.shadowRoot;
       const card = root.lastChild;
       this.myhass = hass;
-      
+
       const hideTitle = config.hide_title ? 1 : 0;
       const hideFace = config.hide_face ? 1 : 0;
       const iconDirectory = config.icons || "https://cdn.jsdelivr.net/gh/dnguyen800/air-visual-card@0.0.4/dist";
@@ -215,7 +214,7 @@ class AirVisualCard extends HTMLElement {
         'windy-variant': `mdi:weather-windy-variant`,
         'exceptional': '!!',
       }
-   
+
       let currentCondition = '';
       let tempValue = '';
 
@@ -234,10 +233,10 @@ class AirVisualCard extends HTMLElement {
         tempValue = hass.states[tempSensor].state + 'º';
         if (weatherStatus !== '') { currentCondition = hass.states[weatherStatus].state };
       } else if (tempSensor.split('.')[0] == 'weather') {
-        tempValue = hass.states[tempSensor].attributes['temperature'] + 'º';     
+        tempValue = hass.states[tempSensor].attributes['temperature'] + 'º';
         currentCondition = hass.states[tempSensor].state;
-      } 
- 
+      }
+
       let getAQI = function () {
         switch (true) {
           case (aqiSensor.value <= 50):
@@ -258,8 +257,8 @@ class AirVisualCard extends HTMLElement {
       };
 
 
-      let faceHTML = ``;     
- 
+      let faceHTML = ``;
+
       let card_content = `
         <div class="grid-container" style="background-color: ${AQIbgColor[getAQI()]};">
         `;
@@ -298,19 +297,19 @@ class AirVisualCard extends HTMLElement {
 
 
       root.lastChild.hass = hass;
-      root.getElementById('content').innerHTML = card_content;      
+      root.getElementById('content').innerHTML = card_content;
 
       // hard-coded version of click event
       if (!hideFace){
-	      card.querySelector('#face').addEventListener('click', event => {   // when selecting HTML id, do not use dash '-'  
-	        fireEvent(this, "hass-more-info", { entityId: aqiSensor.config });
-	      });
+	      card.querySelector('#face').addEventListener('click', event => {   // when selecting HTML id, do not use dash '-'
+        fireEvent(this, "hass-more-info", { entityId: aqiSensor.config });
+        });
       }
-      card.querySelector('#aqiSensor').addEventListener('click', event => {   // when selecting HTML id, do not use dash '-'  
+      card.querySelector('#aqiSensor').addEventListener('click', event => {   // when selecting HTML id, do not use dash '-'
         fireEvent(this, "hass-more-info", { entityId: aqiSensor.config });
       });
-      card.querySelector('#aplSensor').addEventListener('click', event => {   // when selecting HTML id, do not use dash '-'  
-       fireEvent(this, "hass-more-info", { entityId: aplSensor.config });
+      card.querySelector('#aplSensor').addEventListener('click', event => {   // when selecting HTML id, do not use dash '-'
+        fireEvent(this, "hass-more-info", { entityId: aplSensor.config });
       });
       card.querySelector('#mainPollutantSensor').addEventListener('click', event => {   // when selecting HTML id, do not use dash '-'  
         fireEvent(this, "hass-more-info", { entityId: mainPollutantSensor.config });
@@ -323,8 +322,7 @@ class AirVisualCard extends HTMLElement {
         console.log(`let sensor in sensorList: ${sensor}`);
         console.log(`sensor.name: ${sensor.name}`);
         console.log(`sensor.config: ${sensor.config}`);
-  
-     
+
         if (sensor.config.split('.')[0] == 'sensor') {
           console.log('IF statement running!');
           card.querySelector(`#${sensor.name}`).addEventListener('click', event => {   // when selecting HTML id, do not use dash '-'  
@@ -332,7 +330,7 @@ class AirVisualCard extends HTMLElement {
             console.log('on-click if statement ran!');
           });
         }
-      }  
+      }
 
 */
 
@@ -343,5 +341,5 @@ class AirVisualCard extends HTMLElement {
       return 1;
     }
 }
-  
+
 customElements.define('air-visual-card', AirVisualCard);
