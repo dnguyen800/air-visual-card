@@ -152,7 +152,8 @@ class AirVisualCard extends HTMLElement {
       const hideFace = config.hide_face ? 1 : 0;
       const hideAQI = config.hide_aqi ? 1 : 0;
       const hideAPL = config.hide_apl ? 1 : 0;
-      const iconDirectory = config.icons || "https://cdn.jsdelivr.net/gh/dnguyen800/air-visual-card@0.0.4/dist";
+      // points to local directory created by HACS installation
+      const iconDirectory = config.icons || "/local/community/air-visual-card";
       const country = config.country || 'US';
       const city = config.city || '';
       const tempSensor = config.temp || '';
