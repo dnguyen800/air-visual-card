@@ -1,7 +1,7 @@
 
 // UPDATE FOR EACH RELEASE!!! From aftership-card. Version # is hard-coded for now.
 console.info(
-  `%c  AIR-VISUAL-CARD  \n%c  Version 0.0.11   `,
+  `%c  AIR-VISUAL-CARD  \n%c  Version 0.0.13   `,
   'color: orange; font-weight: bold; background: black',
   'color: white; font-weight: bold; background: dimgray',
 );
@@ -219,8 +219,8 @@ class AirVisualCard extends HTMLElement {
       let tempValue = '';
 
       airvisualSensorList.forEach(sensor => {
-        if (sensor.config.split('.')[0] == 'sensor') {
-          try {
+        if (sensor.config?.split('.')[0] == 'sensor') {
+          try { 
             sensor.value = hass.states[sensor.config].state;
           }
           catch(err) {
