@@ -220,7 +220,7 @@ class AirVisualCard extends HTMLElement {
       let tempValue = '';
 
       airvisualSensorList.forEach(sensor => {
-        if (sensor.config.split('.')[0] == 'sensor') {
+        if (sensor.config?.split('.')[0] == 'sensor') {
           try { 
             sensor.value = hass.states[sensor.config].state;
           }
