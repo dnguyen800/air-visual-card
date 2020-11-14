@@ -1,7 +1,10 @@
+// To study:
+// Plant Picture Card: https://github.com/badguy99/PlantPictureCard/blob/master/dist/PlantPictureCard.js
+
 
 // UPDATE FOR EACH RELEASE!!! From aftership-card. Version # is hard-coded for now.
 console.info(
-  `%c  AIR-VISUAL-CARD  \n%c  Version 0.0.13   `,
+  `%c  AIR-VISUAL-CARD  \n%c  Version 0.0.14   `,
   'color: orange; font-weight: bold; background: black',
   'color: white; font-weight: bold; background: dimgray',
 );
@@ -30,8 +33,11 @@ class AirVisualCard extends HTMLElement {
       const root = this.shadowRoot;
       if (root.lastChild) root.removeChild(root.lastChild);
 
-      const cardConfig = Object.assign({}, config);
+      const re = new RegExp("(sensor|weather)");
+      if (!re.test(config.air_quality_index.split('.')[0])) throw new Error('Please define a sensor or weather entity.');
 
+
+      const cardConfig = Object.assign({}, config);
       const card = document.createElement('ha-card');
       const content = document.createElement('div');
       const style = document.createElement('style');
@@ -146,7 +152,6 @@ class AirVisualCard extends HTMLElement {
       const config = this._config;
       const root = this.shadowRoot;
       const card = root.lastChild;
-      this.myhass = hass;
 
       const hideTitle = config.hide_title ? 1 : 0;
       const hideFace = config.hide_face ? 1 : 0;
@@ -162,9 +167,8 @@ class AirVisualCard extends HTMLElement {
       const aqiSensor = { name: 'aqiSensor', config: config.air_quality_index || null, value: 0 };
       const aplSensor = { name: 'aplSensor', config: config.air_pollution_level || null, value: 0 };
       const mainPollutantSensor = { name: 'mainPollutantSensor', config: config.main_pollutant || null, value: 0 };
-      const airvisualSensorList = [aqiSensor, aplSensor, mainPollutantSensor];
+      const sensorList = [aqiSensor, aplSensor, mainPollutantSensor];
       const unitOfMeasurement = hass.states[aqiSensor.config] ? hass.states[aqiSensor.config].attributes['unit_of_measurement'] : 'AQI';
-      const pollutantUnit = hass.states[mainPollutantSensor.config] ? hass.states[mainPollutantSensor.config].attributes['pollutant_unit'] : 'µg/m³';
 
       const faceIcon = {
         '1': 'mdi:emoticon-excited',
@@ -181,7 +185,7 @@ class AirVisualCard extends HTMLElement {
         '4': '#FE6A69',
         '5': '#A97ABC',
         '6': '#A87383',
-      }
+      };
       const AQIfaceColor = {
         '1': `#B0E867`,
         '2': '#E3C143',
@@ -189,7 +193,7 @@ class AirVisualCard extends HTMLElement {
         '4': '#E45F5E',
         '5': '#986EA9',
         '6': '#A5516B',
-      }
+      };
       const AQIfontColor = {
         '1': `#718B3A`,
         '2': '#A57F23',
@@ -197,7 +201,7 @@ class AirVisualCard extends HTMLElement {
         '4': '#AF2C3B',
         '5': '#634675',
         '6': '#683E51',
-      }
+      };
 
       const weatherIcons = {
         'clear-night': 'mdi:weather-night',
@@ -217,27 +221,36 @@ class AirVisualCard extends HTMLElement {
         'exceptional': '!!',
       }
 
+      // WAQI sensor-specific stuff
+      // AirVisual sensors have the APL description as part of the sensor state, but WAQI doesn't. These APL states will be used as backup if AirVisual sensors is not used.
+      const APLdescription = {
+        '1': 'Good',
+        '2': 'Moderate',
+        '3': 'Unhealthy for Sensitive Groups',
+        '4': 'Unhealthy',
+        '5': 'Very Unhealthy',
+        '6': 'Hazardous',
+      }
+      const pollutantUnitValue = {
+        'pm25': 'µg/m³',
+        'pm10': 'µg/m³',
+        'o3': 'ppb',
+        'no2': 'ppb',
+        'so2': 'ppb',
+      }
+      const mainPollutantValue = {
+        'pm25': 'PM2.5',
+        'pm10': 'PM10',
+        'o3': 'Ozone',
+        'no2': 'Nitrogen Dioxide',
+        'so2': 'Sulfur Dioxide',
+      }
+
       let currentCondition = '';
       let tempValue = '';
-
-      airvisualSensorList.forEach(sensor => {
-        if (sensor.config?.split('.')[0] == 'sensor') {
-          try { 
-            sensor.value = hass.states[sensor.config].state;
-          }
-          catch(err) {
-            console.log(`Error in sensor: ${sensor.name}`);
-          }
-        } else { sensor.value = 0; }
-      });
-
-      if (tempSensor.split('.')[0] == 'sensor') {
-        tempValue = hass.states[tempSensor].state + 'º';
-        if (weatherStatus !== '') { currentCondition = hass.states[weatherStatus].state };
-      } else if (tempSensor.split('.')[0] == 'weather') {
-        tempValue = hass.states[tempSensor].attributes['temperature'] + 'º';
-        currentCondition = hass.states[tempSensor].state;
-      }
+      let pollutantUnit = '';
+      let apl = '';
+      let mainPollutant = '';
 
       let getAQI = function () {
         switch (true) {
@@ -257,6 +270,47 @@ class AirVisualCard extends HTMLElement {
             return '1';
         }
       };
+
+      var i;
+      // Use this section to assign values (real or placeholder), after doing validation check
+      for (i = 0; i < sensorList.length; i++) {
+        if (typeof hass.states[sensorList[i].config] == "undefined") { continue; }            
+        // if Main Pollutant is an Airvisual sensor, else if if it is an WAQI sensor
+        if (typeof hass.states[mainPollutantSensor.config] != "undefined") {
+          if (typeof hass.states[mainPollutantSensor.config].attributes['pollutant_unit'] != "undefined") {
+            pollutantUnit = hass.states[mainPollutantSensor.config].attributes['pollutant_unit'];
+            mainPollutant = hass.states[mainPollutantSensor.config].state;
+          } else if (typeof hass.states[mainPollutantSensor.config].attributes['dominentpol'] != "undefined") {
+            pollutantUnit = pollutantUnitValue[hass.states[mainPollutantSensor.config].attributes['dominentpol']];
+            mainPollutant = mainPollutantValue[hass.states[mainPollutantSensor.config].attributes['dominentpol']];
+          } else {
+            pollutantUnit = 'pollutant unit';
+            mainPollutant = 'main pollutant';
+          }         
+        }
+        if (typeof hass.states[aqiSensor.config] != "undefined") {
+          aqiSensor.value = hass.states[aqiSensor.config].state;
+        }
+        // Check if APL is an WAQI sensor (because the state is an integer). Returns 'NaN' if it is not a number
+        if (typeof hass.states[aplSensor.config] != "undefined") {
+          if (parseInt(hass.states[aplSensor.config].state) != 'NaN') {
+            apl = APLdescription[getAQI()];      
+          } else {
+            apl = hass.states[aplSensor.config].state;
+          }
+        }
+      };
+
+
+      if (tempSensor.split('.')[0] == 'sensor') {
+        tempValue = hass.states[tempSensor].state + 'º';
+        if (weatherStatus !== '') { currentCondition = hass.states[weatherStatus].state };
+      } else if (tempSensor.split('.')[0] == 'weather') {
+        tempValue = hass.states[tempSensor].attributes['temperature'] + 'º';
+        currentCondition = hass.states[tempSensor].state;
+      }
+
+
 
 
       let faceHTML = ``;
@@ -290,10 +344,10 @@ class AirVisualCard extends HTMLElement {
       if (!hideAPL){        
         card_content += `
           <div class="aplSensor" id="aplSensor" style="background-color: ${AQIbgColor[getAQI()]}; color: ${AQIfontColor[getAQI()]}">
-            ${aplSensor.value}
+            ${apl}
             <br>
             <div class="mainPollutantSensor" id="mainPollutantSensor">
-              ${mainPollutantSensor.value} | ${pollutantUnit}
+              ${mainPollutant} | ${pollutantUnit}
             </div>
           </div>     
         `;
@@ -327,6 +381,8 @@ class AirVisualCard extends HTMLElement {
       }
     }
 
+    // The height of your card. Home Assistant uses this to automatically
+    // distribute all cards over the available columns.
     getCardSize() {
       return 1;
     }
