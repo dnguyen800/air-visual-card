@@ -1,3 +1,12 @@
+// Problems:
+// - Some code is refreshing all the time when it should be constant (e.g. APL value)
+
+// Notes:
+// WAQI sensor explanations:
+// w =  wind
+// wg = ? 
+// co = Carbon Dioxide
+// temp = temperature (in Celsius)
 
 // UPDATE FOR EACH RELEASE!!! From aftership-card. Version # is hard-coded for now.
 console.info(
@@ -148,6 +157,7 @@ class AirVisualCard extends HTMLElement {
       const card = root.lastChild;
       this.myhass = hass;
 
+      // this statement first tests that the user-defined value doesn't crash the code. If it doesn't crash it, then the variable is set to the user-defined value. If it does crash, the value is default to 'false'
       const hideTitle = config.hide_title ? 1 : 0;
       const hideFace = config.hide_face ? 1 : 0;
       const hideAQI = config.hide_aqi ? 1 : 0;
@@ -164,7 +174,16 @@ class AirVisualCard extends HTMLElement {
       const mainPollutantSensor = { name: 'mainPollutantSensor', config: config.main_pollutant || null, value: 0 };
       const airvisualSensorList = [aqiSensor, aplSensor, mainPollutantSensor];
       const unitOfMeasurement = hass.states[aqiSensor.config] ? hass.states[aqiSensor.config].attributes['unit_of_measurement'] : 'AQI';
-      const pollutantUnit = hass.states[mainPollutantSensor.config] ? hass.states[mainPollutantSensor.config].attributes['pollutant_unit'] : 'µg/m³';
+  
+      const waqiSensor = { 
+        name: 'waqiSensor', 
+        config: config.air_quality_index || null, 
+        aqiValue: 0, 
+        mainPollutant: 'main pollutant',
+        unitOfMeasurement: 'unit of measurement',
+        pollutantUnit: 'pollutant unit',
+      };
+
 
       const faceIcon = {
         '1': 'mdi:emoticon-excited',
@@ -217,9 +236,38 @@ class AirVisualCard extends HTMLElement {
         'exceptional': '!!',
       }
 
+      // WAQI sensor-specific stuff
+      // AirVisual sensors have the APL description as part of the sensor state, but WAQI doesn't. These APL states will be used as backup if AirVisual sensors is not used.
+      const APLdescription = {
+        '1': 'Good',
+        '2': 'Moderate',
+        '3': 'Unhealthy for Sensitive Groups',
+        '4': 'Unhealthy',
+        '5': 'Very Unhealthy',
+        '6': 'Hazardous',
+      }
+      const pollutantUnitValue = {
+        'pm25': 'µg/m³',
+        'pm10': 'µg/m³',
+        'o3': 'ppb',
+        'no2': 'ppb',
+        'so2': 'ppb',
+      }
+      const mainPollutantValue = {
+        'pm25': 'PM2.5',
+        'pm10': 'PM10',
+        'o3': 'Ozone',
+        'no2': 'Nitrogen Dioxide',
+        'so2': 'Sulfur Dioxide',
+      }
+
       let currentCondition = '';
       let tempValue = '';
+      let pollutantUnit = '';
+      let apl = '';
+      let mainPollutant = '';
 
+      // error handling to test the sensor listed in user config. Defaults to 0 if there is an error.
       airvisualSensorList.forEach(sensor => {
         if (sensor.config?.split('.')[0] == 'sensor') {
           try { 
@@ -227,10 +275,13 @@ class AirVisualCard extends HTMLElement {
           }
           catch(err) {
             console.log(`Error in sensor: ${sensor.name}`);
+            sensor.value = 0;
           }
         } else { sensor.value = 0; }
       });
 
+
+      // Detect whether the HA entity is a sensor or weather entity
       if (tempSensor.split('.')[0] == 'sensor') {
         tempValue = hass.states[tempSensor].state + 'º';
         if (weatherStatus !== '') { currentCondition = hass.states[weatherStatus].state };
@@ -258,6 +309,26 @@ class AirVisualCard extends HTMLElement {
         }
       };
 
+
+
+      
+      // Check if Main Pollutant is an Airvisual sensor and assign appropriate values based on the sensor's state and attributes
+      if (hass.states[mainPollutantSensor.config].attributes['pollutant_unit']) {
+        pollutantUnit = hass.states[mainPollutantSensor.config].attributes['pollutant_unit'];
+        mainPollutant = mainPollutantSensor.value;
+      //check if WAQI sensor  
+      } else if (hass.states[mainPollutantSensor.config].attributes['dominentpol']) {
+        pollutantUnit = pollutantUnitValue[hass.states[mainPollutantSensor.config].attributes['dominentpol']];
+        mainPollutant = mainPollutantValue[hass.states[mainPollutantSensor.config].attributes['dominentpol']];
+      } else {
+        pollutantUnit = 'µg/m³';
+      }
+      // Check if APL is an WAQI sensor (because the state is an integer). Returns 'NaN' if it is not a number
+      if (parseInt(aplSensor.value) != 'NaN') {
+        apl = APLdescription[getAQI()];      
+      } else {
+        apl = aplSensor.value;
+      }
 
       let faceHTML = ``;
 
@@ -290,10 +361,10 @@ class AirVisualCard extends HTMLElement {
       if (!hideAPL){        
         card_content += `
           <div class="aplSensor" id="aplSensor" style="background-color: ${AQIbgColor[getAQI()]}; color: ${AQIfontColor[getAQI()]}">
-            ${aplSensor.value}
+            ${apl}
             <br>
             <div class="mainPollutantSensor" id="mainPollutantSensor">
-              ${mainPollutantSensor.value} | ${pollutantUnit}
+              ${mainPollutant} | ${pollutantUnit}
             </div>
           </div>     
         `;
