@@ -20,6 +20,7 @@ This is a Home Assistant Lovelace card that uses the [AirVisual Sensor](https://
 | city | string | Optional | Name of the city that AirVisual is collecting AQI data from.
 | icons | string | Optional | The local directory where the .svg files are located. For example, 'icons: "/hacsfiles/air-visual-card"' is appropriate if this plugin is installed using HACS. If left blank, icons will be loaded from Jsdeliver CDN. 
 | hide_title | boolean | Optional | Set to `true` if you want to hide the title that includes the city name and weather. Useful for minimalists or those using dark themes.
+| hide_face | boolean | Optional | Set to `true` if you want to hide the face icon.
 | weather | string | Optional | If temp field does not use a weather entity (such as 'sensor.yweather_temperature'), this attribute allows you to specify a weather state for displaying the appropiate icon on the card.
 
 ## HACS Installation
