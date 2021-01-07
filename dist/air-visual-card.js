@@ -23,6 +23,8 @@ const fireEvent = (node, type, detail, options) => {
   return event;
 };
 
+let oldStates = {}
+
 class AirVisualCard extends HTMLElement {
     constructor() {
       super();
@@ -145,13 +147,35 @@ class AirVisualCard extends HTMLElement {
       card.appendChild(content);
       card.appendChild(style);
       root.appendChild(card);
+      oldStates = {}
       this._config = cardConfig;
+    }
+
+    shouldNotUpdate(config, hass) {
+      let clone = JSON.parse(JSON.stringify(config))
+      delete clone["city"]
+      delete clone["type"]
+      delete clone["icons"]
+      delete clone["hide_title"]
+      delete clone["hide_face"]
+      let states = {}
+      for (let entity of Object.values(clone)) {
+        states[entity] = hass.states[entity]
+      }
+      if (JSON.stringify(oldStates) === JSON.stringify(states)) {
+        return true
+      }
+      oldStates = states
+      return false
     }
 
     set hass(hass) {
       const config = this._config;
       const root = this.shadowRoot;
       const card = root.lastChild;
+      if (this.shouldNotUpdate(config, hass)) {
+        return 
+      }
 
       const hideTitle = config.hide_title ? 1 : 0;
       const hideFace = config.hide_face ? 1 : 0;
