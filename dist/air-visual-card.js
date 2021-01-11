@@ -194,14 +194,6 @@ class AirVisualCard extends HTMLElement {
       const sensorList = [aqiSensor, aplSensor, mainPollutantSensor];
       const unitOfMeasurement = hass.states[aqiSensor.config] ? hass.states[aqiSensor.config].attributes['unit_of_measurement'] : 'AQI';
 
-      const faceIcon = {
-        '1': 'mdi:emoticon-excited',
-        '2': 'mdi:emoticon-happy',
-        '3': 'mdi:emoticon-neutral',
-        '4': 'mdi:emoticon-sad',
-        '5': 'mdi:emoticon-poop',
-        '6': 'mdi:emoticon-dead'
-      };
       const AQIbgColor = {
         '1': `#A8E05F`,
         '2': '#FDD74B',
