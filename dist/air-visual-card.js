@@ -309,7 +309,8 @@ class AirVisualCard extends HTMLElement {
         }
         // Check if APL is an WAQI sensor (because the state is an integer). Returns 'NaN' if it is not a number
         if (typeof hass.states[aplSensor.config] != "undefined") {
-          if (parseInt(hass.states[aplSensor.config].state) != 'NaN') {
+          let aplParse = parseInt(hass.states[aplSensor.config].state)
+          if (!isNaN(aplParse)) {
             apl = APLdescription[getAQI()];      
           } else {
             apl = hass.states[aplSensor.config].state;
