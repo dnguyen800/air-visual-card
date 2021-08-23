@@ -406,3 +406,12 @@ class AirVisualCard extends HTMLElement {
 }
 
 customElements.define('air-visual-card', AirVisualCard);
+
+// Configure the preview in the Lovelace card picker
+window.customCards = window.customCards || [];
+window.customCards.push({
+  type: 'air-visual-card',
+  name: 'Air Visual Card',
+  preview: false,
+  description: 'This is a Home Assistant Lovelace card that uses the AirVisual Sensor to provide air quality index (AQI) data and creates a card like the ones found on AirVisual website. Requires the AirVisual Sensor to be setup. Tested with Yahoo and Darksky Weather component.'
+});
