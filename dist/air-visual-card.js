@@ -255,6 +255,7 @@ class AirVisualCard extends HTMLElement {
         'so2': 'ppb',
       }
       const mainPollutantValue = {
+        'p2': 'PM2.5',
         'pm25': 'PM2.5',
         'pm10': 'PM10',
         'o3': 'Ozone',
@@ -295,7 +296,9 @@ class AirVisualCard extends HTMLElement {
         if (typeof hass.states[mainPollutantSensor.config] != "undefined") {
           if (typeof hass.states[mainPollutantSensor.config].attributes['pollutant_unit'] != "undefined") {
             pollutantUnit = hass.states[mainPollutantSensor.config].attributes['pollutant_unit'];
-            mainPollutant = hass.states[mainPollutantSensor.config].state;
+            // workaround related to Github issue #48. Using hard-coded translation in dictionary mainPollutantValue.
+            //  mainPollutant = hass.states[mainPollutantSensor.config].state;
+            mainPollutant = mainPollutantValue[hass.states[mainPollutantSensor.config].state];
           } else if (typeof hass.states[mainPollutantSensor.config].attributes['dominentpol'] != "undefined") {
             pollutantUnit = pollutantUnitValue[hass.states[mainPollutantSensor.config].attributes['dominentpol']];
             mainPollutant = mainPollutantValue[hass.states[mainPollutantSensor.config].attributes['dominentpol']];
@@ -313,7 +316,10 @@ class AirVisualCard extends HTMLElement {
           if (!isNaN(aplParse)) {
             apl = APLdescription[getAQI()];      
           } else {
-            apl = hass.states[aplSensor.config].state;
+          // Commenting this out as workaround for Github issue #48. The sensor.u_s_air_pollution_level uses keys for translation so text doesn't look nice. 
+          // Relying on hard-coded English translation defined in APLdescription variable  
+          //  apl = hass.states[aplSensor.config].state;
+            apl = APLdescription[getAQI()];
           }
         }
       };
