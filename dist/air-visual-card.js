@@ -196,8 +196,8 @@ class AirVisualCard extends HTMLElement {
 
       const AQIbgColor = {
         '1': `#A8E05F`,
-        '2': '#FDD74B',
-        '3': '#FE9B57',
+        '2': '#FDD64B',
+        '3': '#FF9B57',
         '4': '#FE6A69',
         '5': '#A97ABC',
         '6': '#A87383',
