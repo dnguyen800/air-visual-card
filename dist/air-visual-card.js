@@ -4,7 +4,7 @@
 
 // UPDATE FOR EACH RELEASE!!! From aftership-card. Version # is hard-coded for now.
 console.info(
-  `%c  AIR-VISUAL-CARD  \n%c  Version 0.0.16   `,
+  `%c  AIR-VISUAL-CARD  \n%c  Version 0.0.19   `,
   'color: orange; font-weight: bold; background: black',
   'color: white; font-weight: bold; background: dimgray',
 );
