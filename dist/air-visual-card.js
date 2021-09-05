@@ -4,7 +4,7 @@
 
 // UPDATE FOR EACH RELEASE!!! From aftership-card. Version # is hard-coded for now.
 console.info(
-  `%c  AIR-VISUAL-CARD  \n%c  Version 0.0.16   `,
+  `%c  AIR-VISUAL-CARD  \n%c  Version 0.0.19   `,
   'color: orange; font-weight: bold; background: black',
   'color: white; font-weight: bold; background: dimgray',
 );
@@ -316,10 +316,8 @@ class AirVisualCard extends HTMLElement {
           if (!isNaN(aplParse)) {
             apl = APLdescription[getAQI()];      
           } else {
-          // Commenting this out as workaround for Github issue #48. The sensor.u_s_air_pollution_level uses keys for translation so text doesn't look nice. 
-          // Relying on hard-coded English translation defined in APLdescription variable  
-          //  apl = hass.states[aplSensor.config].state;
-            apl = APLdescription[getAQI()];
+            let aplState = hass.states[aplSensor.config].state;
+            apl = hass.localize("component.sensor.state.airvisual__pollutant_level." + aplState)
           }
         }
       };
