@@ -4,7 +4,7 @@
 
 // UPDATE FOR EACH RELEASE!!! From aftership-card. Version # is hard-coded for now.
 console.info(
-  `%c  AIR-VISUAL-CARD  \n%c  Version 0.0.19   `,
+  `%c  AIR-VISUAL-CARD  \n%c  Version 1.0.0   `,
   'color: orange; font-weight: bold; background: black',
   'color: white; font-weight: bold; background: dimgray',
 );
@@ -26,6 +26,18 @@ const fireEvent = (node, type, detail, options) => {
 let oldStates = {}
 
 class AirVisualCard extends HTMLElement {
+//  Placeholder for lovelace card editor
+//  static getConfigElement() {
+//    return document.createElement("air-visual-card-editor");
+//  }
+
+  static getStubConfig() {
+    return { air_pollution_level: "sensor.u_s_air_pollution_level",
+             air_quality_index: "sensor.u_s_air_quality_index",
+             main_pollutant: "sensor.u_s_main_pollutant"              
+    }
+  }
+
     constructor() {
       super();
       this.attachShadow({ mode: 'open' });
@@ -296,9 +308,8 @@ class AirVisualCard extends HTMLElement {
         if (typeof hass.states[mainPollutantSensor.config] != "undefined") {
           if (typeof hass.states[mainPollutantSensor.config].attributes['pollutant_unit'] != "undefined") {
             pollutantUnit = hass.states[mainPollutantSensor.config].attributes['pollutant_unit'];
-            // workaround related to Github issue #48. Using hard-coded translation in dictionary mainPollutantValue.
-            //  mainPollutant = hass.states[mainPollutantSensor.config].state;
-            mainPollutant = mainPollutantValue[hass.states[mainPollutantSensor.config].state];
+            let mainPollutantState = hass.states[mainPollutantSensor.config].state;
+            mainPollutant = hass.localize("component.sensor.state.airvisual__pollutant_label." + mainPollutantState);
           } else if (typeof hass.states[mainPollutantSensor.config].attributes['dominentpol'] != "undefined") {
             pollutantUnit = pollutantUnitValue[hass.states[mainPollutantSensor.config].attributes['dominentpol']];
             mainPollutant = mainPollutantValue[hass.states[mainPollutantSensor.config].attributes['dominentpol']];
@@ -412,6 +423,7 @@ class AirVisualCard extends HTMLElement {
 customElements.define('air-visual-card', AirVisualCard);
 
 // Configure the preview in the Lovelace card picker
+// https://developers.home-assistant.io/docs/frontend/custom-ui/lovelace-custom-card/
 window.customCards = window.customCards || [];
 window.customCards.push({
   type: 'air-visual-card',
