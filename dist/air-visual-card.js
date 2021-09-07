@@ -4,7 +4,7 @@
 
 // UPDATE FOR EACH RELEASE!!! From aftership-card. Version # is hard-coded for now.
 console.info(
-  `%c  AIR-VISUAL-CARD  \n%c  Version 1.0.0   `,
+  `%c  AIR-VISUAL-CARD  \n%c  Version 1.1.0   `,
   'color: orange; font-weight: bold; background: black',
   'color: white; font-weight: bold; background: dimgray',
 );
@@ -31,10 +31,17 @@ class AirVisualCard extends HTMLElement {
 //    return document.createElement("air-visual-card-editor");
 //  }
 
+  static async getConfigElement() {
+    await import("./air-visual-card-editor.js");
+    return document.createElement("air-visual-card-editor");
+  }
+
   static getStubConfig() {
     return { air_pollution_level: "sensor.u_s_air_pollution_level",
              air_quality_index: "sensor.u_s_air_quality_index",
-             main_pollutant: "sensor.u_s_main_pollutant"              
+             main_pollutant: "sensor.u_s_main_pollutant",
+             hide_title: 1,
+             hide_face: 0              
     }
   }
 
