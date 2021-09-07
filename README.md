@@ -98,4 +98,5 @@ I am studying programming as a hobby and this is my first set of Home Assistant 
   - All the custom HA cards and components I studied from, including [@Arsaboo's Animated Weather card](https://github.com/arsaboo/homeassistant-config/blob/master/www/custom_ui/weather-card.js) and [Mini Media Player](https://github.com/kalkih/mini-media-player)
   - [airvisual.com](https://www.airvisual.com/) - For the card design and data
   - [Home Assistant Air Visual sensor](https://www.home-assistant.io/components/sensor.airvisual/)
+  - [Weather Card](https://github.com/bramkragten/weather-card) by @bramkragten - for the visual card editor 
 
