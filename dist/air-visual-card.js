@@ -422,7 +422,7 @@ class AirVisualCard extends HTMLElement {
         card_content += `<div class="city">${city} Air Quality Index</div>`;
       }
 
-      if (weatherEntity.split('.')[0] == 'weather') {
+      if (weatherEntity.split('.')[0] == 'weather' && hass.states[weatherEntity]) {
         tempValue = hass.states[weatherEntity].attributes['temperature'] + 'º';
         currentCondition = hass.states[weatherEntity].state;
         humidity = hass.states[weatherEntity].attributes['humidity'] + '%';
