@@ -21,6 +21,7 @@ This is a Home Assistant Lovelace card that uses the [AirVisual component](https
 | `weather`             | string  | optional                     | `weather.dark_sky`               | Name of the weather entity if you wish to display temperature, humidity and wind information on the card. |
 | `country`             | string  | `US`                         | `mdi:air-conditioner`            | Name of the country that Airvisual is collecting AQI data from. |
 | `city`                | string  | optional                     | `San Francisco`                  | Name of the city that AirVisual is collecting AQI data from. |
+| `unit_of_measurement`                | string  | optional                     | `AQI`                  | Unit of measurement |
 | `icons`               | string  | `/hacsfiles/air-visual-card` | `/hacsfiles/air-visual-card`     | The local directory where the .svg files are located. For example, 'icons: "/hacsfiles/air-visual-card"' is appropriate if this plugin is installed using HACS. If left blank, icons will be loaded from default location. |
 | `hide_title`          | boolean | `true`                       | `true` | `false`                 | Set to `true` if you want to hide the title that includes the city name. Useful for minimalists or those using dark themes. |
 | `hide_face`           | boolean | `false`                      | `true` | `false`                 | Set to `true` if you want to hide the face icon.             |
