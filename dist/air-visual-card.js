@@ -69,6 +69,7 @@ class AirVisualCard extends HTMLElement {
           /* sample css */
           background-color: rgba(0,0,0,0);
           box-shadow: none;
+	  overflow: hidden;
         }
 
         body {
