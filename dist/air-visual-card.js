@@ -347,6 +347,14 @@ class AirVisualCard extends HTMLElement {
         'no2': 'Nitrogen Dioxide',
         'so2': 'Sulfur Dioxide',
       }
+      const mainAirVisualPollutantValue = {
+        'p2': 'PM2.5',
+        'p1': 'PM10',
+        'co': 'Carbon Monoxide',
+        'o3': 'Ozone',
+        'n2': 'Nitrogen Dioxide',
+        's2': 'Sulfur Dioxide',
+      }
 
       let currentCondition = '';
       let humidity = '';
@@ -383,8 +391,7 @@ class AirVisualCard extends HTMLElement {
         if (typeof hass.states[mainPollutantSensor.config] != "undefined") {
           if (typeof hass.states[mainPollutantSensor.config].attributes['pollutant_unit'] != "undefined") {
             pollutantUnit = hass.states[mainPollutantSensor.config].attributes['pollutant_unit'];
-            let mainPollutantState = hass.states[mainPollutantSensor.config].state;
-            mainPollutant = hass.localize("component.sensor.state.airvisual__pollutant_label." + mainPollutantState);
+	    mainPollutant = mainAirVisualPollutantValue[hass.states[mainPollutantSensor.config].attributes['pollutant_symbol']];
           } else if (typeof hass.states[mainPollutantSensor.config].attributes['dominentpol'] != "undefined") {
             pollutantUnit = pollutantUnitValue[hass.states[mainPollutantSensor.config].attributes['dominentpol']];
             mainPollutant = mainPollutantValue[hass.states[mainPollutantSensor.config].attributes['dominentpol']];
