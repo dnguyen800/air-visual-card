@@ -424,7 +424,9 @@ class AirVisualCard extends HTMLElement {
             let aplState = hass.states[aplSensor.config].state;
             apl = hass.localize("component.sensor.state.airvisual__pollutant_level." + aplState)
           }
-        } 
+        } else if (aqiSensor.value != 0) {
+          apl = APLdescription[getAQI()];   
+        }
       };
 
 
