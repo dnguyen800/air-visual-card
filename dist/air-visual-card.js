@@ -412,9 +412,6 @@ class AirVisualCard extends HTMLElement {
             mainPollutant = 'main pollutant';
           }         
         }
-        if (typeof hass.states[aqiSensor.config] != "undefined") {
-          aqiSensor.value = hass.states[aqiSensor.config].state;
-        }
         // Check if APL is an WAQI sensor (because the state is an integer). Returns 'NaN' if it is not a number
         if (typeof hass.states[aplSensor.config] != "undefined") {
           let aplParse = parseInt(hass.states[aplSensor.config].state)
@@ -425,6 +422,12 @@ class AirVisualCard extends HTMLElement {
             apl = hass.localize("component.sensor.state.airvisual__pollutant_level." + aplState)
           }
         }
+        if (typeof hass.states[aqiSensor.config] != "undefined") {
+          aqiSensor.value = hass.states[aqiSensor.config].state;
+          if (apl=''){
+           apl = APLdescription[getAQI()];
+          }
+        } 
       };
 
 
