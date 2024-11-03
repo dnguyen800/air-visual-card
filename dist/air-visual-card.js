@@ -257,8 +257,9 @@ class AirVisualCard extends HTMLElement {
       // value is used as a string instead of integer in order for 
       const aqiSensor = { name: 'aqiSensor', config: config.air_quality_index || null, value: 0 };
       const aplSensor = { name: 'aplSensor', config: config.air_pollution_level || null, value: 0 };
-      const mainPollutantSensor = { name: 'mainPollutantSensor', config: config.main_pollutant || null, value: 0 };
+      const mainPollutantSensor = { name: 'mainPollutantSensor', config: config.main_pollutant || null, value: '' };
       const sensorList = [aqiSensor, aplSensor, mainPollutantSensor];
+      const validPollutants = ['co', 'no2', 'o3', 'so2', 'pm10', 'pm25', 'neph'];
       
       const unitOfMeasurement = config.unit_of_measurement || 'AQI';
 
@@ -355,6 +356,15 @@ class AirVisualCard extends HTMLElement {
         'o3': 'Ozone',
         'n2': 'Nitrogen Dioxide',
         's2': 'Sulfur Dioxide',
+      }      
+      const mainPollutantUnit = {
+          'co': 'ppm',
+          'no2': 'ppb',
+          'o3': 'ppb',
+          'so2': 'ppb',
+          'pm10': 'µg/m³',
+          'pm25': 'µg/m³',
+          'neph': '1/Mm',
       }
 
       let currentCondition = '';
@@ -390,12 +400,13 @@ class AirVisualCard extends HTMLElement {
         if (typeof hass.states[sensorList[i].config] == "undefined") { continue; }            
         // if Main Pollutant is an Airvisual sensor, else if if it is an WAQI sensor
         if (typeof hass.states[mainPollutantSensor.config] != "undefined") {
+          let mpParse = hass.states[mainPollutantSensor.config].state;
           if (typeof hass.states[mainPollutantSensor.config].attributes['pollutant_unit'] != "undefined") {
             pollutantUnit = hass.states[mainPollutantSensor.config].attributes['pollutant_unit'];
-	    mainPollutant = mainAirVisualPollutantValue[hass.states[mainPollutantSensor.config].attributes['pollutant_symbol']];
-          } else if (typeof hass.states[mainPollutantSensor.config].attributes['dominentpol'] != "undefined") {
-            pollutantUnit = pollutantUnitValue[hass.states[mainPollutantSensor.config].attributes['dominentpol']];
-            mainPollutant = mainPollutantValue[hass.states[mainPollutantSensor.config].attributes['dominentpol']];
+            mainPollutant = mainAirVisualPollutantValue[hass.states[mainPollutantSensor.config].attributes['pollutant_symbol']];
+          } else if (validPollutants.includes(mpParse)) {
+            mainPollutant = mainPollutantValue[mpParse];
+            pollutantUnit = mainPollutantUnit[mpParse];
           } else {
             pollutantUnit = 'pollutant unit';
             mainPollutant = 'main pollutant';
