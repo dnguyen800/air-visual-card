@@ -248,10 +248,10 @@ class AirVisualCard extends HTMLElement {
       const hideAQI = config.hide_aqi ? 1 : 0;
       const hideAPL = config.hide_apl ? 1 : 0;
       const hideWeather = config.hide_weather || !config.weather ? 1 : 0;
-      const speedUnit = config.speed_unit || 'mp/h';
+      const speedUnit = config.speed_unit || '';
       // points to local directory created by HACS installation
       const iconDirectory = config.icons || "/hacsfiles/air-visual-card";
-      const country = config.country || 'US';
+      const country = config.country || '';
       const city = config.city || '';
       const weatherEntity = config.weather || '';
       // value is used as a string instead of integer in order for 
@@ -260,7 +260,6 @@ class AirVisualCard extends HTMLElement {
       const mainPollutantSensor = { name: 'mainPollutantSensor', config: config.main_pollutant || null, value: '' };
       const sensorList = [aqiSensor, aplSensor, mainPollutantSensor];
       const validPollutants = ['co', 'no2', 'o3', 'so2', 'pm10', 'pm25', 'neph'];
-      
       const unitOfMeasurement = config.unit_of_measurement || 'AQI';
 
       const AQIbgColor = {
@@ -374,7 +373,7 @@ class AirVisualCard extends HTMLElement {
       let pollutantUnit = '';
       let apl = '';
       let mainPollutant = '';
-
+      let speed_unit = speedUnit;
       let getAQI = function () {
         switch (true) {
           case (aqiSensor.value <= 50):
@@ -393,7 +392,10 @@ class AirVisualCard extends HTMLElement {
             return '1';
         }
       };
-
+	    
+      if (weatherEntity != '' && typeof hass.states[weatherEntity].attributes['wind_speed_unit'] != "undefined"){
+	speed_unit = hass.states[weatherEntity].attributes['wind_speed_unit'];
+      }
       var i;
       // Use this section to assign values (real or placeholder), after doing validation check
       for (i = 0; i < sensorList.length; i++) {
@@ -446,7 +448,7 @@ class AirVisualCard extends HTMLElement {
         tempValue = hass.states[weatherEntity].attributes['temperature'] + 'º';
         currentCondition = hass.states[weatherEntity].state;
         humidity = hass.states[weatherEntity].attributes['humidity'] + '%';
-        windSpeed = hass.states[weatherEntity].attributes['wind_speed'] + ' ' + speedUnit;
+        windSpeed = hass.states[weatherEntity].attributes['wind_speed'] + ' ' + speed_unit;
       }
       if (!hideWeather) {
         card_content += `
