@@ -394,42 +394,37 @@ class AirVisualCard extends HTMLElement {
       };
 	    
       if (weatherEntity != '' && typeof hass.states[weatherEntity].attributes['wind_speed_unit'] != "undefined"){
-	speed_unit = hass.states[weatherEntity].attributes['wind_speed_unit'];
-      }
-      var i;
-      // Use this section to assign values (real or placeholder), after doing validation check
-      for (i = 0; i < sensorList.length; i++) {
-        if (typeof hass.states[sensorList[i].config] == "undefined") { continue; }            
+        speed_unit = hass.states[weatherEntity].attributes['wind_speed_unit'];
+      }          
         // if Main Pollutant is an Airvisual sensor, else if if it is an WAQI sensor
-        if (typeof hass.states[mainPollutantSensor.config] != "undefined") {
-          let mpParse = hass.states[mainPollutantSensor.config].state;
-          if (typeof hass.states[mainPollutantSensor.config].attributes['pollutant_unit'] != "undefined") {
-            pollutantUnit = hass.states[mainPollutantSensor.config].attributes['pollutant_unit'];
-            mainPollutant = mainAirVisualPollutantValue[hass.states[mainPollutantSensor.config].attributes['pollutant_symbol']];
-          } else if (validPollutants.includes(mpParse)) {
-            mainPollutant = mainPollutantValue[mpParse];
-            pollutantUnit = mainPollutantUnit[mpParse];
-          } else {
-            pollutantUnit = 'pollutant unit';
-            mainPollutant = 'main pollutant';
-          }         
+      if (typeof hass.states[mainPollutantSensor.config] != "undefined") {
+        let mpParse = hass.states[mainPollutantSensor.config].state;
+        if (typeof hass.states[mainPollutantSensor.config].attributes['pollutant_unit'] != "undefined") {
+          pollutantUnit = hass.states[mainPollutantSensor.config].attributes['pollutant_unit'];
+          mainPollutant = mainAirVisualPollutantValue[hass.states[mainPollutantSensor.config].attributes['pollutant_symbol']];
+        } else if (validPollutants.includes(mpParse)) {
+          mainPollutant = mainPollutantValue[mpParse];
+          pollutantUnit = mainPollutantUnit[mpParse];
+        } else {
+          pollutantUnit = 'pollutant unit';
+          mainPollutant = 'main pollutant';
+        }         
+      }
+      if (typeof hass.states[aqiSensor.config] != "undefined") {
+        aqiSensor.value = hass.states[aqiSensor.config].state;
+      }
+      // Check if APL is an WAQI sensor (because the state is an integer). Returns 'NaN' if it is not a number
+      if (typeof hass.states[aplSensor.config] != "undefined") {
+        let aplParse = parseInt(hass.states[aplSensor.config].state);
+        if (!isNaN(aplParse)) {
+          apl = APLdescription[getAQI()];      
+        } else {
+          let aplState = hass.states[aplSensor.config].state;
+          apl = hass.localize("component.sensor.state.airvisual__pollutant_level." + aplState)
         }
-        if (typeof hass.states[aqiSensor.config] != "undefined") {
-          aqiSensor.value = hass.states[aqiSensor.config].state;
-        }
-        // Check if APL is an WAQI sensor (because the state is an integer). Returns 'NaN' if it is not a number
-        if (typeof hass.states[aplSensor.config] != "undefined") {
-          let aplParse = parseInt(hass.states[aplSensor.config].state);
-          if (!isNaN(aplParse)) {
-            apl = APLdescription[getAQI()];      
-          } else {
-            let aplState = hass.states[aplSensor.config].state;
-            apl = hass.localize("component.sensor.state.airvisual__pollutant_level." + aplState)
-          }
-        } else if (aqiSensor.value != 0) {
-          apl = APLdescription[getAQI()];   
-        }
-      };
+      } else if (aqiSensor.value != 0) {
+        apl = APLdescription[getAQI()];   
+      }
 
 
   
