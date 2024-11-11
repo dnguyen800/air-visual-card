@@ -404,7 +404,7 @@ class AirVisualCard extends HTMLElement {
           mainPollutant = mainAirVisualPollutantValue[hass.states[mainPollutantSensor.config].attributes['pollutant_symbol']];
         } else if (validPollutants.includes(mpParse)) {
           mainPollutant = mainPollutantValue[mpParse];
-          pollutantUnit = mainPollutantUnit[mpParse];
+          pollutantUnit = 'AQI';
         } else {
           pollutantUnit = 'pollutant unit';
           mainPollutant = 'main pollutant';
