@@ -38,7 +38,7 @@ class AirVisualCard extends HTMLElement {
     return { air_pollution_level: "sensor.u_s_air_pollution_level",
              air_quality_index: "sensor.u_s_air_quality_index",
              main_pollutant: "sensor.u_s_main_pollutant",
-             weather: "weather.home",
+             weather: "",
              hide_weather: 1,
              hide_title: 1,
              unit_of_measurement: "AQI",
