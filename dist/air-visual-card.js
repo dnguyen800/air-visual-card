@@ -38,7 +38,7 @@ class AirVisualCard extends HTMLElement {
     return { air_pollution_level: "sensor.u_s_air_pollution_level",
              air_quality_index: "sensor.u_s_air_quality_index",
              main_pollutant: "sensor.u_s_main_pollutant",
-             weather: "weather.home",
+             weather: "",
              hide_weather: 1,
              hide_title: 1,
              unit_of_measurement: "AQI",
@@ -258,7 +258,6 @@ class AirVisualCard extends HTMLElement {
       const aqiSensor = { name: 'aqiSensor', config: config.air_quality_index || null, value: 0 };
       const aplSensor = { name: 'aplSensor', config: config.air_pollution_level || null, value: 0 };
       const mainPollutantSensor = { name: 'mainPollutantSensor', config: config.main_pollutant || null, value: '' };
-      const sensorList = [aqiSensor, aplSensor, mainPollutantSensor];
       const validPollutants = ['co', 'no2', 'o3', 'so2', 'pm10', 'pm25', 'neph'];
       const unitOfMeasurement = config.unit_of_measurement || 'AQI';
 
@@ -377,7 +376,7 @@ class AirVisualCard extends HTMLElement {
       let getAQI = function () {
         switch (true) {
           case (aqiSensor.value <= 50):
-            return '1'; // return string '1' to pull appropriate AQI icon filename ('ic-face-1.svg') in HTML
+            return '1';
           case (aqiSensor.value <= 100):
             return '2';
           case (aqiSensor.value <= 150):
@@ -386,7 +385,7 @@ class AirVisualCard extends HTMLElement {
             return '4';
           case (aqiSensor.value <= 300):
             return '5';
-          case (aqiSensor.value <= 9999):
+          case (aqiSensor.value > 300):
             return '6';
           default:
             return '1';
@@ -404,25 +403,24 @@ class AirVisualCard extends HTMLElement {
           mainPollutant = mainAirVisualPollutantValue[hass.states[mainPollutantSensor.config].attributes['pollutant_symbol']];
         } else if (validPollutants.includes(mpParse)) {
           mainPollutant = mainPollutantValue[mpParse];
-          pollutantUnit = mainPollutantUnit[mpParse];
+          pollutantUnit = 'AQI';
         } else {
           pollutantUnit = 'pollutant unit';
           mainPollutant = 'main pollutant';
         }         
       }
-      if (typeof hass.states[aqiSensor.config] != "undefined") {
-        aqiSensor.value = hass.states[aqiSensor.config].state;
-      }
       // Check if APL is an WAQI sensor (because the state is an integer). Returns 'NaN' if it is not a number
       if (typeof hass.states[aplSensor.config] != "undefined") {
-        let aplParse = parseInt(hass.states[aplSensor.config].state);
+        let aplParse = parseInt(hass.states[aqiSensor.config].state);
+        aqiSensor.value = aplParse;
         if (!isNaN(aplParse)) {
           apl = APLdescription[getAQI()];      
         } else {
           let aplState = hass.states[aplSensor.config].state;
           apl = hass.localize("component.sensor.state.airvisual__pollutant_level." + aplState)
         }
-      } else if (aqiSensor.value != 0) {
+      } else if (typeof hass.states[aqiSensor.config] != "undefined") {
+        aqiSensor.value = hass.states[aqiSensor.config].state;
         apl = APLdescription[getAQI()];   
       }
 
