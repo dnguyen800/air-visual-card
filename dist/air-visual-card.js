@@ -2,7 +2,7 @@
 // Plant Picture Card: https://github.com/badguy99/PlantPictureCard/blob/master/dist/PlantPictureCard.js
 // UPDATE FOR EACH RELEASE!!! From aftership-card. Version # is hard-coded for now.
 console.info(
-  '%c  AIR-VISUAL-CARD  \n%c  Version 2.0.5',
+  '%c  AIR-VISUAL-CARD  \n%c  Version 2.0.5.proto1',
   'color: orange; font-weight: bold; background: black',
   'color: white; font-weight: bold; background: dimgray',
 );
@@ -483,26 +483,38 @@ class AirVisualCard extends HTMLElement {
 
 
       root.lastChild.hass = hass;
-      root.querySelector('#content').innerHTML = card_content;
+      root.getElementById('content').innerHTML = card_content;
 
       // hard-coded version of click event
-      if (!hideFace){
-	      card.shadowRoot.querySelector('#face').addEventListener('click', event => {   // when selecting HTML id, do not use dash '-'
-        fireEvent(this, "hass-more-info", { entityId: aqiSensor.config });
-        });
+      if (!hideFace) {
+        const faceElem = card.querySelector('#face');
+        if (faceElem) {
+          faceElem.addEventListener('click', event => {   // when selecting HTML id, do not use dash '-'
+            fireEvent(this, "hass-more-info", { entityId: aqiSensor.config });
+          });
+        }
       }
-      if (!hideAQI){
-        card.shadowRoot.querySelector('#aqiSensor').addEventListener('click', event => {   // when selecting HTML id, do not use dash '-'
-        fireEvent(this, "hass-more-info", { entityId: aqiSensor.config });
-        });
+      if (!hideAQI) {
+        const aqiElem = card.querySelector('#aqiSensor');
+        if (aqiElem) {
+          aqiElem.addEventListener('click', event => {   // when selecting HTML id, do not use dash '-'
+            fireEvent(this, "hass-more-info", { entityId: aqiSensor.config });
+          });
+        }
       }
-      if (!hideAPL){
-        card.shadowRoot.querySelector('#aplSensor').addEventListener('click', event => {   // when selecting HTML id, do not use dash '-'
-          fireEvent(this, "hass-more-info", { entityId: aplSensor.config });
-        });
-        card.shadowRoot.querySelector('#mainPollutantSensor').addEventListener('click', event => {   // when selecting HTML id, do not use dash '-'  
-          fireEvent(this, "hass-more-info", { entityId: mainPollutantSensor.config });
-        });
+      if (!hideAPL) {
+        const aplElem = card.querySelector('#aplSensor');
+        if (aplElem) {
+          aplElem.addEventListener('click', event => {   // when selecting HTML id, do not use dash '-'
+            fireEvent(this, "hass-more-info", { entityId: aplSensor.config });
+          });
+        }
+        const mainPollutantElem = card.querySelector('#mainPollutantSensor');
+        if (mainPollutantElem) {
+          mainPollutantElem.addEventListener('click', event => {   // when selecting HTML id, do not use dash '-'  
+            fireEvent(this, "hass-more-info", { entityId: mainPollutantSensor.config });
+          });
+        }
       }
     }
 
