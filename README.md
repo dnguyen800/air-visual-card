@@ -12,7 +12,7 @@ Originally designed for the AirVisual integration, this card now supports multip
 
 - [AirVisual](https://www.home-assistant.io/integrations/airvisual/)
 - [World Air Quality Index (WAQI)](https://www.home-assistant.io/integrations/waqi/)
-- `worlds_air_quality_index` (custom integration)
+- [World's Air Quality Index (worlds_air_quality_index)](https://github.com/pawkakol1/worlds-air-quality-index) (custom integration)
 
 ---
 
