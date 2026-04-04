@@ -476,14 +476,17 @@ class AirVisualCard extends HTMLElement {
       hass.states[weatherEntity]
     ) {
       const weatherState = hass.states[weatherEntity];
-      tempValue = (weatherState.attributes['temperature'] ?? '') + 'º';
+      const attrs = weatherState.attributes || {};
+    
+      tempValue = attrs.temperature !== undefined ? `${attrs.temperature}º` : '';
       currentCondition = weatherState.state || '';
-      humidity = (weatherState.attributes['humidity'] ?? '') + '%';
-      windSpeed = (weatherState.attributes['wind_speed'] ?? '') + ' ' + speed_unit;
+      humidity = attrs.humidity !== undefined ? `${attrs.humidity}%` : '';
+      windSpeed = attrs.wind_speed !== undefined ? `${attrs.wind_speed} ${speed_unit}` : '';
     }
 
     if (!hideWeather) {
-      const weatherIcon = weatherSVG[currentCondition] || 'clear-sky';
+      const weatherIcon = weatherSVG[currentCondition] || 'scattered-clouds';
+    
       card_content += `
         <div class="temp" id="temp"><img src="${iconDirectory}/ic-w-${weatherIcon}.svg"></img>${tempValue}</div>
         <div class="humidity" id="humidity"><img src="${iconDirectory}/ic-humidity.svg"></img>${humidity}</div>
