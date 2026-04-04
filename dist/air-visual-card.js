@@ -397,17 +397,41 @@ class AirVisualCard extends HTMLElement {
       }          
         // if Main Pollutant is an Airvisual sensor, else if it is an worlds_air_quality_index else if WAQI sensor
 		if (typeof hass.states[mainPollutantSensor.config] != "undefined") {
-		  let mpParse = hass.states[mainPollutantSensor.config].state;
-		  if (typeof hass.states[mainPollutantSensor.config].attributes['pollutant_unit'] != "undefined") {
-		    pollutantUnit = hass.states[mainPollutantSensor.config].attributes['pollutant_unit'];
-		    mainPollutant = mainAirVisualPollutantValue[hass.states[mainPollutantSensor.config].attributes['pollutant_symbol']];
+		
+		  let entity = hass.states[mainPollutantSensor.config];
+		  let mpParse = entity.state;
+		
+		  // ✅ CASE 1: AirVisual sensors (original behavior)
+		  if (typeof entity.attributes['pollutant_unit'] != "undefined") {
+			pollutantUnit = entity.attributes['pollutant_unit'];
+			mainPollutant = mainAirVisualPollutantValue[entity.attributes['pollutant_symbol']];
+		
+		  // ✅ CASE 2: WAQI proper sensor (state = "o3", "pm25", etc)
 		  } else if (validPollutants.includes(mpParse)) {
-		    mainPollutant = mainPollutantValue[mpParse];
-		    pollutantUnit = 'AQI';
+			mainPollutant = mainPollutantValue[mpParse];
+			pollutantUnit = mainPollutantUnit[mpParse] || 'AQI';
+		
+		  // 🔥 CASE 3: YOUR integration (state = number, attribute = dominentpol)
+		  } else if (
+			typeof hass.states[aqiSensor.config] != "undefined" &&
+			hass.states[aqiSensor.config].attributes &&
+			hass.states[aqiSensor.config].attributes['dominentpol']
+		  ) {
+			let dominant = hass.states[aqiSensor.config].attributes['dominentpol'];
+		
+			if (validPollutants.includes(dominant)) {
+			  mainPollutant = mainPollutantValue[dominant];
+			  pollutantUnit = mainPollutantUnit[dominant] || '';
+			} else {
+			  mainPollutant = dominant;
+			  pollutantUnit = '';
+			}
+		
+		  // ❌ fallback
 		  } else {
-		    pollutantUnit = 'pollutant unit';
-		    mainPollutant = 'main pollutant';
-		  }         
+			pollutantUnit = 'pollutant unit';
+			mainPollutant = 'main pollutant';
+		  }
 		}
       // Check if APL is an WAQI sensor (because the state is an integer). Returns 'NaN' if it is not a number
       if (typeof hass.states[aplSensor.config] != "undefined") {
@@ -423,12 +447,6 @@ class AirVisualCard extends HTMLElement {
         aqiSensor.value = hass.states[aqiSensor.config].state;
         apl = APLdescription[getAQI()];   
       }
-
-
-  
-
-
-
 
       let faceHTML = ``;
 
