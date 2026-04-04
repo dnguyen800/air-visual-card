@@ -479,42 +479,30 @@ class AirVisualCard extends HTMLElement {
       const attrs = weatherState.attributes || {};
     
       tempValue = attrs.temperature !== undefined ? `${attrs.temperature}º` : '';
-      currentCondition = weatherState.state || '';
-    
-      if (attrs.humidity !== undefined && attrs.humidity !== null) {
-        humidity = `${attrs.humidity}%`;
-      } else if (attrs.humidity_value !== undefined && attrs.humidity_value !== null) {
-        humidity = `${attrs.humidity_value}%`;
-      } else {
-        humidity = '';
-      }
-    
+      currentCondition = String(weatherState.state || '').trim().toLowerCase();
+      humidity = attrs.humidity !== undefined ? `${attrs.humidity}%` : '';
       windSpeed = attrs.wind_speed !== undefined ? `${attrs.wind_speed} ${speed_unit}` : '';
     }
 
     if (!hideWeather) {
-      let weatherIcon = weatherSVG[currentCondition];
-    
-      if (!weatherIcon) {
-        weatherIcon = 'scattered-clouds';
-      }
-    
-      const tempIconHtml = weatherIcon
-        ? `<img src="${iconDirectory}/ic-w-${weatherIcon}.svg" onerror="this.style.display='none'">`
-        : '';
-    
-      const humidityIconHtml = humidity
-        ? `<img src="${iconDirectory}/ic-humidity.svg" onerror="this.style.display='none'">`
-        : '';
-    
-      const windIconHtml = windSpeed
-        ? `<img src="${iconDirectory}/ic-wind.svg" onerror="this.style.display='none'">`
-        : '';
+      const weatherIcon = weatherSVG[currentCondition] || 'new-clouds';
+      const weatherIconSrc = `${iconDirectory}/ic-w-${weatherIcon}.svg`;
     
       card_content += `
-        <div class="temp" id="temp">${tempIconHtml}${tempValue}</div>
-        <div class="humidity" id="humidity">${humidity ? `${humidityIconHtml}${humidity}` : ''}</div>
-        <div class="wind" id="wind">${windIconHtml}${windSpeed}</div>
+        <div class="temp" id="temp">
+          <img
+            src="${weatherIconSrc}"
+            alt="${currentCondition}"
+            title="${currentCondition} → ${weatherIconSrc}"
+            onerror="this.replaceWith(document.createTextNode('☁'))"
+          >${tempValue}
+        </div>
+        <div class="humidity" id="humidity">
+          ${humidity ? `<img src="${iconDirectory}/ic-humidity.svg"></img>${humidity}` : ``}
+        </div>
+        <div class="wind" id="wind">
+          ${windSpeed ? `<img src="${iconDirectory}/ic-wind.svg"></img> ${windSpeed}` : ``}
+        </div>
       `;
     }
 
