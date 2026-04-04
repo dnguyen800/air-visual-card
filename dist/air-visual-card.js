@@ -480,17 +480,41 @@ class AirVisualCard extends HTMLElement {
     
       tempValue = attrs.temperature !== undefined ? `${attrs.temperature}º` : '';
       currentCondition = weatherState.state || '';
-      humidity = attrs.humidity !== undefined ? `${attrs.humidity}%` : '';
+    
+      if (attrs.humidity !== undefined && attrs.humidity !== null) {
+        humidity = `${attrs.humidity}%`;
+      } else if (attrs.humidity_value !== undefined && attrs.humidity_value !== null) {
+        humidity = `${attrs.humidity_value}%`;
+      } else {
+        humidity = '';
+      }
+    
       windSpeed = attrs.wind_speed !== undefined ? `${attrs.wind_speed} ${speed_unit}` : '';
     }
 
     if (!hideWeather) {
-      const weatherIcon = weatherSVG[currentCondition] || 'scattered-clouds';
+      let weatherIcon = weatherSVG[currentCondition];
+    
+      if (!weatherIcon) {
+        weatherIcon = 'scattered-clouds';
+      }
+    
+      const tempIconHtml = weatherIcon
+        ? `<img src="${iconDirectory}/ic-w-${weatherIcon}.svg" onerror="this.style.display='none'">`
+        : '';
+    
+      const humidityIconHtml = humidity
+        ? `<img src="${iconDirectory}/ic-humidity.svg" onerror="this.style.display='none'">`
+        : '';
+    
+      const windIconHtml = windSpeed
+        ? `<img src="${iconDirectory}/ic-wind.svg" onerror="this.style.display='none'">`
+        : '';
     
       card_content += `
-        <div class="temp" id="temp"><img src="${iconDirectory}/ic-w-${weatherIcon}.svg"></img>${tempValue}</div>
-        <div class="humidity" id="humidity"><img src="${iconDirectory}/ic-humidity.svg"></img>${humidity}</div>
-        <div class="wind" id="wind"><img src="${iconDirectory}/ic-wind.svg"></img> ${windSpeed}</div>
+        <div class="temp" id="temp">${tempIconHtml}${tempValue}</div>
+        <div class="humidity" id="humidity">${humidity ? `${humidityIconHtml}${humidity}` : ''}</div>
+        <div class="wind" id="wind">${windIconHtml}${windSpeed}</div>
       `;
     }
 
