@@ -28,13 +28,19 @@ This is a Home Assistant Lovelace card that uses the [AirVisual component](https
 | `hide_weather`        | boolean | `true`                       | `true` | `false`                 | Set to `false` if you want to show the weather information from the weather entity. |
 
 
+## Prerequisites
+### AirVisual Sensor
+Install the [AirVisual sensor](https://www.home-assistant.io/components/sensor.airvisual/) and confirm AQI, APL, and Main Pollutant sensors are created, like below.
 
-## HACS Installation
+![sensors](images/airvisual_sensors.JPG)
+
+## Installation
+### HACS
 1. Open the HACS on your Home Assistant instance.
 2. Open the Plugins section and click on the Air Visual Card.
 3. Click on Install, then click on "Add to Lovelace"
 
-## Manual Installation
+### Alternative: Manual Installation
 1. Download the [AirVisual Card](https://raw.githubusercontent.com/dnguyen800/air-visual-card/master/dist/air-visual-card.js)
 2. Place the file in your `config/www` folder
 3. Include the card code in the Resources section of your `ui-lovelace-card.yaml` like below:
@@ -48,23 +54,16 @@ resources:
 
 5. Save the icons in a directory in Home Assistant, such as `/local/air-visual-card`
 
-6. Update the card configuration in `ui-lovelace.yaml`  to include the following (use directory name in step #7):
+6. Update the card configuration in `ui-lovelace.yaml`  to include the following (use directory name in step #5):
 
    ```yaml
     icons: "/local/air-visual-card"
    ```
 
-## Instructions
-1. Install the [AirVisual sensor](https://www.home-assistant.io/components/sensor.airvisual/) and confirm AQI, APL, and Main Pollutant sensors are created, like below.
-
-![sensors](images/airvisual_sensors.JPG)
-
-2. Add a card in the Lovelace UI.
-3. Search for `air-visual-card` and click the search result. ![add-card](images/add-card.png)
-4. Fill out the card editor. ![card-editor](images/card-editor.png)
-
-
-
+## Configuration
+1. Add a card in the Lovelace UI.
+2. Search for `air-visual-card` and click the search result. ![add-card](images/add-card.png)
+3. Fill out the card editor. ![card-editor](images/card-editor.png)
 
 ## FAQ
  - The card doesn't show the temperature properly.
