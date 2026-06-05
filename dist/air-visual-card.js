@@ -238,7 +238,6 @@ class AirVisualCard extends HTMLElement {
   set hass(hass) {
     const config = this._config;
     const root = this.shadowRoot;
-    const card = root.lastChild;
     if (this.shouldNotUpdate(config, hass)) {
       return
     }
@@ -473,12 +472,18 @@ class AirVisualCard extends HTMLElement {
     </div>
     `;
 
-    root.lastChild.hass = hass;
-    root.getElementById('content').innerHTML = card_content;
+    const card = root.lastChild;
+    if (card) {
+      card.hass = hass;
+    }
+    const contentDiv = root.querySelector('#content');
+    if (contentDiv) {
+      contentDiv.innerHTML = card_content;
+    }
 
     // hard-coded version of click event
     if (!hideFace) {
-      const faceElem = card.querySelector('#face');
+      const faceElem = root.querySelector('#face');
       if (faceElem) {
         faceElem.addEventListener('click', event => {   // when selecting HTML id, do not use dash '-'
           fireEvent(this, "hass-more-info", { entityId: aqiSensor.config });
@@ -486,7 +491,7 @@ class AirVisualCard extends HTMLElement {
       }
     }
     if (!hideAQI) {
-      const aqiElem = card.querySelector('#aqiSensor');
+      const aqiElem = root.querySelector('#aqiSensor');
       if (aqiElem) {
         aqiElem.addEventListener('click', event => {   // when selecting HTML id, do not use dash '-'
           fireEvent(this, "hass-more-info", { entityId: aqiSensor.config });
@@ -494,13 +499,13 @@ class AirVisualCard extends HTMLElement {
       }
     }
     if (!hideAPL) {
-      const aplElem = card.querySelector('#aplSensor');
+      const aplElem = root.querySelector('#aplSensor');
       if (aplElem) {
         aplElem.addEventListener('click', event => {   // when selecting HTML id, do not use dash '-'
           fireEvent(this, "hass-more-info", { entityId: aplSensor.config });
         });
       }
-      const mainPollutantElem = card.querySelector('#mainPollutantSensor');
+      const mainPollutantElem = root.querySelector('#mainPollutantSensor');
       if (mainPollutantElem) {
         mainPollutantElem.addEventListener('click', event => {   // when selecting HTML id, do not use dash '-'  
           fireEvent(this, "hass-more-info", { entityId: mainPollutantSensor.config });
