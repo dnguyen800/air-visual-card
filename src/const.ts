@@ -1,6 +1,6 @@
 import { AQILevel, AQILevelInfo } from './types';
 
-export const CARD_VERSION = '3.0.0';
+export const CARD_VERSION = '3.0.1';
 
 export const AQI_LEVEL_DATA: Record<AQILevel, AQILevelInfo> = {
   1: {
