@@ -262,7 +262,7 @@ export class AirVisualCard extends LitElement {
               ? html`
                   <div
                     class="face-section"
-                    style="color: ${aqiInfo.faceColor};"
+                    style="background-color: ${aqiInfo.faceColor}; color: ${aqiInfo.fontColor};"
                     @click=${() => this._openMoreInfo(this._config.air_quality_index || this._config.air_pollution_level)}
                     title="Air Quality: ${aqiInfo.label}"
                   >

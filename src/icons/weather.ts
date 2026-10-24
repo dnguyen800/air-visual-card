@@ -1,7 +1,7 @@
-import { svg, SVGTemplateResult } from 'lit';
+import { html, TemplateResult } from 'lit';
 import { WEATHER_ICON_MAP } from '../const';
 
-export const humiditySvg: SVGTemplateResult = svg`
+export const humiditySvg: TemplateResult = html`
   <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 72 72">
     <g fill="none" fill-rule="evenodd">
       <path d="M0 72h72V0H0z"/>
@@ -13,7 +13,7 @@ export const humiditySvg: SVGTemplateResult = svg`
   </svg>
 `;
 
-export const windSvg: SVGTemplateResult = svg`
+export const windSvg: TemplateResult = html`
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="13" viewBox="0 0 16 13">
     <g fill="none" fill-rule="evenodd">
       <path d="M-4 19h24V-5H-4z"/>
@@ -22,7 +22,7 @@ export const windSvg: SVGTemplateResult = svg`
   </svg>
 `;
 
-export const clearSkySvg: SVGTemplateResult = svg`
+export const clearSkySvg: TemplateResult = html`
   <svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
     <g fill="none" fill-rule="evenodd">
       <path d="M0 24h24V0H0z"/>
@@ -31,7 +31,7 @@ export const clearSkySvg: SVGTemplateResult = svg`
   </svg>
 `;
 
-export const nightClearSkySvg: SVGTemplateResult = svg`
+export const nightClearSkySvg: TemplateResult = html`
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
     <g fill="none" fill-rule="evenodd">
       <path d="M0 24h24V0H0z"/>
@@ -40,7 +40,7 @@ export const nightClearSkySvg: SVGTemplateResult = svg`
   </svg>
 `;
 
-export const newCloudsSvg: SVGTemplateResult = svg`
+export const newCloudsSvg: TemplateResult = html`
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
     <g fill="none" fill-rule="evenodd">
       <path fill="none" d="M0 24h24V0H0z"/>
@@ -50,7 +50,7 @@ export const newCloudsSvg: SVGTemplateResult = svg`
   </svg>
 `;
 
-export const scatteredCloudsSvg: SVGTemplateResult = svg`
+export const scatteredCloudsSvg: TemplateResult = html`
   <svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
     <g fill="none" fill-rule="evenodd">
       <path d="M0 24h24V0H0z"/>
@@ -59,7 +59,7 @@ export const scatteredCloudsSvg: SVGTemplateResult = svg`
   </svg>
 `;
 
-export const rainSvg: SVGTemplateResult = svg`
+export const rainSvg: TemplateResult = html`
   <svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
     <g fill="none" fill-rule="evenodd">
       <path d="M0 24h24V0H0z"/>
@@ -69,7 +69,7 @@ export const rainSvg: SVGTemplateResult = svg`
   </svg>
 `;
 
-export const snowSvg: SVGTemplateResult = svg`
+export const snowSvg: TemplateResult = html`
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
     <g fill="none" fill-rule="evenodd">
       <path d="M0 24h24V0H0z"/>
@@ -78,7 +78,7 @@ export const snowSvg: SVGTemplateResult = svg`
   </svg>
 `;
 
-export const getWeatherSvg = (condition?: string): SVGTemplateResult => {
+export const getWeatherSvg = (condition?: string): TemplateResult => {
   if (!condition) return clearSkySvg;
   const mapped = WEATHER_ICON_MAP[condition.toLowerCase()] || condition;
   switch (mapped) {

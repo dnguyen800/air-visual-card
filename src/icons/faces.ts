@@ -1,7 +1,7 @@
-import { svg, SVGTemplateResult } from 'lit';
+import { html, TemplateResult } from 'lit';
 import { AQILevel } from '../types';
 
-export const face1Svg: SVGTemplateResult = svg`
+export const face1Svg: TemplateResult = html`
   <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
     <g fill="none" fill-rule="evenodd">
       <path d="M0 48h48V0H0z"/>
@@ -14,7 +14,7 @@ export const face1Svg: SVGTemplateResult = svg`
   </svg>
 `;
 
-export const face2Svg: SVGTemplateResult = svg`
+export const face2Svg: TemplateResult = html`
   <svg height="48" viewBox="0 0 48 48" width="48" xmlns="http://www.w3.org/2000/svg">
     <g fill="none" fill-rule="evenodd">
       <path d="M0 48h48V0H0z"/>
@@ -27,7 +27,7 @@ export const face2Svg: SVGTemplateResult = svg`
   </svg>
 `;
 
-export const face3Svg: SVGTemplateResult = svg`
+export const face3Svg: TemplateResult = html`
   <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
     <g fill="none" fill-rule="evenodd">
       <path d="M0 48h48V0H0z"/>
@@ -39,7 +39,7 @@ export const face3Svg: SVGTemplateResult = svg`
   </svg>
 `;
 
-export const face4Svg: SVGTemplateResult = svg`
+export const face4Svg: TemplateResult = html`
   <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
     <g fill="none" fill-rule="evenodd">
       <path d="M0 48h48V0H0z"/>
@@ -51,7 +51,7 @@ export const face4Svg: SVGTemplateResult = svg`
   </svg>
 `;
 
-export const face5Svg: SVGTemplateResult = svg`
+export const face5Svg: TemplateResult = html`
   <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
     <g fill="none" fill-rule="evenodd">
       <path d="M0 48h48V0H0z"/>
@@ -65,7 +65,7 @@ export const face5Svg: SVGTemplateResult = svg`
   </svg>
 `;
 
-export const face6Svg: SVGTemplateResult = svg`
+export const face6Svg: TemplateResult = html`
   <svg height="48" viewBox="0 0 48 48" width="48" xmlns="http://www.w3.org/2000/svg">
     <g fill="none" fill-rule="evenodd">
       <path d="M0 48h48V0H0z"/>
@@ -77,7 +77,7 @@ export const face6Svg: SVGTemplateResult = svg`
   </svg>
 `;
 
-export const getFaceSvg = (level: AQILevel): SVGTemplateResult => {
+export const getFaceSvg = (level: AQILevel): TemplateResult => {
   switch (level) {
     case 1:
       return face1Svg;
