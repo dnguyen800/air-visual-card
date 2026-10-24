@@ -64,7 +64,6 @@ export const cardStyles: CSSResultGroup = css`
     display: block;
     width: 58px;
     height: 58px;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.12));
   }
 
   .aqi-section {
