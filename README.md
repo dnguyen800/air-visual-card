@@ -1,89 +1,97 @@
 # Air Visual Card
 
+A modern, responsive Home Assistant Lovelace card that displays Air Quality Index (AQI), pollution levels, and weather data in the style of AirVisual.
+
 ![example](images/example.PNG)
 
-This is a Home Assistant Lovelace card that uses the [AirVisual component](https://www.home-assistant.io/integrations/airvisual/) or [World Air Quality Index (WAQI) component](https://www.home-assistant.io/integrations/waqi/) to provide air quality index (AQI) data and creates a card like the ones found on [AirVisual website](https://www.airvisual.com). Requires the [AirVisual component](https://www.home-assistant.io/integrations/airvisual/) or [World Air Quality Index (WAQI) component](https://www.home-assistant.io/integrations/waqi/). Tested with Yahoo and Darksky Weather component.
+Built with **Lit 3**, **TypeScript 5**, and following the official [custom-cards/boilerplate-card](https://github.com/custom-cards/boilerplate-card) best practices.
 
 ## Features
-  - Card colors and icons change depending on AQI level
 
+- **Dynamic Theme Colors**: Card background and face icons adjust automatically across 6 AQI hazard tiers (Good, Moderate, Unhealthy for Sensitive Groups, Unhealthy, Very Unhealthy, Hazardous).
+- **100% Self-Contained**: Vector face and weather icons are inlined directly into the bundle (no missing 404 SVGs or separate icon downloads).
+- **Modern Visual Editor**: Native `ha-form` schema editor with entity pickers and selectors.
+- **Section & Grid Support**: Native `getLayoutOptions()` support for Home Assistant's new Sections dashboard grid.
+- **Full Action Handling**: Interactive tap, hold, and double-tap gestures to open more-info dialogs or custom Lovelace actions.
+- **Wide Sensor Support**: Works seamlessly with official [AirVisual](https://www.home-assistant.io/integrations/airvisual/), [WAQI (World Air Quality Index)](https://www.home-assistant.io/integrations/waqi/), or custom template sensors.
 
-## Options
-
-### Main Options
-
-| Name                  | Type    | Default                      | Supported options                | Description                                                  |
-| --------------------- | ------- | ---------------------------- | -------------------------------- | ------------------------------------------------------------ |
-| `type`                | string  | **Required**                 | `custom:air-visual-card`         | Type of the card                                             |
-| `air_pollution_level` | string  | **Required**                 | `sensor.u_s_air_pollution_level` | Name of the Air Pollution Level sensor.                      |
-| `air_quality_index`   | string  | optional                     | `sensor.u_s_air_quality_index`   | Name of the Air Quality Index sensor. If sensor does not exist, do not add this config value. |
-| `main_pollutant`      | string  | optional                     | `sensor.u_s_main_pollutant`      | Name of the Main Pollutant sensor. If sensor does not exist, do not add this config value. |
-| `weather`             | string  | optional                     | `weather.dark_sky`               | Name of the weather entity if you wish to display temperature, humidity and wind information on the card. |
-| `country`             | string  | `US`                         | `mdi:air-conditioner`            | Name of the country that Airvisual is collecting AQI data from. |
-| `city`                | string  | optional                     | `San Francisco`                  | Name of the city that AirVisual is collecting AQI data from. |
-| `unit_of_measurement`                | string  | optional                     | `AQI`                  | Unit of measurement |
-| `icons`               | string  | `/hacsfiles/air-visual-card` | `/hacsfiles/air-visual-card`     | The local directory where the .svg files are located. For example, 'icons: "/hacsfiles/air-visual-card"' is appropriate if this plugin is installed using HACS. If left blank, icons will be loaded from default location. |
-| `hide_title`          | boolean | `true`                       | `true` | `false`                 | Set to `true` if you want to hide the title that includes the city name. Useful for minimalists or those using dark themes. |
-| `hide_face`           | boolean | `false`                      | `true` | `false`                 | Set to `true` if you want to hide the face icon.             |
-| `hide_weather`        | boolean | `true`                       | `true` | `false`                 | Set to `false` if you want to show the weather information from the weather entity. |
-
-
-## Prerequisites
-### AirVisual Sensor
-Install the [AirVisual sensor](https://www.home-assistant.io/components/sensor.airvisual/) and confirm AQI, APL, and Main Pollutant sensors are created, like below.
-
-![sensors](images/airvisual_sensors.JPG)
+---
 
 ## Installation
-### HACS
-1. Open the HACS on your Home Assistant instance.
-2. Open the Plugins section and click on the Air Visual Card.
-3. Click on Install, then click on "Add to Lovelace"
 
-### Alternative: Manual Installation
-1. Download the [AirVisual Card](https://raw.githubusercontent.com/dnguyen800/air-visual-card/master/dist/air-visual-card.js)
-2. Place the file in your `config/www` folder
-3. Include the card code in the Resources section of your `ui-lovelace-card.yaml` like below:
+### HACS (Recommended)
+1. Open HACS in your Home Assistant instance.
+2. Go to **Frontend** and search for **Air Visual Card**.
+3. Click **Download**.
+4. Refresh your dashboard.
 
+### Manual Installation
+1. Download [`dist/air-visual-card.js`](https://raw.githubusercontent.com/dnguyen800/air-visual-card/master/dist/air-visual-card.js).
+2. Copy it into your Home Assistant directory `<config>/www/air-visual-card.js`.
+3. Add the resource in your Dashboard Settings (or `configuration.yaml`):
 ```yaml
 resources:
-  - url: /local/air-visual-card/air-visual-card.js
-    type: js
+  - url: /local/air-visual-card.js
+    type: module
 ```
-4. **Optional:** If you wish to store the Airvisual icons locally, then download the icons [here](https://github.com/dnguyen800/air-visual-card/tree/master/dist).
 
-5. Save the icons in a directory in Home Assistant, such as `/local/air-visual-card`
-
-6. Update the card configuration in `ui-lovelace.yaml`  to include the following (use directory name in step #5):
-
-   ```yaml
-    icons: "/local/air-visual-card"
-   ```
+---
 
 ## Configuration
-1. Add a card in the Lovelace UI.
-2. Search for `air-visual-card` and click the search result. ![add-card](images/add-card.png)
-3. Fill out the card editor. ![card-editor](images/card-editor.png)
 
-## FAQ
- - The card doesn't show the temperature properly.
-  
-   Let me know which weather provider you are using and I'll try to fix the issue. I have only tested with the Yahoo! Weather component. Optionally, if you create a template sensor that reports the temperature as its state, you can use that sensor as for the temp config.
+### Visual Editor
+Add an **Air Visual Card** from the Lovelace card picker and use the UI editor to configure your entities and display toggles.
 
- - This card doesn't work in Fully Kiosk Browser on Amazon Fire tablets. Why?
+### YAML Example
+```yaml
+type: custom:air-visual-card
+air_quality_index: sensor.u_s_air_quality_index
+air_pollution_level: sensor.u_s_air_pollution_level
+main_pollutant: sensor.u_s_main_pollutant
+weather: weather.home
+city: San Francisco
+country: US
+hide_title: false
+hide_face: false
+hide_weather: false
+```
 
-   This card uses a new CSS function, CSS Grid Layout, which was implemented in October 2018, and isn't compatible with browsers using old versions of Android WebView. That's my guess anyways.
+### Options
 
- - The card is showing the word 'unavailable' instead of the AQI data!
-   
-   Most likely your Airvisual key expired (it has a one-year expiration) and needs to be recreated. Delete and recreate a new key on airvisual.com and save the key in your HA config file.
+| Name | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `type` | string | **Required** | `custom:air-visual-card` |
+| `air_quality_index` | string | optional | Entity ID of the Air Quality Index sensor (e.g. `sensor.u_s_air_quality_index`). |
+| `air_pollution_level` | string | optional | Entity ID of the Air Pollution Level sensor. |
+| `main_pollutant` | string | optional | Entity ID of the Main Pollutant sensor. |
+| `weather` | string | optional | Entity ID of a `weather.*` entity for temperature, humidity, and wind. |
+| `city` | string | optional | City name displayed at the top of the card. |
+| `country` | string | optional | Country / standard indicator (e.g. `US`, `CN`). |
+| `unit_of_measurement` | string | `AQI` | Unit of measurement override. |
+| `speed_unit` | string | auto | Wind speed unit override (e.g. `mph`, `km/h`, `m/s`). |
+| `hide_title` | boolean | `false` | Set to `true` to hide the city header title. |
+| `hide_face` | boolean | `false` | Set to `true` to hide the face illustration. |
+| `hide_weather` | boolean | `false` | Set to `true` to hide the bottom weather forecast bar. |
+| `hide_aqi` | boolean | `false` | Set to `true` to hide the numerical AQI badge. |
+| `hide_apl` | boolean | `false` | Set to `true` to hide the pollution level text and pollutant badge. |
+| `tap_action` | object | `more-info` | Action to perform when tapping the card. |
+| `hold_action` | object | `more-info` | Action to perform on hold. |
 
-## Support
-I am studying programming as a hobby and this is my first set of Home Assistant projects. Unfortunately, I know nothing about Javascript and relied on studying other Lovelace custom cards to write this. Suggestions are welcome but no promises if I can fix anything! If you're familiar with CSS, then you can edit the CSS style in the .js file directly.
+---
+
+## Development
+
+```bash
+# Install dependencies
+npm install
+
+# Build production bundle
+npm run build
+
+# Watch mode for local development
+npm run watch
+```
 
 ## Credits
-  - All the custom HA cards and components I studied from, including [@Arsaboo's Animated Weather card](https://github.com/arsaboo/homeassistant-config/blob/master/www/custom_ui/weather-card.js) and [Mini Media Player](https://github.com/kalkih/mini-media-player)
-  - [airvisual.com](https://www.airvisual.com/) - For the card design and data
-  - [Home Assistant Air Visual sensor](https://www.home-assistant.io/components/sensor.airvisual/)
-  - [Weather Card](https://github.com/bramkragten/weather-card) by @bramkragten - for the visual card editor 
-
+- [custom-cards/boilerplate-card](https://github.com/custom-cards/boilerplate-card) for modern Home Assistant card best practices.
+- [AirVisual.com](https://www.airvisual.com/) for original visual card styling and color scales.

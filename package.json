@@ -1,0 +1,40 @@
+{
+  "name": "air-visual-card",
+  "type": "module",
+  "version": "3.0.0",
+  "description": "Home Assistant Lovelace AirVisual Card refactored with Lit 3 and TypeScript",
+  "keywords": [
+    "home-assistant",
+    "homeassistant",
+    "hass",
+    "lovelace",
+    "custom-cards",
+    "airvisual",
+    "aqi"
+  ],
+  "module": "dist/air-visual-card.js",
+  "repository": "git@github.com:dnguyen800/air-visual-card.git",
+  "author": "Dan Nguyen",
+  "license": "MIT",
+  "scripts": {
+    "build": "rollup -c",
+    "watch": "rollup -c --watch",
+    "start": "rollup -c --watch"
+  },
+  "dependencies": {
+    "custom-card-helpers": "^2.0.0",
+    "home-assistant-js-websocket": "^9.4.0",
+    "lit": "^3.2.1"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^26.0.0",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^15.2.0",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "rollup": "^4.20.0",
+    "rollup-plugin-serve": "^1.1.1",
+    "tslib": "^2.6.3",
+    "typescript": "^5.5.4"
+  }
+}
