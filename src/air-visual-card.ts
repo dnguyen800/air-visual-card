@@ -2,7 +2,6 @@ import { LitElement, html, TemplateResult, PropertyValues, CSSResultGroup } from
 import { customElement, property, state } from 'lit/decorators.js';
 import {
   HomeAssistant,
-  hasConfigOrEntityChanged,
   handleAction,
   hasAction,
   LovelaceCardEditor,
@@ -85,12 +84,36 @@ export class AirVisualCard extends LitElement {
     };
   }
 
+  public get config(): AirVisualCardConfig {
+    return this._config;
+  }
+
   protected shouldUpdate(changedProps: PropertyValues): boolean {
     if (!this._config) {
       return false;
     }
 
-    return hasConfigOrEntityChanged(this, changedProps, false);
+    if (changedProps.has('_config')) {
+      return true;
+    }
+
+    const oldHass = changedProps.get('hass') as HomeAssistant | undefined;
+    if (!oldHass || !this.hass) {
+      return true;
+    }
+
+    const trackedEntities = [
+      this._config.air_quality_index,
+      this._config.air_pollution_level,
+      this._config.main_pollutant,
+      this._config.weather,
+    ].filter(Boolean) as string[];
+
+    if (trackedEntities.length === 0) {
+      return true;
+    }
+
+    return trackedEntities.some((entity) => oldHass.states[entity] !== this.hass.states[entity]);
   }
 
   public getCardSize(): number {
