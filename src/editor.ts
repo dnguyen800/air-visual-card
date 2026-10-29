@@ -270,7 +270,6 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
     }
   }
 
-
   static get styles(): CSSResultGroup {
     return css`
       ha-form {
