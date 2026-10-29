@@ -10,6 +10,10 @@ import {
 } from 'custom-card-helpers';
 import { HassEntity } from 'home-assistant-js-websocket';
 
+interface HassWithFormat extends HomeAssistant {
+  formatEntityState?: (stateObj: HassEntity) => string;
+}
+
 import { AirVisualCardConfig, AQILevel } from './types';
 import {
   CARD_VERSION,
@@ -198,7 +202,7 @@ export class AirVisualCard extends LitElement {
     let aplText = aqiInfo.label;
     if (aplEntity && isNaN(parseInt(aplEntity.state, 10))) {
       // Try Home Assistant native formatEntityState, then clean fallback
-      const formatted = (this.hass as any).formatEntityState?.(aplEntity);
+      const formatted = (this.hass as HassWithFormat).formatEntityState?.(aplEntity);
       if (formatted) {
         aplText = formatted;
       } else {

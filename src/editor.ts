@@ -3,6 +3,10 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { HomeAssistant, fireEvent, LovelaceCardEditor } from 'custom-card-helpers';
 import { AirVisualCardConfig } from './types';
 
+interface HassWithEntities extends HomeAssistant {
+  entities?: Record<string, { platform?: string; device_id?: string; translation_key?: string }>;
+}
+
 @customElement('air-visual-card-editor')
 export class AirVisualCardEditor extends LitElement implements LovelaceCardEditor {
   @property({ attribute: false }) public hass!: HomeAssistant;
@@ -202,9 +206,7 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
   private _applyIntegrationPreset(preset: string, config: AirVisualCardConfig): void {
     if (!this.hass) return;
 
-    const entityRegistry = (this.hass as any).entities as
-      | Record<string, { platform?: string; device_id?: string; translation_key?: string }>
-      | undefined;
+    const entityRegistry = (this.hass as HassWithEntities).entities;
     const states = this.hass.states;
     const allEntityIds = Object.keys(states);
 
@@ -268,6 +270,8 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
           friendly.includes('pm2.5') ||
           friendly.includes('pm 2.5') ||
           friendly.includes('pm2_5') ||
+          friendly.includes('particulate matter 2.5') ||
+          id.includes('particulate_matter_2_5') ||
           id.includes('pm25') ||
           id.includes('pm2_5')
         );
