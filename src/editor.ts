@@ -13,75 +13,91 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
     this._config = config;
   }
 
-  private _schema = [
-    {
-      name: 'integration_preset',
-      required: false,
-      selector: {
-        select: {
-          mode: 'dropdown',
-          options: [
-            { label: 'Manual / Custom', value: 'manual' },
-            { label: 'OpenWeatherMap', value: 'openweathermap' },
-            { label: 'AirVisual (IQAir)', value: 'airvisual' },
-            { label: 'WAQI (World Air Quality Index)', value: 'waqi' },
-          ],
+  private get _schema() {
+    const preset = this._config?.integration_preset;
+    const isIntegration = Boolean(preset && preset !== 'manual');
+
+    // Filter sensor selectors to the chosen integration when not manual/custom
+    const sensorSelector = isIntegration
+      ? { entity: { domain: 'sensor', integration: preset } }
+      : { entity: { domain: 'sensor' } };
+
+    // Filter weather selector if integration provides a weather entity
+    const weatherSelector =
+      preset === 'openweathermap'
+        ? { entity: { domain: 'weather', integration: 'openweathermap' } }
+        : { entity: { domain: 'weather' } };
+
+    return [
+      {
+        name: 'integration_preset',
+        required: false,
+        selector: {
+          select: {
+            mode: 'dropdown',
+            options: [
+              { label: 'Manual / Custom', value: 'manual' },
+              { label: 'OpenWeatherMap', value: 'openweathermap' },
+              { label: 'AirVisual (IQAir)', value: 'airvisual' },
+              { label: 'WAQI (World Air Quality Index)', value: 'waqi' },
+            ],
+          },
         },
       },
-    },
-    {
-      name: 'air_quality_index',
-      required: false,
-      selector: { entity: { domain: 'sensor' } },
-    },
-    {
-      name: 'air_pollution_level',
-      required: false,
-      selector: { entity: { domain: 'sensor' } },
-    },
-    {
-      name: 'main_pollutant',
-      required: false,
-      selector: { entity: { domain: 'sensor' } },
-    },
-    {
-      name: 'main_pollutant_value',
-      required: false,
-      selector: { entity: { domain: 'sensor' } },
-    },
-    {
-      name: 'weather',
-      required: false,
-      selector: { entity: { domain: 'weather' } },
-    },
-    {
-      type: 'grid',
-      name: '',
-      schema: [
-        { name: 'city', selector: { text: {} } },
-        { name: 'country', selector: { text: {} } },
-      ],
-    },
-    {
-      type: 'grid',
-      name: '',
-      schema: [
-        { name: 'unit_of_measurement', selector: { text: {} } },
-        { name: 'speed_unit', selector: { text: {} } },
-      ],
-    },
-    {
-      type: 'grid',
-      name: '',
-      schema: [
-        { name: 'hide_title', selector: { boolean: {} } },
-        { name: 'hide_face', selector: { boolean: {} } },
-        { name: 'hide_weather', selector: { boolean: {} } },
-        { name: 'hide_aqi', selector: { boolean: {} } },
-        { name: 'hide_apl', selector: { boolean: {} } },
-      ],
-    },
-  ];
+      {
+        name: 'air_quality_index',
+        required: false,
+        selector: sensorSelector,
+      },
+      {
+        name: 'air_pollution_level',
+        required: false,
+        selector: sensorSelector,
+      },
+      {
+        name: 'main_pollutant',
+        required: false,
+        selector: sensorSelector,
+      },
+      {
+        name: 'main_pollutant_value',
+        required: false,
+        selector: sensorSelector,
+      },
+      {
+        name: 'weather',
+        required: false,
+        selector: weatherSelector,
+      },
+      {
+        type: 'grid',
+        name: '',
+        schema: [
+          { name: 'city', selector: { text: {} } },
+          { name: 'country', selector: { text: {} } },
+        ],
+      },
+      {
+        type: 'grid',
+        name: '',
+        schema: [
+          { name: 'unit_of_measurement', selector: { text: {} } },
+          { name: 'speed_unit', selector: { text: {} } },
+        ],
+      },
+      {
+        type: 'grid',
+        name: '',
+        schema: [
+          { name: 'hide_title', selector: { boolean: {} } },
+          { name: 'hide_face', selector: { boolean: {} } },
+          { name: 'hide_weather', selector: { boolean: {} } },
+          { name: 'hide_aqi', selector: { boolean: {} } },
+          { name: 'hide_apl', selector: { boolean: {} } },
+        ],
+      },
+    ];
+  }
 
   protected render(): TemplateResult {
     if (!this.hass || !this._config) {
