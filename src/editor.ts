@@ -91,6 +91,11 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
     const data = {
       integration_preset: this._config.integration_preset || 'manual',
       ...this._config,
+      air_quality_index: this._config.air_quality_index || '',
+      air_pollution_level: this._config.air_pollution_level || '',
+      main_pollutant: this._config.main_pollutant || '',
+      main_pollutant_value: this._config.main_pollutant_value || '',
+      weather: this._config.weather || '',
       hide_title: this._config.hide_title ?? false,
       hide_face: this._config.hide_face ?? false,
       hide_weather: this._config.hide_weather ?? false,
@@ -152,9 +157,18 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
 
     const newConfig = { ...this._config, ...ev.detail.value };
 
-    // Auto-fill when switching to an integration preset
-    if (selectedPreset && selectedPreset !== currentPreset && selectedPreset !== 'manual') {
-      this._applyIntegrationPreset(selectedPreset, newConfig);
+    // When changing between preset options, clear out previous sensor selector values
+    if (selectedPreset && selectedPreset !== currentPreset) {
+      delete newConfig.air_quality_index;
+      delete newConfig.air_pollution_level;
+      delete newConfig.main_pollutant;
+      delete newConfig.main_pollutant_value;
+      delete newConfig.weather;
+      delete newConfig.city;
+
+      if (selectedPreset !== 'manual') {
+        this._applyIntegrationPreset(selectedPreset, newConfig);
+      }
     }
 
     // Clean empty strings
