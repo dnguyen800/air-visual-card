@@ -30,6 +30,11 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
       selector: { entity: { domain: 'sensor' } },
     },
     {
+      name: 'main_pollutant_value',
+      required: false,
+      selector: { entity: { domain: 'sensor' } },
+    },
+    {
       name: 'weather',
       required: false,
       selector: { entity: { domain: 'weather' } },
@@ -96,6 +101,7 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
       air_quality_index: 'Air Quality Index Sensor',
       air_pollution_level: 'Air Pollution Level Sensor',
       main_pollutant: 'Main Pollutant Sensor',
+      main_pollutant_value: 'Main Pollutant Value Sensor',
       weather: 'Weather Entity (Optional)',
       city: 'City Name',
       country: 'Country / Standard Label',

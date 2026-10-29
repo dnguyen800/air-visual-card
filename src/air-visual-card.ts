@@ -107,6 +107,7 @@ export class AirVisualCard extends LitElement {
       this._config.air_quality_index,
       this._config.air_pollution_level,
       this._config.main_pollutant,
+      this._config.main_pollutant_value,
       this._config.weather,
     ].filter(Boolean) as string[];
 
@@ -140,7 +141,8 @@ export class AirVisualCard extends LitElement {
       const primaryEntity =
         this._config.air_quality_index ||
         this._config.air_pollution_level ||
-        this._config.main_pollutant;
+        this._config.main_pollutant ||
+        this._config.main_pollutant_value;
 
       const actionConfig = {
         entity: primaryEntity,
@@ -166,6 +168,10 @@ export class AirVisualCard extends LitElement {
 
     const pollutantEntity: HassEntity | undefined = this._config.main_pollutant
       ? this.hass.states[this._config.main_pollutant]
+      : undefined;
+
+    const pollutantValueEntity: HassEntity | undefined = this._config.main_pollutant_value
+      ? this.hass.states[this._config.main_pollutant_value]
       : undefined;
 
     const weatherEntity: HassEntity | undefined = this._config.weather
@@ -205,6 +211,8 @@ export class AirVisualCard extends LitElement {
     // Resolve Main Pollutant & Unit
     let pollutantName = '';
     let pollutantUnit = '';
+    let pollutantValue = '';
+
     if (pollutantEntity) {
       const rawPollutant = pollutantEntity.state.toLowerCase();
       const symbol = pollutantEntity.attributes?.pollutant_symbol?.toLowerCase() || rawPollutant;
@@ -215,6 +223,22 @@ export class AirVisualCard extends LitElement {
         POLLUTANT_UNITS[symbol] ||
         POLLUTANT_UNITS[rawPollutant] ||
         '';
+    }
+
+    if (pollutantValueEntity) {
+      pollutantValue = pollutantValueEntity.state;
+      if (!pollutantUnit && pollutantValueEntity.attributes?.unit_of_measurement) {
+        pollutantUnit = pollutantValueEntity.attributes.unit_of_measurement;
+      }
+    }
+
+    let pollutantDetails = '';
+    if (pollutantValue && pollutantUnit) {
+      pollutantDetails = `${pollutantValue} ${pollutantUnit}`;
+    } else if (pollutantValue) {
+      pollutantDetails = pollutantValue;
+    } else if (pollutantUnit) {
+      pollutantDetails = pollutantUnit;
     }
 
     const cityName = this._config.city || '';
@@ -297,14 +321,18 @@ export class AirVisualCard extends LitElement {
                   <div
                     class="apl-section"
                     @click=${() =>
-                      this._openMoreInfo(this._config.main_pollutant || this._config.air_pollution_level)}
+                      this._openMoreInfo(
+                        this._config.main_pollutant_value ||
+                        this._config.main_pollutant ||
+                        this._config.air_pollution_level
+                      )}
                     title="${aplText}"
                   >
                     <div class="apl-badge">${aplText}</div>
-                    ${pollutantName
+                    ${pollutantName || pollutantDetails
                       ? html`
                           <div class="pollutant-badge">
-                            ${pollutantName}${pollutantUnit ? ` | ${pollutantUnit}` : ''}
+                            ${[pollutantName, pollutantDetails].filter(Boolean).join(' | ')}
                           </div>
                         `
                       : html``}
