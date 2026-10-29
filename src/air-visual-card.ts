@@ -230,6 +230,32 @@ export class AirVisualCard extends LitElement {
       if (!pollutantUnit && pollutantValueEntity.attributes?.unit_of_measurement) {
         pollutantUnit = pollutantValueEntity.attributes.unit_of_measurement;
       }
+      if (!pollutantName) {
+        const deviceClass = pollutantValueEntity.attributes?.device_class;
+        const entityId = (this._config.main_pollutant_value || '').toLowerCase();
+        const friendlyName = String(pollutantValueEntity.attributes?.friendly_name || '').toLowerCase();
+        if (
+          deviceClass === 'pm25' ||
+          entityId.includes('pm2_5') ||
+          entityId.includes('pm25') ||
+          friendlyName.includes('pm2.5') ||
+          friendlyName.includes('pm 2.5') ||
+          friendlyName.includes('pm2_5') ||
+          friendlyName.includes('particulate matter 2.5')
+        ) {
+          pollutantName = 'PM2.5';
+        } else if (deviceClass === 'pm10' || entityId.includes('pm10') || friendlyName.includes('pm10')) {
+          pollutantName = 'PM10';
+        } else if (deviceClass === 'o3' || entityId.includes('ozone') || friendlyName.includes('ozone')) {
+          pollutantName = 'Ozone';
+        } else if (deviceClass === 'co' || entityId.includes('carbon_monoxide')) {
+          pollutantName = 'Carbon Monoxide';
+        } else if (deviceClass === 'no2' || entityId.includes('nitrogen_dioxide')) {
+          pollutantName = 'Nitrogen Dioxide';
+        } else if (deviceClass === 'so2' || entityId.includes('sulphur_dioxide') || entityId.includes('sulfur_dioxide')) {
+          pollutantName = 'Sulfur Dioxide';
+        }
+      }
     }
 
     let pollutantDetails = '';

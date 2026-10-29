@@ -203,6 +203,10 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
         config.air_quality_index = aqiSensor;
       }
 
+      // OpenWeatherMap has no Air Pollution Level text sensor - leave blank
+      delete config.air_pollution_level;
+      delete config.main_pollutant;
+
       // 2. Weather Entity
       const weatherEntity = allEntityIds.find((id) => {
         if (!id.startsWith('weather.')) return false;
@@ -217,11 +221,20 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
         config.weather = weatherEntity;
       }
 
-      // 3. Main Pollutant Value Sensor (OpenWeatherMap provides PM2.5, PM10, etc.)
+      // 3. Main Pollutant Value Sensor (Preselect PM2.5 sensor as the most common)
       const pm25Sensor = platformEntities.find((id) => {
         const state = states[id];
+        const friendly = String(state?.attributes?.friendly_name || '').toLowerCase();
+        const translationKey = entityRegistry?.[id]?.translation_key;
         return (
           state?.attributes?.device_class === 'pm25' ||
+          translationKey === 'particulate_matter_2_5' ||
+          translationKey === 'pm2_5' ||
+          translationKey === 'pm25' ||
+          friendly.includes('pm2.5') ||
+          friendly.includes('pm 2.5') ||
+          friendly.includes('pm2_5') ||
+          friendly.includes('particulate matter 2.5') ||
           id.includes('particulate_matter_2_5') ||
           id.includes('pm2_5') ||
           id.includes('pm25')
