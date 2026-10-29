@@ -10,6 +10,10 @@ import {
 } from 'custom-card-helpers';
 import { HassEntity } from 'home-assistant-js-websocket';
 
+interface HassWithFormat extends HomeAssistant {
+  formatEntityState?: (stateObj: HassEntity) => string;
+}
+
 import { AirVisualCardConfig, AQILevel } from './types';
 import {
   CARD_VERSION,
@@ -107,6 +111,7 @@ export class AirVisualCard extends LitElement {
       this._config.air_quality_index,
       this._config.air_pollution_level,
       this._config.main_pollutant,
+      this._config.main_pollutant_value,
       this._config.weather,
     ].filter(Boolean) as string[];
 
@@ -140,7 +145,8 @@ export class AirVisualCard extends LitElement {
       const primaryEntity =
         this._config.air_quality_index ||
         this._config.air_pollution_level ||
-        this._config.main_pollutant;
+        this._config.main_pollutant ||
+        this._config.main_pollutant_value;
 
       const actionConfig = {
         entity: primaryEntity,
@@ -168,6 +174,10 @@ export class AirVisualCard extends LitElement {
       ? this.hass.states[this._config.main_pollutant]
       : undefined;
 
+    const pollutantValueEntity: HassEntity | undefined = this._config.main_pollutant_value
+      ? this.hass.states[this._config.main_pollutant_value]
+      : undefined;
+
     const weatherEntity: HassEntity | undefined = this._config.weather
       ? this.hass.states[this._config.weather]
       : undefined;
@@ -192,7 +202,7 @@ export class AirVisualCard extends LitElement {
     let aplText = aqiInfo.label;
     if (aplEntity && isNaN(parseInt(aplEntity.state, 10))) {
       // Try Home Assistant native formatEntityState, then clean fallback
-      const formatted = (this.hass as any).formatEntityState?.(aplEntity);
+      const formatted = (this.hass as HassWithFormat).formatEntityState?.(aplEntity);
       if (formatted) {
         aplText = formatted;
       } else {
@@ -205,6 +215,8 @@ export class AirVisualCard extends LitElement {
     // Resolve Main Pollutant & Unit
     let pollutantName = '';
     let pollutantUnit = '';
+    let pollutantValue = '';
+
     if (pollutantEntity) {
       const rawPollutant = pollutantEntity.state.toLowerCase();
       const symbol = pollutantEntity.attributes?.pollutant_symbol?.toLowerCase() || rawPollutant;
@@ -215,6 +227,48 @@ export class AirVisualCard extends LitElement {
         POLLUTANT_UNITS[symbol] ||
         POLLUTANT_UNITS[rawPollutant] ||
         '';
+    }
+
+    if (pollutantValueEntity) {
+      pollutantValue = pollutantValueEntity.state;
+      if (!pollutantUnit && pollutantValueEntity.attributes?.unit_of_measurement) {
+        pollutantUnit = pollutantValueEntity.attributes.unit_of_measurement;
+      }
+      if (!pollutantName) {
+        const deviceClass = pollutantValueEntity.attributes?.device_class;
+        const entityId = (this._config.main_pollutant_value || '').toLowerCase();
+        const friendlyName = String(pollutantValueEntity.attributes?.friendly_name || '').toLowerCase();
+        if (
+          deviceClass === 'pm25' ||
+          entityId.includes('pm2_5') ||
+          entityId.includes('pm25') ||
+          friendlyName.includes('pm2.5') ||
+          friendlyName.includes('pm 2.5') ||
+          friendlyName.includes('pm2_5') ||
+          friendlyName.includes('particulate matter 2.5')
+        ) {
+          pollutantName = 'PM2.5';
+        } else if (deviceClass === 'pm10' || entityId.includes('pm10') || friendlyName.includes('pm10')) {
+          pollutantName = 'PM10';
+        } else if (deviceClass === 'o3' || entityId.includes('ozone') || friendlyName.includes('ozone')) {
+          pollutantName = 'Ozone';
+        } else if (deviceClass === 'co' || entityId.includes('carbon_monoxide')) {
+          pollutantName = 'Carbon Monoxide';
+        } else if (deviceClass === 'no2' || entityId.includes('nitrogen_dioxide')) {
+          pollutantName = 'Nitrogen Dioxide';
+        } else if (deviceClass === 'so2' || entityId.includes('sulphur_dioxide') || entityId.includes('sulfur_dioxide')) {
+          pollutantName = 'Sulfur Dioxide';
+        }
+      }
+    }
+
+    let pollutantDetails = '';
+    if (pollutantValue && pollutantUnit) {
+      pollutantDetails = `${pollutantValue} ${pollutantUnit}`;
+    } else if (pollutantValue) {
+      pollutantDetails = pollutantValue;
+    } else if (pollutantUnit) {
+      pollutantDetails = pollutantUnit;
     }
 
     const cityName = this._config.city || '';
@@ -297,14 +351,18 @@ export class AirVisualCard extends LitElement {
                   <div
                     class="apl-section"
                     @click=${() =>
-                      this._openMoreInfo(this._config.main_pollutant || this._config.air_pollution_level)}
+                      this._openMoreInfo(
+                        this._config.main_pollutant_value ||
+                        this._config.main_pollutant ||
+                        this._config.air_pollution_level
+                      )}
                     title="${aplText}"
                   >
                     <div class="apl-badge">${aplText}</div>
-                    ${pollutantName
+                    ${pollutantName || pollutantDetails
                       ? html`
                           <div class="pollutant-badge">
-                            ${pollutantName}${pollutantUnit ? ` | ${pollutantUnit}` : ''}
+                            ${[pollutantName, pollutantDetails].filter(Boolean).join(' | ')}
                           </div>
                         `
                       : html``}
