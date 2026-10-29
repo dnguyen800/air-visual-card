@@ -16,6 +16,7 @@ import {
   AQI_LEVEL_DATA,
   POLLUTANT_NAMES,
   POLLUTANT_UNITS,
+  STATE_TO_AQI_LEVEL,
   getAQILevel,
 } from './const';
 import { getFaceSvg } from './icons/faces';
@@ -181,15 +182,24 @@ export class AirVisualCard extends LitElement {
     }
 
     const validAQI = !isNaN(aqiNum);
-    const aqiLevel: AQILevel = validAQI ? getAQILevel(aqiNum) : 1;
+    let aqiLevel: AQILevel = validAQI ? getAQILevel(aqiNum) : 1;
+    if (!validAQI && aplEntity && STATE_TO_AQI_LEVEL[aplEntity.state.toLowerCase()]) {
+      aqiLevel = STATE_TO_AQI_LEVEL[aplEntity.state.toLowerCase()];
+    }
     const aqiInfo = AQI_LEVEL_DATA[aqiLevel];
 
     // Resolve APL label
     let aplText = aqiInfo.label;
     if (aplEntity && isNaN(parseInt(aplEntity.state, 10))) {
-      // If the sensor holds text (e.g. "good", "moderate")
-      const localizedKey = `component.sensor.state.airvisual__pollutant_level.${aplEntity.state}`;
-      aplText = this.hass.localize?.(localizedKey) || aplEntity.state;
+      // Try Home Assistant native formatEntityState, then clean fallback
+      const formatted = (this.hass as any).formatEntityState?.(aplEntity);
+      if (formatted) {
+        aplText = formatted;
+      } else {
+        aplText = aplEntity.state
+          .replace(/_/g, ' ')
+          .replace(/\b\w/g, (char) => char.toUpperCase());
+      }
     }
 
     // Resolve Main Pollutant & Unit
