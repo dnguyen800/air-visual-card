@@ -1,6 +1,6 @@
 import { AQILevel, AQILevelInfo } from './types';
 
-export const CARD_VERSION = '3.0.3';
+export const CARD_VERSION = '3.0.4';
 
 export const AQI_LEVEL_DATA: Record<AQILevel, AQILevelInfo> = {
   1: {
@@ -91,6 +91,19 @@ export const POLLUTANT_UNITS: Record<string, string> = {
   s2: 'ppb',
   co: 'ppm',
   neph: '1/Mm',
+};
+
+export const STATE_TO_AQI_LEVEL: Record<string, AQILevel> = {
+  good: 1,
+  moderate: 2,
+  unhealthy_for_sensitive_groups: 3,
+  'unhealthy-for-sensitive-groups': 3,
+  unhealthy_sensitive: 3,
+  'unhealthy-sensitive': 3,
+  unhealthy: 4,
+  very_unhealthy: 5,
+  'very-unhealthy': 5,
+  hazardous: 6,
 };
 
 export const getAQILevel = (value: number): AQILevel => {
