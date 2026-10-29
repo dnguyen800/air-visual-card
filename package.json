@@ -1,7 +1,7 @@
 {
   "name": "air-visual-card",
   "type": "module",
-  "version": "3.0.8",
+  "version": "3.0.9",
   "description": "Home Assistant Lovelace AirVisual Card refactored with Lit 3 and TypeScript",
   "keywords": [
     "home-assistant",

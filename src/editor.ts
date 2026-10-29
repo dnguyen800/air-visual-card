@@ -37,6 +37,7 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
             mode: 'dropdown',
             options: [
               { label: 'Manual / Custom', value: 'manual' },
+              { label: 'Google Air Quality', value: 'google_air_quality' },
               { label: 'OpenWeatherMap', value: 'openweathermap' },
               { label: 'AirVisual (IQAir)', value: 'airvisual' },
               { label: 'WAQI (World Air Quality Index)', value: 'waqi' },
@@ -218,7 +219,77 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
       );
     });
 
-    if (preset === 'openweathermap') {
+    if (preset === 'google_air_quality') {
+      // 1. Air Quality Index Sensor (Universal AQI or Local AQI)
+      const aqiSensor = platformEntities.find((id) => {
+        const state = states[id];
+        return (
+          id.includes('universal_air_quality_index') ||
+          id.includes('local_air_quality_index') ||
+          state?.attributes?.device_class === 'aqi' ||
+          id.includes('air_quality_index') ||
+          id.includes('aqi')
+        );
+      });
+      if (aqiSensor) {
+        config.air_quality_index = aqiSensor;
+      }
+
+      // 2. Air Pollution Level (UAQI Category or Local Category)
+      const aplSensor = platformEntities.find(
+        (id) =>
+          id.includes('category') ||
+          id.includes('air_pollution_level')
+      );
+      if (aplSensor) {
+        config.air_pollution_level = aplSensor;
+      }
+
+      // 3. Main Pollutant Sensor (Dominant Pollutant)
+      const mpSensor = platformEntities.find(
+        (id) =>
+          id.includes('dominant_pollutant') ||
+          (id.includes('main_pollutant') && !id.includes('value'))
+      );
+      if (mpSensor) {
+        config.main_pollutant = mpSensor;
+      }
+
+      // 4. Main Pollutant Value Sensor (PM2.5)
+      const pm25Sensor = platformEntities.find((id) => {
+        const state = states[id];
+        const friendly = String(state?.attributes?.friendly_name || '').toLowerCase();
+        const translationKey = entityRegistry?.[id]?.translation_key;
+        return (
+          state?.attributes?.device_class === 'pm25' ||
+          translationKey === 'pm25' ||
+          translationKey === 'pm2_5' ||
+          translationKey === 'particulate_matter_2_5' ||
+          friendly.includes('pm2.5') ||
+          friendly.includes('pm 2.5') ||
+          friendly.includes('pm2_5') ||
+          id.includes('pm25') ||
+          id.includes('pm2_5')
+        );
+      });
+      if (pm25Sensor) {
+        config.main_pollutant_value = pm25Sensor;
+      }
+
+      // 5. Default City Name (from location name in friendly name)
+      if (!config.city && aqiSensor) {
+        const friendly = states[aqiSensor]?.attributes?.friendly_name;
+        if (friendly) {
+          const cleanCity = friendly
+            .replace(/google\s*air\s*quality/gi, '')
+            .replace(/universal\s*air\s*quality\s*index/gi, '')
+            .replace(/local\s*air\s*quality\s*index/gi, '')
+            .replace(/air\s*quality\s*index/gi, '')
+            .replace(/^[-_\s:]+|[-_\s:]+$/g, '');
+          if (cleanCity) config.city = cleanCity;
+        }
+      }
+    } else if (preset === 'openweathermap') {
       // 1. Air Quality Index Sensor
       const aqiSensor = platformEntities.find((id) => {
         const state = states[id];
