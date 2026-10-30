@@ -397,9 +397,27 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
       );
       if (aqiSensor) config.air_quality_index = aqiSensor;
 
-      const pm25Sensor = platformEntities.find(
-        (id) => states[id]?.attributes?.device_class === 'pm25' || id.includes('pm2_5') || id.includes('pm25')
-      );
+      // WAQI has no Air Pollution Level text sensor - leave blank
+      delete config.air_pollution_level;
+
+      const pm25Sensor = platformEntities.find((id) => {
+        const state = states[id];
+        const friendly = String(state?.attributes?.friendly_name || '').toLowerCase();
+        const translationKey = entityRegistry?.[id]?.translation_key;
+        return (
+          state?.attributes?.device_class === 'pm25' ||
+          translationKey === 'pm25' ||
+          translationKey === 'pm2_5' ||
+          translationKey === 'particulate_matter_2_5' ||
+          friendly.includes('pm2.5') ||
+          friendly.includes('pm 2.5') ||
+          friendly.includes('pm2_5') ||
+          friendly.includes('particulate matter 2.5') ||
+          id.includes('particulate_matter_2_5') ||
+          id.includes('pm2_5') ||
+          id.includes('pm25')
+        );
+      });
       if (pm25Sensor) config.main_pollutant_value = pm25Sensor;
     }
   }
