@@ -1,4 +1,4 @@
-function t(t,e,i,a){var n,o=arguments.length,s=o<3?e:null===a?a=Object.getOwnPropertyDescriptor(e,i):a;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)s=Reflect.decorate(t,e,i,a);else for(var r=t.length-1;r>=0;r--)(n=t[r])&&(s=(o<3?n(s):o>3?n(e,i,s):n(e,i))||s);return o>3&&s&&Object.defineProperty(e,i,s),s}"function"==typeof SuppressedError&&SuppressedError;const e=globalThis,i=e.ShadowRoot&&(void 0===e.ShadyCSS||e.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,a=Symbol(),n=new WeakMap;let o=class{constructor(t,e,i){if(this._$cssResult$=!0,i!==a)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=t,this.t=e}get styleSheet(){let t=this.o;const e=this.t;if(i&&void 0===t){const i=void 0!==e&&1===e.length;i&&(t=n.get(e)),void 0===t&&((this.o=t=new CSSStyleSheet).replaceSync(this.cssText),i&&n.set(e,t))}return t}toString(){return this.cssText}};const s=(t,...e)=>{const i=1===t.length?t[0]:e.reduce((e,i,a)=>e+(t=>{if(!0===t._$cssResult$)return t.cssText;if("number"==typeof t)return t;throw Error("Value passed to 'css' function must be a 'css' function result: "+t+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(i)+t[a+1],t[0]);return new o(i,t,a)},r=i?t=>t:t=>t instanceof CSSStyleSheet?(t=>{let e="";for(const i of t.cssRules)e+=i.cssText;return(t=>new o("string"==typeof t?t:t+"",void 0,a))(e)})(t):t,{is:l,defineProperty:c,getOwnPropertyDescriptor:h,getOwnPropertyNames:d,getOwnPropertySymbols:u,getPrototypeOf:p}=Object,_=globalThis,f=_.trustedTypes,g=f?f.emptyScript:"",m=_.reactiveElementPolyfillSupport,v=(t,e)=>t,y={toAttribute(t,e){switch(e){case Boolean:t=t?g:null;break;case Object:case Array:t=null==t?t:JSON.stringify(t)}return t},fromAttribute(t,e){let i=t;switch(e){case Boolean:i=null!==t;break;case Number:i=null===t?null:Number(t);break;case Object:case Array:try{i=JSON.parse(t)}catch(t){i=null}}return i}},w=(t,e)=>!l(t,e),b={attribute:!0,type:String,converter:y,reflect:!1,useDefault:!1,hasChanged:w};Symbol.metadata??=Symbol("metadata"),_.litPropertyMetadata??=new WeakMap;let $=class extends HTMLElement{static addInitializer(t){this._$Ei(),(this.l??=[]).push(t)}static get observedAttributes(){return this.finalize(),this._$Eh&&[...this._$Eh.keys()]}static createProperty(t,e=b){if(e.state&&(e.attribute=!1),this._$Ei(),this.prototype.hasOwnProperty(t)&&((e=Object.create(e)).wrapped=!0),this.elementProperties.set(t,e),!e.noAccessor){const i=Symbol(),a=this.getPropertyDescriptor(t,i,e);void 0!==a&&c(this.prototype,t,a)}}static getPropertyDescriptor(t,e,i){const{get:a,set:n}=h(this.prototype,t)??{get(){return this[e]},set(t){this[e]=t}};return{get:a,set(e){const o=a?.call(this);n?.call(this,e),this.requestUpdate(t,o,i)},configurable:!0,enumerable:!0}}static getPropertyOptions(t){return this.elementProperties.get(t)??b}static _$Ei(){if(this.hasOwnProperty(v("elementProperties")))return;const t=p(this);t.finalize(),void 0!==t.l&&(this.l=[...t.l]),this.elementProperties=new Map(t.elementProperties)}static finalize(){if(this.hasOwnProperty(v("finalized")))return;if(this.finalized=!0,this._$Ei(),this.hasOwnProperty(v("properties"))){const t=this.properties,e=[...d(t),...u(t)];for(const i of e)this.createProperty(i,t[i])}const t=this[Symbol.metadata];if(null!==t){const e=litPropertyMetadata.get(t);if(void 0!==e)for(const[t,i]of e)this.elementProperties.set(t,i)}this._$Eh=new Map;for(const[t,e]of this.elementProperties){const i=this._$Eu(t,e);void 0!==i&&this._$Eh.set(i,t)}this.elementStyles=this.finalizeStyles(this.styles)}static finalizeStyles(t){const e=[];if(Array.isArray(t)){const i=new Set(t.flat(1/0).reverse());for(const t of i)e.unshift(r(t))}else void 0!==t&&e.push(r(t));return e}static _$Eu(t,e){const i=e.attribute;return!1===i?void 0:"string"==typeof i?i:"string"==typeof t?t.toLowerCase():void 0}constructor(){super(),this._$Ep=void 0,this.isUpdatePending=!1,this.hasUpdated=!1,this._$Em=null,this._$Ev()}_$Ev(){this._$ES=new Promise(t=>this.enableUpdating=t),this._$AL=new Map,this._$E_(),this.requestUpdate(),this.constructor.l?.forEach(t=>t(this))}addController(t){(this._$EO??=new Set).add(t),void 0!==this.renderRoot&&this.isConnected&&t.hostConnected?.()}removeController(t){this._$EO?.delete(t)}_$E_(){const t=new Map,e=this.constructor.elementProperties;for(const i of e.keys())this.hasOwnProperty(i)&&(t.set(i,this[i]),delete this[i]);t.size>0&&(this._$Ep=t)}createRenderRoot(){const t=this.shadowRoot??this.attachShadow(this.constructor.shadowRootOptions);return((t,a)=>{if(i)t.adoptedStyleSheets=a.map(t=>t instanceof CSSStyleSheet?t:t.styleSheet);else for(const i of a){const a=document.createElement("style"),n=e.litNonce;void 0!==n&&a.setAttribute("nonce",n),a.textContent=i.cssText,t.appendChild(a)}})(t,this.constructor.elementStyles),t}connectedCallback(){this.renderRoot??=this.createRenderRoot(),this.enableUpdating(!0),this._$EO?.forEach(t=>t.hostConnected?.())}enableUpdating(t){}disconnectedCallback(){this._$EO?.forEach(t=>t.hostDisconnected?.())}attributeChangedCallback(t,e,i){this._$AK(t,i)}_$ET(t,e){const i=this.constructor.elementProperties.get(t),a=this.constructor._$Eu(t,i);if(void 0!==a&&!0===i.reflect){const n=(void 0!==i.converter?.toAttribute?i.converter:y).toAttribute(e,i.type);this._$Em=t,null==n?this.removeAttribute(a):this.setAttribute(a,n),this._$Em=null}}_$AK(t,e){const i=this.constructor,a=i._$Eh.get(t);if(void 0!==a&&this._$Em!==a){const t=i.getPropertyOptions(a),n="function"==typeof t.converter?{fromAttribute:t.converter}:void 0!==t.converter?.fromAttribute?t.converter:y;this._$Em=a;const o=n.fromAttribute(e,t.type);this[a]=o??this._$Ej?.get(a)??o,this._$Em=null}}requestUpdate(t,e,i,a=!1,n){if(void 0!==t){const o=this.constructor;if(!1===a&&(n=this[t]),i??=o.getPropertyOptions(t),!((i.hasChanged??w)(n,e)||i.useDefault&&i.reflect&&n===this._$Ej?.get(t)&&!this.hasAttribute(o._$Eu(t,i))))return;this.C(t,e,i)}!1===this.isUpdatePending&&(this._$ES=this._$EP())}C(t,e,{useDefault:i,reflect:a,wrapped:n},o){i&&!(this._$Ej??=new Map).has(t)&&(this._$Ej.set(t,o??e??this[t]),!0!==n||void 0!==o)||(this._$AL.has(t)||(this.hasUpdated||i||(e=void 0),this._$AL.set(t,e)),!0===a&&this._$Em!==t&&(this._$Eq??=new Set).add(t))}async _$EP(){this.isUpdatePending=!0;try{await this._$ES}catch(t){Promise.reject(t)}const t=this.scheduleUpdate();return null!=t&&await t,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){if(!this.isUpdatePending)return;if(!this.hasUpdated){if(this.renderRoot??=this.createRenderRoot(),this._$Ep){for(const[t,e]of this._$Ep)this[t]=e;this._$Ep=void 0}const t=this.constructor.elementProperties;if(t.size>0)for(const[e,i]of t){const{wrapped:t}=i,a=this[e];!0!==t||this._$AL.has(e)||void 0===a||this.C(e,void 0,i,a)}}let t=!1;const e=this._$AL;try{t=this.shouldUpdate(e),t?(this.willUpdate(e),this._$EO?.forEach(t=>t.hostUpdate?.()),this.update(e)):this._$EM()}catch(e){throw t=!1,this._$EM(),e}t&&this._$AE(e)}willUpdate(t){}_$AE(t){this._$EO?.forEach(t=>t.hostUpdated?.()),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(t)),this.updated(t)}_$EM(){this._$AL=new Map,this.isUpdatePending=!1}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$ES}shouldUpdate(t){return!0}update(t){this._$Eq&&=this._$Eq.forEach(t=>this._$ET(t,this[t])),this._$EM()}updated(t){}firstUpdated(t){}};$.elementStyles=[],$.shadowRootOptions={mode:"open"},$[v("elementProperties")]=new Map,$[v("finalized")]=new Map,m?.({ReactiveElement:$}),(_.reactiveElementVersions??=[]).push("2.1.2");const x=globalThis,A=t=>t,C=x.trustedTypes,E=C?C.createPolicy("lit-html",{createHTML:t=>t}):void 0,M="$lit$",S=`lit$${Math.random().toFixed(9).slice(2)}$`,k="?"+S,H=`<${k}>`,z=document,P=()=>z.createComment(""),O=t=>null===t||"object"!=typeof t&&"function"!=typeof t,q=Array.isArray,L="[ \t\n\f\r]",T=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,U=/-->/g,B=/>/g,I=RegExp(`>|${L}(?:([^\\s"'>=/]+)(${L}*=${L}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`,"g"),R=/'/g,N=/"/g,D=/^(?:script|style|textarea|title)$/i,j=(t=>(e,...i)=>({_$litType$:t,strings:e,values:i}))(1),V=Symbol.for("lit-noChange"),Q=Symbol.for("lit-nothing"),W=new WeakMap,F=z.createTreeWalker(z,129);function K(t,e){if(!q(t)||!t.hasOwnProperty("raw"))throw Error("invalid template strings array");return void 0!==E?E.createHTML(e):e}const G=(t,e)=>{const i=t.length-1,a=[];let n,o=2===e?"<svg>":3===e?"<math>":"",s=T;for(let e=0;e<i;e++){const i=t[e];let r,l,c=-1,h=0;for(;h<i.length&&(s.lastIndex=h,l=s.exec(i),null!==l);)h=s.lastIndex,s===T?"!--"===l[1]?s=U:void 0!==l[1]?s=B:void 0!==l[2]?(D.test(l[2])&&(n=RegExp("</"+l[2],"g")),s=I):void 0!==l[3]&&(s=I):s===I?">"===l[0]?(s=n??T,c=-1):void 0===l[1]?c=-2:(c=s.lastIndex-l[2].length,r=l[1],s=void 0===l[3]?I:'"'===l[3]?N:R):s===N||s===R?s=I:s===U||s===B?s=T:(s=I,n=void 0);const d=s===I&&t[e+1].startsWith("/>")?" ":"";o+=s===T?i+H:c>=0?(a.push(r),i.slice(0,c)+M+i.slice(c)+S+d):i+S+(-2===c?e:d)}return[K(t,o+(t[i]||"<?>")+(2===e?"</svg>":3===e?"</math>":"")),a]};class X{constructor({strings:t,_$litType$:e},i){let a;this.parts=[];let n=0,o=0;const s=t.length-1,r=this.parts,[l,c]=G(t,e);if(this.el=X.createElement(l,i),F.currentNode=this.el.content,2===e||3===e){const t=this.el.content.firstChild;t.replaceWith(...t.childNodes)}for(;null!==(a=F.nextNode())&&r.length<s;){if(1===a.nodeType){if(a.hasAttributes())for(const t of a.getAttributeNames())if(t.endsWith(M)){const e=c[o++],i=a.getAttribute(t).split(S),s=/([.?@])?(.*)/.exec(e);r.push({type:1,index:n,name:s[2],strings:i,ctor:"."===s[1]?et:"?"===s[1]?it:"@"===s[1]?at:tt}),a.removeAttribute(t)}else t.startsWith(S)&&(r.push({type:6,index:n}),a.removeAttribute(t));if(D.test(a.tagName)){const t=a.textContent.split(S),e=t.length-1;if(e>0){a.textContent=C?C.emptyScript:"";for(let i=0;i<e;i++)a.append(t[i],P()),F.nextNode(),r.push({type:2,index:++n});a.append(t[e],P())}}}else if(8===a.nodeType)if(a.data===k)r.push({type:2,index:n});else{let t=-1;for(;-1!==(t=a.data.indexOf(S,t+1));)r.push({type:7,index:n}),t+=S.length-1}n++}}static createElement(t,e){const i=z.createElement("template");return i.innerHTML=t,i}}function Y(t,e,i=t,a){if(e===V)return e;let n=void 0!==a?i._$Co?.[a]:i._$Cl;const o=O(e)?void 0:e._$litDirective$;return n?.constructor!==o&&(n?._$AO?.(!1),void 0===o?n=void 0:(n=new o(t),n._$AT(t,i,a)),void 0!==a?(i._$Co??=[])[a]=n:i._$Cl=n),void 0!==n&&(e=Y(t,n._$AS(t,e.values),n,a)),e}class J{constructor(t,e){this._$AV=[],this._$AN=void 0,this._$AD=t,this._$AM=e}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(t){const{el:{content:e},parts:i}=this._$AD,a=(t?.creationScope??z).importNode(e,!0);F.currentNode=a;let n=F.nextNode(),o=0,s=0,r=i[0];for(;void 0!==r;){if(o===r.index){let e;2===r.type?e=new Z(n,n.nextSibling,this,t):1===r.type?e=new r.ctor(n,r.name,r.strings,this,t):6===r.type&&(e=new nt(n,this,t)),this._$AV.push(e),r=i[++s]}o!==r?.index&&(n=F.nextNode(),o++)}return F.currentNode=z,a}p(t){let e=0;for(const i of this._$AV)void 0!==i&&(void 0!==i.strings?(i._$AI(t,i,e),e+=i.strings.length-2):i._$AI(t[e])),e++}}class Z{get _$AU(){return this._$AM?._$AU??this._$Cv}constructor(t,e,i,a){this.type=2,this._$AH=Q,this._$AN=void 0,this._$AA=t,this._$AB=e,this._$AM=i,this.options=a,this._$Cv=a?.isConnected??!0}get parentNode(){let t=this._$AA.parentNode;const e=this._$AM;return void 0!==e&&11===t?.nodeType&&(t=e.parentNode),t}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(t,e=this){t=Y(this,t,e),O(t)?t===Q||null==t||""===t?(this._$AH!==Q&&this._$AR(),this._$AH=Q):t!==this._$AH&&t!==V&&this._(t):void 0!==t._$litType$?this.$(t):void 0!==t.nodeType?this.T(t):(t=>q(t)||"function"==typeof t?.[Symbol.iterator])(t)?this.k(t):this._(t)}O(t){return this._$AA.parentNode.insertBefore(t,this._$AB)}T(t){this._$AH!==t&&(this._$AR(),this._$AH=this.O(t))}_(t){this._$AH!==Q&&O(this._$AH)?this._$AA.nextSibling.data=t:this.T(z.createTextNode(t)),this._$AH=t}$(t){const{values:e,_$litType$:i}=t,a="number"==typeof i?this._$AC(t):(void 0===i.el&&(i.el=X.createElement(K(i.h,i.h[0]),this.options)),i);if(this._$AH?._$AD===a)this._$AH.p(e);else{const t=new J(a,this),i=t.u(this.options);t.p(e),this.T(i),this._$AH=t}}_$AC(t){let e=W.get(t.strings);return void 0===e&&W.set(t.strings,e=new X(t)),e}k(t){q(this._$AH)||(this._$AH=[],this._$AR());const e=this._$AH;let i,a=0;for(const n of t)a===e.length?e.push(i=new Z(this.O(P()),this.O(P()),this,this.options)):i=e[a],i._$AI(n),a++;a<e.length&&(this._$AR(i&&i._$AB.nextSibling,a),e.length=a)}_$AR(t=this._$AA.nextSibling,e){for(this._$AP?.(!1,!0,e);t!==this._$AB;){const e=A(t).nextSibling;A(t).remove(),t=e}}setConnected(t){void 0===this._$AM&&(this._$Cv=t,this._$AP?.(t))}}class tt{get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}constructor(t,e,i,a,n){this.type=1,this._$AH=Q,this._$AN=void 0,this.element=t,this.name=e,this._$AM=a,this.options=n,i.length>2||""!==i[0]||""!==i[1]?(this._$AH=Array(i.length-1).fill(new String),this.strings=i):this._$AH=Q}_$AI(t,e=this,i,a){const n=this.strings;let o=!1;if(void 0===n)t=Y(this,t,e,0),o=!O(t)||t!==this._$AH&&t!==V,o&&(this._$AH=t);else{const a=t;let s,r;for(t=n[0],s=0;s<n.length-1;s++)r=Y(this,a[i+s],e,s),r===V&&(r=this._$AH[s]),o||=!O(r)||r!==this._$AH[s],r===Q?t=Q:t!==Q&&(t+=(r??"")+n[s+1]),this._$AH[s]=r}o&&!a&&this.j(t)}j(t){t===Q?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,t??"")}}class et extends tt{constructor(){super(...arguments),this.type=3}j(t){this.element[this.name]=t===Q?void 0:t}}class it extends tt{constructor(){super(...arguments),this.type=4}j(t){this.element.toggleAttribute(this.name,!!t&&t!==Q)}}class at extends tt{constructor(t,e,i,a,n){super(t,e,i,a,n),this.type=5}_$AI(t,e=this){if((t=Y(this,t,e,0)??Q)===V)return;const i=this._$AH,a=t===Q&&i!==Q||t.capture!==i.capture||t.once!==i.once||t.passive!==i.passive,n=t!==Q&&(i===Q||a);a&&this.element.removeEventListener(this.name,this,i),n&&this.element.addEventListener(this.name,this,t),this._$AH=t}handleEvent(t){"function"==typeof this._$AH?this._$AH.call(this.options?.host??this.element,t):this._$AH.handleEvent(t)}}class nt{constructor(t,e,i){this.element=t,this.type=6,this._$AN=void 0,this._$AM=e,this.options=i}get _$AU(){return this._$AM._$AU}_$AI(t){Y(this,t)}}const ot=x.litHtmlPolyfillSupport;ot?.(X,Z),(x.litHtmlVersions??=[]).push("3.3.3");const st=globalThis;let rt=class extends ${constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0}createRenderRoot(){const t=super.createRenderRoot();return this.renderOptions.renderBefore??=t.firstChild,t}update(t){const e=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(t),this._$Do=((t,e,i)=>{const a=i?.renderBefore??e;let n=a._$litPart$;if(void 0===n){const t=i?.renderBefore??null;a._$litPart$=n=new Z(e.insertBefore(P(),t),t,void 0,i??{})}return n._$AI(t),n})(e,this.renderRoot,this.renderOptions)}connectedCallback(){super.connectedCallback(),this._$Do?.setConnected(!0)}disconnectedCallback(){super.disconnectedCallback(),this._$Do?.setConnected(!1)}render(){return V}};rt._$litElement$=!0,rt.finalized=!0,st.litElementHydrateSupport?.({LitElement:rt});const lt=st.litElementPolyfillSupport;lt?.({LitElement:rt}),(st.litElementVersions??=[]).push("4.2.2");const ct=t=>(e,i)=>{void 0!==i?i.addInitializer(()=>{customElements.define(t,e)}):customElements.define(t,e)},ht={attribute:!0,type:String,converter:y,reflect:!1,hasChanged:w},dt=(t=ht,e,i)=>{const{kind:a,metadata:n}=i;let o=globalThis.litPropertyMetadata.get(n);if(void 0===o&&globalThis.litPropertyMetadata.set(n,o=new Map),"setter"===a&&((t=Object.create(t)).wrapped=!0),o.set(i.name,t),"accessor"===a){const{name:a}=i;return{set(i){const n=e.get.call(this);e.set.call(this,i),this.requestUpdate(a,n,t,!0,i)},init(e){return void 0!==e&&this.C(a,void 0,t,e),e}}}if("setter"===a){const{name:a}=i;return function(i){const n=this[a];e.call(this,i),this.requestUpdate(a,n,t,!0,i)}}throw Error("Unsupported decorator location: "+a)};function ut(t){return(e,i)=>"object"==typeof i?dt(t,e,i):((t,e,i)=>{const a=e.hasOwnProperty(i);return e.constructor.createProperty(i,t),a?Object.getOwnPropertyDescriptor(e,i):void 0})(t,e,i)}function pt(t){return ut({...t,state:!0,attribute:!1})}var _t,ft;!function(t){t.language="language",t.system="system",t.comma_decimal="comma_decimal",t.decimal_comma="decimal_comma",t.space_comma="space_comma",t.none="none"}(_t||(_t={})),function(t){t.language="language",t.system="system",t.am_pm="12",t.twenty_four="24"}(ft||(ft={}));const gt=["closed","locked","off"],mt=(t,e,i,a)=>{a=a||{},i=null==i?{}:i;const n=new Event(e,{bubbles:void 0===a.bubbles||a.bubbles,cancelable:Boolean(a.cancelable),composed:void 0===a.composed||a.composed});return n.detail=i,t.dispatchEvent(n),n},vt=(t,e)=>{if(t===e)return!0;if(t&&e&&"object"==typeof t&&"object"==typeof e){if(t.constructor!==e.constructor)return!1;let i,a;if(Array.isArray(t)){const n=e;if(a=t.length,a!==n.length)return!1;for(i=a;0!==i--;)if(!vt(t[i],n[i]))return!1;return!0}if(t instanceof Map&&e instanceof Map){if(t.size!==e.size)return!1;for(i of t.entries())if(!e.has(i[0]))return!1;for(i of t.entries())if(!vt(i[1],e.get(i[0])))return!1;return!0}if(t instanceof Set&&e instanceof Set){if(t.size!==e.size)return!1;for(i of t.entries())if(!e.has(i[0]))return!1;return!0}if(ArrayBuffer.isView(t)&&ArrayBuffer.isView(e))return((t,e)=>{if(t.byteLength!==e.byteLength)return!1;const i=new Uint8Array(t.buffer,t.byteOffset,t.byteLength),a=new Uint8Array(e.buffer,e.byteOffset,e.byteLength);for(let t=0;t<i.length;t++)if(i[t]!==a[t])return!1;return!0})(t,e);if(t instanceof RegExp&&e instanceof RegExp)return t.source===e.source&&t.flags===e.flags;if(t.valueOf!==Object.prototype.valueOf)return t.valueOf()===e.valueOf();if(t.toString!==Object.prototype.toString)return t.toString()===e.toString();const n=t,o=e,s=Object.keys(n);if(a=s.length,a!==Object.keys(o).length)return!1;for(i=a;0!==i--;)if(!Object.prototype.hasOwnProperty.call(e,s[i]))return!1;for(i=a;0!==i--;){const t=s[i];if(!vt(n[t],o[t]))return!1}return!0}return t!=t&&e!=e},yt=t=>{mt(window,"haptic",t)},wt=(t,e,i,a)=>{if(a||(a={action:"more-info"}),!a.confirmation||a.confirmation.exemptions&&a.confirmation.exemptions.some(t=>t.user===e.user.id)||(yt("warning"),confirm(a.confirmation.text||`Are you sure you want to ${a.action}?`)))switch(a.action){case"more-info":(i.entity||i.camera_image)&&mt(t,"hass-more-info",{entityId:i.entity?i.entity:i.camera_image});break;case"navigate":a.navigation_path&&((t,e,i=!1)=>{i?history.replaceState(null,"",e):history.pushState(null,"",e),mt(window,"location-changed",{replace:i})})(0,a.navigation_path);break;case"url":a.url_path&&window.open(a.url_path);break;case"toggle":i.entity&&(((t,e)=>{((t,e,i=!0)=>{const a=function(t){return t.substr(0,t.indexOf("."))}(e),n="group"===a?"homeassistant":a;let o;switch(a){case"lock":o=i?"unlock":"lock";break;case"cover":o=i?"open_cover":"close_cover";break;default:o=i?"turn_on":"turn_off"}t.callService(n,o,{entity_id:e})})(t,e,gt.includes(t.states[e].state))})(e,i.entity),yt("success"));break;case"call-service":{if(!a.service)return void yt("failure");const[t,i]=a.service.split(".",2);e.callService(t,i,a.service_data,a.target),yt("success");break}case"fire-dom-event":mt(t,"ll-custom",a)}};function bt(t){return void 0!==t&&"none"!==t.action}const $t={1:{level:1,label:"Good",bgColor:"#B0E867",faceColor:"#A8E05F",fontColor:"#718B3A"},2:{level:2,label:"Moderate",bgColor:"#E3C143",faceColor:"#FDD64B",fontColor:"#A57F23"},3:{level:3,label:"Unhealthy for Sensitive Groups",bgColor:"#E48B4E",faceColor:"#FF9B57",fontColor:"#B25826"},4:{level:4,label:"Unhealthy",bgColor:"#E45F5E",faceColor:"#FE6A69",fontColor:"#AF2C3C"},5:{level:5,label:"Very Unhealthy",bgColor:"#986EA9",faceColor:"#A97ABC",fontColor:"#634675"},6:{level:6,label:"Hazardous",bgColor:"#A5516B",faceColor:"#A87383",fontColor:"#683E51"}},xt={"clear-night":"night-clear-sky",cloudy:"scattered-clouds",fog:"scattered-clouds",hail:"rain",lightning:"rain","lightning-rainy":"rain",partlycloudy:"new-clouds",pouring:"rain",rainy:"rain",snowy:"snow","snowy-rainy":"snow",sunny:"clear-sky",windy:"scattered-clouds","windy-variant":"scattered-clouds",exceptional:"snow"},At={p2:"PM2.5",pm25:"PM2.5",pm10:"PM10",p1:"PM10",o3:"Ozone",no2:"Nitrogen Dioxide",n2:"Nitrogen Dioxide",so2:"Sulfur Dioxide",s2:"Sulfur Dioxide",co:"Carbon Monoxide",neph:"Nephelometry"},Ct={pm25:"µg/m³",pm10:"µg/m³",p2:"µg/m³",p1:"µg/m³",o3:"ppb",no2:"ppb",n2:"ppb",so2:"ppb",s2:"ppb",co:"ppm",neph:"1/Mm"},Et={good:1,moderate:2,unhealthy_for_sensitive_groups:3,"unhealthy-for-sensitive-groups":3,unhealthy_sensitive:3,"unhealthy-sensitive":3,unhealthy:4,very_unhealthy:5,"very-unhealthy":5,hazardous:6},Mt=j`
+function e(e,t,i,a){var n,o=arguments.length,r=o<3?t:null===a?a=Object.getOwnPropertyDescriptor(t,i):a;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)r=Reflect.decorate(e,t,i,a);else for(var s=e.length-1;s>=0;s--)(n=e[s])&&(r=(o<3?n(r):o>3?n(t,i,r):n(t,i))||r);return o>3&&r&&Object.defineProperty(t,i,r),r}"function"==typeof SuppressedError&&SuppressedError;const t=globalThis,i=t.ShadowRoot&&(void 0===t.ShadyCSS||t.ShadyCSS.nativeShadow)&&"adoptedStyleSheets"in Document.prototype&&"replace"in CSSStyleSheet.prototype,a=Symbol(),n=new WeakMap;let o=class{constructor(e,t,i){if(this._$cssResult$=!0,i!==a)throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");this.cssText=e,this.t=t}get styleSheet(){let e=this.o;const t=this.t;if(i&&void 0===e){const i=void 0!==t&&1===t.length;i&&(e=n.get(t)),void 0===e&&((this.o=e=new CSSStyleSheet).replaceSync(this.cssText),i&&n.set(t,e))}return e}toString(){return this.cssText}};const r=(e,...t)=>{const i=1===e.length?e[0]:t.reduce((t,i,a)=>t+(e=>{if(!0===e._$cssResult$)return e.cssText;if("number"==typeof e)return e;throw Error("Value passed to 'css' function must be a 'css' function result: "+e+". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.")})(i)+e[a+1],e[0]);return new o(i,e,a)},s=i?e=>e:e=>e instanceof CSSStyleSheet?(e=>{let t="";for(const i of e.cssRules)t+=i.cssText;return(e=>new o("string"==typeof e?e:e+"",void 0,a))(t)})(e):e,{is:l,defineProperty:c,getOwnPropertyDescriptor:d,getOwnPropertyNames:h,getOwnPropertySymbols:u,getPrototypeOf:p}=Object,g=globalThis,m=g.trustedTypes,f=m?m.emptyScript:"",_=g.reactiveElementPolyfillSupport,v=(e,t)=>e,y={toAttribute(e,t){switch(t){case Boolean:e=e?f:null;break;case Object:case Array:e=null==e?e:JSON.stringify(e)}return e},fromAttribute(e,t){let i=e;switch(t){case Boolean:i=null!==e;break;case Number:i=null===e?null:Number(e);break;case Object:case Array:try{i=JSON.parse(e)}catch(e){i=null}}return i}},w=(e,t)=>!l(e,t),b={attribute:!0,type:String,converter:y,reflect:!1,useDefault:!1,hasChanged:w};Symbol.metadata??=Symbol("metadata"),g.litPropertyMetadata??=new WeakMap;let $=class extends HTMLElement{static addInitializer(e){this._$Ei(),(this.l??=[]).push(e)}static get observedAttributes(){return this.finalize(),this._$Eh&&[...this._$Eh.keys()]}static createProperty(e,t=b){if(t.state&&(t.attribute=!1),this._$Ei(),this.prototype.hasOwnProperty(e)&&((t=Object.create(t)).wrapped=!0),this.elementProperties.set(e,t),!t.noAccessor){const i=Symbol(),a=this.getPropertyDescriptor(e,i,t);void 0!==a&&c(this.prototype,e,a)}}static getPropertyDescriptor(e,t,i){const{get:a,set:n}=d(this.prototype,e)??{get(){return this[t]},set(e){this[t]=e}};return{get:a,set(t){const o=a?.call(this);n?.call(this,t),this.requestUpdate(e,o,i)},configurable:!0,enumerable:!0}}static getPropertyOptions(e){return this.elementProperties.get(e)??b}static _$Ei(){if(this.hasOwnProperty(v("elementProperties")))return;const e=p(this);e.finalize(),void 0!==e.l&&(this.l=[...e.l]),this.elementProperties=new Map(e.elementProperties)}static finalize(){if(this.hasOwnProperty(v("finalized")))return;if(this.finalized=!0,this._$Ei(),this.hasOwnProperty(v("properties"))){const e=this.properties,t=[...h(e),...u(e)];for(const i of t)this.createProperty(i,e[i])}const e=this[Symbol.metadata];if(null!==e){const t=litPropertyMetadata.get(e);if(void 0!==t)for(const[e,i]of t)this.elementProperties.set(e,i)}this._$Eh=new Map;for(const[e,t]of this.elementProperties){const i=this._$Eu(e,t);void 0!==i&&this._$Eh.set(i,e)}this.elementStyles=this.finalizeStyles(this.styles)}static finalizeStyles(e){const t=[];if(Array.isArray(e)){const i=new Set(e.flat(1/0).reverse());for(const e of i)t.unshift(s(e))}else void 0!==e&&t.push(s(e));return t}static _$Eu(e,t){const i=t.attribute;return!1===i?void 0:"string"==typeof i?i:"string"==typeof e?e.toLowerCase():void 0}constructor(){super(),this._$Ep=void 0,this.isUpdatePending=!1,this.hasUpdated=!1,this._$Em=null,this._$Ev()}_$Ev(){this._$ES=new Promise(e=>this.enableUpdating=e),this._$AL=new Map,this._$E_(),this.requestUpdate(),this.constructor.l?.forEach(e=>e(this))}addController(e){(this._$EO??=new Set).add(e),void 0!==this.renderRoot&&this.isConnected&&e.hostConnected?.()}removeController(e){this._$EO?.delete(e)}_$E_(){const e=new Map,t=this.constructor.elementProperties;for(const i of t.keys())this.hasOwnProperty(i)&&(e.set(i,this[i]),delete this[i]);e.size>0&&(this._$Ep=e)}createRenderRoot(){const e=this.shadowRoot??this.attachShadow(this.constructor.shadowRootOptions);return((e,a)=>{if(i)e.adoptedStyleSheets=a.map(e=>e instanceof CSSStyleSheet?e:e.styleSheet);else for(const i of a){const a=document.createElement("style"),n=t.litNonce;void 0!==n&&a.setAttribute("nonce",n),a.textContent=i.cssText,e.appendChild(a)}})(e,this.constructor.elementStyles),e}connectedCallback(){this.renderRoot??=this.createRenderRoot(),this.enableUpdating(!0),this._$EO?.forEach(e=>e.hostConnected?.())}enableUpdating(e){}disconnectedCallback(){this._$EO?.forEach(e=>e.hostDisconnected?.())}attributeChangedCallback(e,t,i){this._$AK(e,i)}_$ET(e,t){const i=this.constructor.elementProperties.get(e),a=this.constructor._$Eu(e,i);if(void 0!==a&&!0===i.reflect){const n=(void 0!==i.converter?.toAttribute?i.converter:y).toAttribute(t,i.type);this._$Em=e,null==n?this.removeAttribute(a):this.setAttribute(a,n),this._$Em=null}}_$AK(e,t){const i=this.constructor,a=i._$Eh.get(e);if(void 0!==a&&this._$Em!==a){const e=i.getPropertyOptions(a),n="function"==typeof e.converter?{fromAttribute:e.converter}:void 0!==e.converter?.fromAttribute?e.converter:y;this._$Em=a;const o=n.fromAttribute(t,e.type);this[a]=o??this._$Ej?.get(a)??o,this._$Em=null}}requestUpdate(e,t,i,a=!1,n){if(void 0!==e){const o=this.constructor;if(!1===a&&(n=this[e]),i??=o.getPropertyOptions(e),!((i.hasChanged??w)(n,t)||i.useDefault&&i.reflect&&n===this._$Ej?.get(e)&&!this.hasAttribute(o._$Eu(e,i))))return;this.C(e,t,i)}!1===this.isUpdatePending&&(this._$ES=this._$EP())}C(e,t,{useDefault:i,reflect:a,wrapped:n},o){i&&!(this._$Ej??=new Map).has(e)&&(this._$Ej.set(e,o??t??this[e]),!0!==n||void 0!==o)||(this._$AL.has(e)||(this.hasUpdated||i||(t=void 0),this._$AL.set(e,t)),!0===a&&this._$Em!==e&&(this._$Eq??=new Set).add(e))}async _$EP(){this.isUpdatePending=!0;try{await this._$ES}catch(e){Promise.reject(e)}const e=this.scheduleUpdate();return null!=e&&await e,!this.isUpdatePending}scheduleUpdate(){return this.performUpdate()}performUpdate(){if(!this.isUpdatePending)return;if(!this.hasUpdated){if(this.renderRoot??=this.createRenderRoot(),this._$Ep){for(const[e,t]of this._$Ep)this[e]=t;this._$Ep=void 0}const e=this.constructor.elementProperties;if(e.size>0)for(const[t,i]of e){const{wrapped:e}=i,a=this[t];!0!==e||this._$AL.has(t)||void 0===a||this.C(t,void 0,i,a)}}let e=!1;const t=this._$AL;try{e=this.shouldUpdate(t),e?(this.willUpdate(t),this._$EO?.forEach(e=>e.hostUpdate?.()),this.update(t)):this._$EM()}catch(t){throw e=!1,this._$EM(),t}e&&this._$AE(t)}willUpdate(e){}_$AE(e){this._$EO?.forEach(e=>e.hostUpdated?.()),this.hasUpdated||(this.hasUpdated=!0,this.firstUpdated(e)),this.updated(e)}_$EM(){this._$AL=new Map,this.isUpdatePending=!1}get updateComplete(){return this.getUpdateComplete()}getUpdateComplete(){return this._$ES}shouldUpdate(e){return!0}update(e){this._$Eq&&=this._$Eq.forEach(e=>this._$ET(e,this[e])),this._$EM()}updated(e){}firstUpdated(e){}};$.elementStyles=[],$.shadowRootOptions={mode:"open"},$[v("elementProperties")]=new Map,$[v("finalized")]=new Map,_?.({ReactiveElement:$}),(g.reactiveElementVersions??=[]).push("2.1.2");const x=globalThis,A=e=>e,C=x.trustedTypes,E=C?C.createPolicy("lit-html",{createHTML:e=>e}):void 0,M="$lit$",S=`lit$${Math.random().toFixed(9).slice(2)}$`,k="?"+S,H=`<${k}>`,z=document,q=()=>z.createComment(""),P=e=>null===e||"object"!=typeof e&&"function"!=typeof e,L=Array.isArray,O="[ \t\n\f\r]",T=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,U=/-->/g,I=/>/g,B=RegExp(`>|${O}(?:([^\\s"'>=/]+)(${O}*=${O}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`,"g"),N=/'/g,R=/"/g,j=/^(?:script|style|textarea|title)$/i,D=(e=>(t,...i)=>({_$litType$:e,strings:t,values:i}))(1),V=Symbol.for("lit-noChange"),Q=Symbol.for("lit-nothing"),W=new WeakMap,F=z.createTreeWalker(z,129);function K(e,t){if(!L(e)||!e.hasOwnProperty("raw"))throw Error("invalid template strings array");return void 0!==E?E.createHTML(t):t}const G=(e,t)=>{const i=e.length-1,a=[];let n,o=2===t?"<svg>":3===t?"<math>":"",r=T;for(let t=0;t<i;t++){const i=e[t];let s,l,c=-1,d=0;for(;d<i.length&&(r.lastIndex=d,l=r.exec(i),null!==l);)d=r.lastIndex,r===T?"!--"===l[1]?r=U:void 0!==l[1]?r=I:void 0!==l[2]?(j.test(l[2])&&(n=RegExp("</"+l[2],"g")),r=B):void 0!==l[3]&&(r=B):r===B?">"===l[0]?(r=n??T,c=-1):void 0===l[1]?c=-2:(c=r.lastIndex-l[2].length,s=l[1],r=void 0===l[3]?B:'"'===l[3]?R:N):r===R||r===N?r=B:r===U||r===I?r=T:(r=B,n=void 0);const h=r===B&&e[t+1].startsWith("/>")?" ":"";o+=r===T?i+H:c>=0?(a.push(s),i.slice(0,c)+M+i.slice(c)+S+h):i+S+(-2===c?t:h)}return[K(e,o+(e[i]||"<?>")+(2===t?"</svg>":3===t?"</math>":"")),a]};class Y{constructor({strings:e,_$litType$:t},i){let a;this.parts=[];let n=0,o=0;const r=e.length-1,s=this.parts,[l,c]=G(e,t);if(this.el=Y.createElement(l,i),F.currentNode=this.el.content,2===t||3===t){const e=this.el.content.firstChild;e.replaceWith(...e.childNodes)}for(;null!==(a=F.nextNode())&&s.length<r;){if(1===a.nodeType){if(a.hasAttributes())for(const e of a.getAttributeNames())if(e.endsWith(M)){const t=c[o++],i=a.getAttribute(e).split(S),r=/([.?@])?(.*)/.exec(t);s.push({type:1,index:n,name:r[2],strings:i,ctor:"."===r[1]?te:"?"===r[1]?ie:"@"===r[1]?ae:ee}),a.removeAttribute(e)}else e.startsWith(S)&&(s.push({type:6,index:n}),a.removeAttribute(e));if(j.test(a.tagName)){const e=a.textContent.split(S),t=e.length-1;if(t>0){a.textContent=C?C.emptyScript:"";for(let i=0;i<t;i++)a.append(e[i],q()),F.nextNode(),s.push({type:2,index:++n});a.append(e[t],q())}}}else if(8===a.nodeType)if(a.data===k)s.push({type:2,index:n});else{let e=-1;for(;-1!==(e=a.data.indexOf(S,e+1));)s.push({type:7,index:n}),e+=S.length-1}n++}}static createElement(e,t){const i=z.createElement("template");return i.innerHTML=e,i}}function X(e,t,i=e,a){if(t===V)return t;let n=void 0!==a?i._$Co?.[a]:i._$Cl;const o=P(t)?void 0:t._$litDirective$;return n?.constructor!==o&&(n?._$AO?.(!1),void 0===o?n=void 0:(n=new o(e),n._$AT(e,i,a)),void 0!==a?(i._$Co??=[])[a]=n:i._$Cl=n),void 0!==n&&(t=X(e,n._$AS(e,t.values),n,a)),t}class J{constructor(e,t){this._$AV=[],this._$AN=void 0,this._$AD=e,this._$AM=t}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(e){const{el:{content:t},parts:i}=this._$AD,a=(e?.creationScope??z).importNode(t,!0);F.currentNode=a;let n=F.nextNode(),o=0,r=0,s=i[0];for(;void 0!==s;){if(o===s.index){let t;2===s.type?t=new Z(n,n.nextSibling,this,e):1===s.type?t=new s.ctor(n,s.name,s.strings,this,e):6===s.type&&(t=new ne(n,this,e)),this._$AV.push(t),s=i[++r]}o!==s?.index&&(n=F.nextNode(),o++)}return F.currentNode=z,a}p(e){let t=0;for(const i of this._$AV)void 0!==i&&(void 0!==i.strings?(i._$AI(e,i,t),t+=i.strings.length-2):i._$AI(e[t])),t++}}class Z{get _$AU(){return this._$AM?._$AU??this._$Cv}constructor(e,t,i,a){this.type=2,this._$AH=Q,this._$AN=void 0,this._$AA=e,this._$AB=t,this._$AM=i,this.options=a,this._$Cv=a?.isConnected??!0}get parentNode(){let e=this._$AA.parentNode;const t=this._$AM;return void 0!==t&&11===e?.nodeType&&(e=t.parentNode),e}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(e,t=this){e=X(this,e,t),P(e)?e===Q||null==e||""===e?(this._$AH!==Q&&this._$AR(),this._$AH=Q):e!==this._$AH&&e!==V&&this._(e):void 0!==e._$litType$?this.$(e):void 0!==e.nodeType?this.T(e):(e=>L(e)||"function"==typeof e?.[Symbol.iterator])(e)?this.k(e):this._(e)}O(e){return this._$AA.parentNode.insertBefore(e,this._$AB)}T(e){this._$AH!==e&&(this._$AR(),this._$AH=this.O(e))}_(e){this._$AH!==Q&&P(this._$AH)?this._$AA.nextSibling.data=e:this.T(z.createTextNode(e)),this._$AH=e}$(e){const{values:t,_$litType$:i}=e,a="number"==typeof i?this._$AC(e):(void 0===i.el&&(i.el=Y.createElement(K(i.h,i.h[0]),this.options)),i);if(this._$AH?._$AD===a)this._$AH.p(t);else{const e=new J(a,this),i=e.u(this.options);e.p(t),this.T(i),this._$AH=e}}_$AC(e){let t=W.get(e.strings);return void 0===t&&W.set(e.strings,t=new Y(e)),t}k(e){L(this._$AH)||(this._$AH=[],this._$AR());const t=this._$AH;let i,a=0;for(const n of e)a===t.length?t.push(i=new Z(this.O(q()),this.O(q()),this,this.options)):i=t[a],i._$AI(n),a++;a<t.length&&(this._$AR(i&&i._$AB.nextSibling,a),t.length=a)}_$AR(e=this._$AA.nextSibling,t){for(this._$AP?.(!1,!0,t);e!==this._$AB;){const t=A(e).nextSibling;A(e).remove(),e=t}}setConnected(e){void 0===this._$AM&&(this._$Cv=e,this._$AP?.(e))}}class ee{get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}constructor(e,t,i,a,n){this.type=1,this._$AH=Q,this._$AN=void 0,this.element=e,this.name=t,this._$AM=a,this.options=n,i.length>2||""!==i[0]||""!==i[1]?(this._$AH=Array(i.length-1).fill(new String),this.strings=i):this._$AH=Q}_$AI(e,t=this,i,a){const n=this.strings;let o=!1;if(void 0===n)e=X(this,e,t,0),o=!P(e)||e!==this._$AH&&e!==V,o&&(this._$AH=e);else{const a=e;let r,s;for(e=n[0],r=0;r<n.length-1;r++)s=X(this,a[i+r],t,r),s===V&&(s=this._$AH[r]),o||=!P(s)||s!==this._$AH[r],s===Q?e=Q:e!==Q&&(e+=(s??"")+n[r+1]),this._$AH[r]=s}o&&!a&&this.j(e)}j(e){e===Q?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,e??"")}}class te extends ee{constructor(){super(...arguments),this.type=3}j(e){this.element[this.name]=e===Q?void 0:e}}class ie extends ee{constructor(){super(...arguments),this.type=4}j(e){this.element.toggleAttribute(this.name,!!e&&e!==Q)}}class ae extends ee{constructor(e,t,i,a,n){super(e,t,i,a,n),this.type=5}_$AI(e,t=this){if((e=X(this,e,t,0)??Q)===V)return;const i=this._$AH,a=e===Q&&i!==Q||e.capture!==i.capture||e.once!==i.once||e.passive!==i.passive,n=e!==Q&&(i===Q||a);a&&this.element.removeEventListener(this.name,this,i),n&&this.element.addEventListener(this.name,this,e),this._$AH=e}handleEvent(e){"function"==typeof this._$AH?this._$AH.call(this.options?.host??this.element,e):this._$AH.handleEvent(e)}}class ne{constructor(e,t,i){this.element=e,this.type=6,this._$AN=void 0,this._$AM=t,this.options=i}get _$AU(){return this._$AM._$AU}_$AI(e){X(this,e)}}const oe=x.litHtmlPolyfillSupport;oe?.(Y,Z),(x.litHtmlVersions??=[]).push("3.3.3");const re=globalThis;let se=class extends ${constructor(){super(...arguments),this.renderOptions={host:this},this._$Do=void 0}createRenderRoot(){const e=super.createRenderRoot();return this.renderOptions.renderBefore??=e.firstChild,e}update(e){const t=this.render();this.hasUpdated||(this.renderOptions.isConnected=this.isConnected),super.update(e),this._$Do=((e,t,i)=>{const a=i?.renderBefore??t;let n=a._$litPart$;if(void 0===n){const e=i?.renderBefore??null;a._$litPart$=n=new Z(t.insertBefore(q(),e),e,void 0,i??{})}return n._$AI(e),n})(t,this.renderRoot,this.renderOptions)}connectedCallback(){super.connectedCallback(),this._$Do?.setConnected(!0)}disconnectedCallback(){super.disconnectedCallback(),this._$Do?.setConnected(!1)}render(){return V}};se._$litElement$=!0,se.finalized=!0,re.litElementHydrateSupport?.({LitElement:se});const le=re.litElementPolyfillSupport;le?.({LitElement:se}),(re.litElementVersions??=[]).push("4.2.2");const ce=e=>(t,i)=>{void 0!==i?i.addInitializer(()=>{customElements.define(e,t)}):customElements.define(e,t)},de={attribute:!0,type:String,converter:y,reflect:!1,hasChanged:w},he=(e=de,t,i)=>{const{kind:a,metadata:n}=i;let o=globalThis.litPropertyMetadata.get(n);if(void 0===o&&globalThis.litPropertyMetadata.set(n,o=new Map),"setter"===a&&((e=Object.create(e)).wrapped=!0),o.set(i.name,e),"accessor"===a){const{name:a}=i;return{set(i){const n=t.get.call(this);t.set.call(this,i),this.requestUpdate(a,n,e,!0,i)},init(t){return void 0!==t&&this.C(a,void 0,e,t),t}}}if("setter"===a){const{name:a}=i;return function(i){const n=this[a];t.call(this,i),this.requestUpdate(a,n,e,!0,i)}}throw Error("Unsupported decorator location: "+a)};function ue(e){return(t,i)=>"object"==typeof i?he(e,t,i):((e,t,i)=>{const a=t.hasOwnProperty(i);return t.constructor.createProperty(i,e),a?Object.getOwnPropertyDescriptor(t,i):void 0})(e,t,i)}function pe(e){return ue({...e,state:!0,attribute:!1})}var ge,me;!function(e){e.language="language",e.system="system",e.comma_decimal="comma_decimal",e.decimal_comma="decimal_comma",e.space_comma="space_comma",e.none="none"}(ge||(ge={})),function(e){e.language="language",e.system="system",e.am_pm="12",e.twenty_four="24"}(me||(me={}));const fe=["closed","locked","off"],_e=(e,t,i,a)=>{a=a||{},i=null==i?{}:i;const n=new Event(t,{bubbles:void 0===a.bubbles||a.bubbles,cancelable:Boolean(a.cancelable),composed:void 0===a.composed||a.composed});return n.detail=i,e.dispatchEvent(n),n},ve=(e,t)=>{if(e===t)return!0;if(e&&t&&"object"==typeof e&&"object"==typeof t){if(e.constructor!==t.constructor)return!1;let i,a;if(Array.isArray(e)){const n=t;if(a=e.length,a!==n.length)return!1;for(i=a;0!==i--;)if(!ve(e[i],n[i]))return!1;return!0}if(e instanceof Map&&t instanceof Map){if(e.size!==t.size)return!1;for(i of e.entries())if(!t.has(i[0]))return!1;for(i of e.entries())if(!ve(i[1],t.get(i[0])))return!1;return!0}if(e instanceof Set&&t instanceof Set){if(e.size!==t.size)return!1;for(i of e.entries())if(!t.has(i[0]))return!1;return!0}if(ArrayBuffer.isView(e)&&ArrayBuffer.isView(t))return((e,t)=>{if(e.byteLength!==t.byteLength)return!1;const i=new Uint8Array(e.buffer,e.byteOffset,e.byteLength),a=new Uint8Array(t.buffer,t.byteOffset,t.byteLength);for(let e=0;e<i.length;e++)if(i[e]!==a[e])return!1;return!0})(e,t);if(e instanceof RegExp&&t instanceof RegExp)return e.source===t.source&&e.flags===t.flags;if(e.valueOf!==Object.prototype.valueOf)return e.valueOf()===t.valueOf();if(e.toString!==Object.prototype.toString)return e.toString()===t.toString();const n=e,o=t,r=Object.keys(n);if(a=r.length,a!==Object.keys(o).length)return!1;for(i=a;0!==i--;)if(!Object.prototype.hasOwnProperty.call(t,r[i]))return!1;for(i=a;0!==i--;){const e=r[i];if(!ve(n[e],o[e]))return!1}return!0}return e!=e&&t!=t},ye=e=>{_e(window,"haptic",e)},we=(e,t,i,a)=>{if(a||(a={action:"more-info"}),!a.confirmation||a.confirmation.exemptions&&a.confirmation.exemptions.some(e=>e.user===t.user.id)||(ye("warning"),confirm(a.confirmation.text||`Are you sure you want to ${a.action}?`)))switch(a.action){case"more-info":(i.entity||i.camera_image)&&_e(e,"hass-more-info",{entityId:i.entity?i.entity:i.camera_image});break;case"navigate":a.navigation_path&&((e,t,i=!1)=>{i?history.replaceState(null,"",t):history.pushState(null,"",t),_e(window,"location-changed",{replace:i})})(0,a.navigation_path);break;case"url":a.url_path&&window.open(a.url_path);break;case"toggle":i.entity&&(((e,t)=>{((e,t,i=!0)=>{const a=function(e){return e.substr(0,e.indexOf("."))}(t),n="group"===a?"homeassistant":a;let o;switch(a){case"lock":o=i?"unlock":"lock";break;case"cover":o=i?"open_cover":"close_cover";break;default:o=i?"turn_on":"turn_off"}e.callService(n,o,{entity_id:t})})(e,t,fe.includes(e.states[t].state))})(t,i.entity),ye("success"));break;case"call-service":{if(!a.service)return void ye("failure");const[e,i]=a.service.split(".",2);t.callService(e,i,a.service_data,a.target),ye("success");break}case"fire-dom-event":_e(e,"ll-custom",a)}};function be(e){return void 0!==e&&"none"!==e.action}const $e={1:{level:1,label:"Good",bgColor:"#B0E867",faceColor:"#A8E05F",fontColor:"#718B3A"},2:{level:2,label:"Moderate",bgColor:"#E3C143",faceColor:"#FDD64B",fontColor:"#A57F23"},3:{level:3,label:"Unhealthy for Sensitive Groups",bgColor:"#E48B4E",faceColor:"#FF9B57",fontColor:"#B25826"},4:{level:4,label:"Unhealthy",bgColor:"#E45F5E",faceColor:"#FE6A69",fontColor:"#AF2C3C"},5:{level:5,label:"Very Unhealthy",bgColor:"#986EA9",faceColor:"#A97ABC",fontColor:"#634675"},6:{level:6,label:"Hazardous",bgColor:"#A5516B",faceColor:"#A87383",fontColor:"#683E51"}},xe={"clear-night":"night-clear-sky",cloudy:"scattered-clouds",fog:"scattered-clouds",hail:"rain",lightning:"rain","lightning-rainy":"rain",partlycloudy:"new-clouds",pouring:"rain",rainy:"rain",snowy:"snow","snowy-rainy":"snow",sunny:"clear-sky",windy:"scattered-clouds","windy-variant":"scattered-clouds",exceptional:"snow"},Ae={p2:"PM2.5",pm25:"PM2.5",pm10:"PM10",p1:"PM10",o3:"Ozone",no2:"Nitrogen Dioxide",n2:"Nitrogen Dioxide",so2:"Sulfur Dioxide",s2:"Sulfur Dioxide",co:"Carbon Monoxide",neph:"Nephelometry"},Ce={pm25:"µg/m³",pm10:"µg/m³",p2:"µg/m³",p1:"µg/m³",o3:"ppb",no2:"ppb",n2:"ppb",so2:"ppb",s2:"ppb",co:"ppm",neph:"1/Mm"},Ee={good:1,moderate:2,unhealthy_for_sensitive_groups:3,"unhealthy-for-sensitive-groups":3,unhealthy_sensitive:3,"unhealthy-sensitive":3,unhealthy:4,very_unhealthy:5,"very-unhealthy":5,hazardous:6},Me=D`
   <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
     <g fill="none" fill-rule="evenodd">
       <path d="M0 48h48V0H0z"/>
@@ -9,7 +9,7 @@ function t(t,e,i,a){var n,o=arguments.length,s=o<3?e:null===a?a=Object.getOwnPro
       </g>
     </g>
   </svg>
-`,St=j`
+`,Se=D`
   <svg height="48" viewBox="0 0 48 48" width="48" xmlns="http://www.w3.org/2000/svg">
     <g fill="none" fill-rule="evenodd">
       <path d="M0 48h48V0H0z"/>
@@ -20,7 +20,7 @@ function t(t,e,i,a){var n,o=arguments.length,s=o<3?e:null===a?a=Object.getOwnPro
       </g>
     </g>
   </svg>
-`,kt=j`
+`,ke=D`
   <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
     <g fill="none" fill-rule="evenodd">
       <path d="M0 48h48V0H0z"/>
@@ -30,7 +30,7 @@ function t(t,e,i,a){var n,o=arguments.length,s=o<3?e:null===a?a=Object.getOwnPro
       </g>
     </g>
   </svg>
-`,Ht=j`
+`,He=D`
   <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
     <g fill="none" fill-rule="evenodd">
       <path d="M0 48h48V0H0z"/>
@@ -40,7 +40,7 @@ function t(t,e,i,a){var n,o=arguments.length,s=o<3?e:null===a?a=Object.getOwnPro
       </g>
     </g>
   </svg>
-`,zt=j`
+`,ze=D`
   <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
     <g fill="none" fill-rule="evenodd">
       <path d="M0 48h48V0H0z"/>
@@ -52,7 +52,7 @@ function t(t,e,i,a){var n,o=arguments.length,s=o<3?e:null===a?a=Object.getOwnPro
       </g>
     </g>
   </svg>
-`,Pt=j`
+`,qe=D`
   <svg height="48" viewBox="0 0 48 48" width="48" xmlns="http://www.w3.org/2000/svg">
     <g fill="none" fill-rule="evenodd">
       <path d="M0 48h48V0H0z"/>
@@ -62,38 +62,38 @@ function t(t,e,i,a){var n,o=arguments.length,s=o<3?e:null===a?a=Object.getOwnPro
       </g>
     </g>
   </svg>
-`,Ot=j`
+`,Pe=e=>{switch(e){case 1:default:return Me;case 2:return Se;case 3:return ke;case 4:return He;case 5:return ze;case 6:return qe}},Le=D`
   <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 72 72">
     <g fill="none" fill-rule="evenodd">
       <path d="M0 72h72V0H0z"/>
       <g stroke="currentColor" stroke-linejoin="round" stroke-width="3">
         <path stroke-linecap="round" d="M36 49.5a6.758 6.758 0 0 1-6.75-6.75"/>
-        <path d="M47.678 36c-2.931-5.077-11.68-20.25-11.68-20.25L24.324 36a13.454 13.454 0 0 0-1.824 6.75c0 7.454 6.045 13.5 13.5 13.5 7.458 0 13.5-6.046 13.5-13.5 0-2.46-.672-4.762-1.821-6.75z"/>
+        <path fill="currentColor" d="M47.678 36c-2.931-5.077-11.68-20.25-11.68-20.25L24.324 36a13.454 13.454 0 0 0-1.824 6.75c0 7.454 6.045 13.5 13.5 13.5 7.458 0 13.5-6.046 13.5-13.5 0-2.46-.672-4.762-1.821-6.75z"/>
       </g>
     </g>
   </svg>
-`,qt=j`
+`,Oe=D`
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="13" viewBox="0 0 16 13">
     <g fill="none" fill-rule="evenodd">
       <path d="M-4 19h24V-5H-4z"/>
-      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M8 13l7.236-12L8 6.118.764 1z"/>
+      <path fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M8 13l7.236-12L8 6.118.764 1z"/>
     </g>
   </svg>
-`,Lt=j`
+`,Te=D`
   <svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
     <g fill="none" fill-rule="evenodd">
       <path d="M0 24h24V0H0z"/>
       <path d="M12 7.5A4.505 4.505 0 0 0 7.5 12c0 2.481 2.019 4.5 4.5 4.5s4.5-2.019 4.5-4.5c0-2.48-2.019-4.5-4.5-4.5m0 9.938a.375.375 0 0 0-.375.375v1.875a.375.375 0 0 0 .75 0v-1.875a.375.375 0 0 0-.375-.375m0-10.875a.375.375 0 0 0 .375-.375V4.313a.375.375 0 0 0-.75 0v1.875c0 .207.168.375.375.375m4.376 9.282a.375.375 0 0 0-.531.53L17.17 17.7a.372.372 0 0 0 .53 0 .374.374 0 0 0 .001-.53l-1.325-1.326zm-8.752-7.69a.376.376 0 0 0 .53 0 .374.374 0 0 0 .001-.53L6.83 6.299a.375.375 0 0 0-.531.53zm12.064 3.47h-1.875a.375.375 0 0 0 0 .75h1.875a.375.375 0 0 0 0-.75M6.563 12a.375.375 0 0 0-.375-.375H4.313a.375.375 0 0 0 0 .75h1.875A.375.375 0 0 0 6.563 12m9.547-3.735a.378.378 0 0 0 .266-.11l1.325-1.326a.375.375 0 0 0-.53-.53l-1.327 1.326a.375.375 0 0 0 .266.64m-8.486 7.58L6.299 17.17a.374.374 0 0 0 .001.53.372.372 0 0 0 .53 0l1.325-1.326a.375.375 0 0 0-.531-.53" fill="#fdd737"/>
     </g>
   </svg>
-`,Tt=j`
+`,Ue=D`
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
     <g fill="none" fill-rule="evenodd">
       <path d="M0 24h24V0H0z"/>
       <path d="M6.587 11.235l-.288-.889.756-.549A.093.093 0 0 0 7 9.628h-.935l-.29-.889a.092.092 0 0 0-.087-.065.094.094 0 0 0-.09.065l-.288.89h-.935a.093.093 0 0 0-.055.168l.755.55-.288.888a.093.093 0 0 0 .034.104.088.088 0 0 0 .055.02c.02 0 .039-.007.055-.02l.757-.549.755.55a.09.09 0 0 0 .11 0 .091.091 0 0 0 .034-.105M9.419 6.15l-.385 1.185a.125.125 0 0 0 .193.14l1.008-.732 1.008.731a.125.125 0 1 0 .193-.139L11.05 6.15l1.008-.733a.126.126 0 0 0 .046-.14.127.127 0 0 0-.12-.086h-1.247l-.383-1.185a.126.126 0 0 0-.24 0L9.73 5.191H8.484a.127.127 0 0 0-.12.086.126.126 0 0 0 .047.14l1.008.733zm8.161 1.551a6.492 6.492 0 0 0-2.258-1.545l-.385-.159a.187.187 0 0 0-.248.235l.137.393a5.789 5.789 0 0 1-1.48 6.096A5.74 5.74 0 0 1 9.383 14.3a5.756 5.756 0 0 1-2.205-.435l-.386-.158a.187.187 0 0 0-.248.235l.137.393c.307.883.785 1.67 1.42 2.34a6.467 6.467 0 0 0 4.74 2.04 6.501 6.501 0 0 0 4.485-1.786 6.48 6.48 0 0 0 2.035-4.56 6.481 6.481 0 0 0-1.78-4.667" fill="#CAD4DB"/>
     </g>
   </svg>
-`,Ut=j`
+`,Ie=D`
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
     <g fill="none" fill-rule="evenodd">
       <path fill="none" d="M0 24h24V0H0z"/>
@@ -101,14 +101,14 @@ function t(t,e,i,a){var n,o=arguments.length,s=o<3?e:null===a?a=Object.getOwnPro
       <path fill="#FDD737" d="M5.661 10.902a4.493 4.493 0 0 1 4.09-2.65c.248 0 .5.023.76.072.22-.398.492-.756.791-1.088a3.916 3.916 0 0 0-3.423-2.01 3.942 3.942 0 0 0-3.938 3.938c0 .651.175 1.274.473 1.836.268-.074.545-.126.836-.126.138 0 .274.01.411.028M7.879 4.29a.375.375 0 0 1-.375-.376V2.04a.375.375 0 0 1 .75 0v1.875a.375.375 0 0 1-.375.375M4.166 5.827a.378.378 0 0 1-.266-.11L2.575 4.391a.375.375 0 0 1 .531-.53l1.326 1.326a.375.375 0 0 1-.266.64M2.629 9.54H.754a.375.375 0 0 1 0-.75h1.875a.375.375 0 0 1 0 .75m8.961-3.713a.378.378 0 0 1-.265-.11.377.377 0 0 1 0-.53l1.327-1.326a.375.375 0 1 1 .53.53l-1.325 1.326a.378.378 0 0 1-.266.11"/>
     </g>
   </svg>
-`,Bt=j`
+`,Be=D`
   <svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
     <g fill="none" fill-rule="evenodd">
       <path d="M0 24h24V0H0z"/>
       <path d="M12.932 9.57a.373.373 0 0 1 0 .53.373.373 0 0 1-.53 0 3.722 3.722 0 0 0-1.487-.897 3.743 3.743 0 0 0-1.165-.202c-1.475 0-2.734.86-3.344 2.1a3.17 3.17 0 0 1 1.09.7.376.376 0 0 1-.265.641.374.374 0 0 1-.264-.11 2.42 2.42 0 0 0-.843-.539l.014.004a2.426 2.426 0 0 0-.888-.172 2.438 2.438 0 1 0 0 4.875h10.5a5.25 5.25 0 0 0 0-10.5c-2.169 0-3.64 1.215-4.483 2.518 0 0 .83.232 1.665 1.051" fill="#cad4db"/>
     </g>
   </svg>
-`,It=j`
+`,Ne=D`
   <svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
     <g fill="none" fill-rule="evenodd">
       <path d="M0 24h24V0H0z"/>
@@ -116,14 +116,14 @@ function t(t,e,i,a){var n,o=arguments.length,s=o<3?e:null===a?a=Object.getOwnPro
       <path d="M12.932 9.57a.374.374 0 0 1-.265.64.37.37 0 0 1-.265-.11 3.708 3.708 0 0 0-1.488-.898v.001a3.738 3.738 0 0 0-1.164-.202c-1.474 0-2.734.86-3.343 2.1.404.157.776.388 1.089.7a.374.374 0 0 1 0 .53.373.373 0 0 1-.53.002 2.398 2.398 0 0 0-.842-.54l.014.004a2.421 2.421 0 0 0-.888-.173 2.437 2.437 0 0 0 0 4.875h10.5a5.25 5.25 0 1 0 0-10.5c-2.17 0-3.64 1.215-4.483 2.518 0 0 .83.232 1.665 1.052" fill="#879cb2"/>
     </g>
   </svg>
-`,Rt=j`
+`,Re=D`
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
     <g fill="none" fill-rule="evenodd">
       <path d="M0 24h24V0H0z"/>
       <path d="M12.932 9.57a.374.374 0 0 1-.265.64.37.37 0 0 1-.265-.11 3.708 3.708 0 0 0-1.488-.898v.001a3.738 3.738 0 0 0-1.164-.202c-1.474 0-2.734.86-3.343 2.1.404.157.776.388 1.089.7a.374.374 0 0 1 0 .53.373.373 0 0 1-.53.002 2.398 2.398 0 0 0-.842-.54l.014.004a2.421 2.421 0 0 0-.888-.173 2.437 2.437 0 0 0 0 4.875h10.5a5.25 5.25 0 1 0 0-10.5c-2.17 0-3.64 1.215-4.483 2.518 0 0 .83.232 1.665 1.052m-.277 12.389h-.923l.462-.799a.225.225 0 0 0-.39-.225l-.46.798-.462-.798a.225.225 0 0 0-.39.225l.461.8h-.923a.225.225 0 0 0 0 .45h.923l-.462.8a.226.226 0 0 0 .391.223l.461-.798.46.798a.227.227 0 0 0 .308.083.226.226 0 0 0 .083-.307l-.462-.8h.923a.225.225 0 0 0 0-.45m3.55-2.842h-.922l.461-.799a.226.226 0 0 0-.39-.224l-.46.798-.462-.798a.226.226 0 0 0-.391.224l.461.8h-.922a.225.225 0 0 0 0 .45h.923l-.462.8a.226.226 0 0 0 .391.223l.461-.798.46.798a.227.227 0 0 0 .308.083.226.226 0 0 0 .083-.307l-.462-.8h.923a.225.225 0 0 0 0-.45m-7.099 0h-.922l.461-.799a.226.226 0 0 0-.39-.224l-.46.798-.462-.798a.226.226 0 0 0-.391.224l.461.8h-.922a.225.225 0 0 0 0 .45h.923l-.462.8a.226.226 0 0 0 .391.223l.461-.798.46.798a.227.227 0 0 0 .308.083.226.226 0 0 0 .083-.307l-.462-.8h.923a.225.225 0 0 0 0-.45" fill="#CAD4DB"/>
     </g>
   </svg>
-`,Nt=s`
+`,je=e=>{if(!e)return Te;switch(xe[e.toLowerCase()]||e){case"night-clear-sky":return Ue;case"new-clouds":return Ie;case"scattered-clouds":return Be;case"rain":return Ne;case"snow":return Re;default:return Te}},De=r`
   :host {
     display: block;
   }
@@ -146,6 +146,7 @@ function t(t,e,i,a){var n,o=arguments.length,s=o<3?e:null===a?a=Object.getOwnPro
     box-sizing: border-box;
   }
 
+  /* Classic Layout Header */
   .header {
     padding: 12px 16px 8px;
     font-size: 1.15rem;
@@ -155,6 +156,7 @@ function t(t,e,i,a){var n,o=arguments.length,s=o<3?e:null===a?a=Object.getOwnPro
     letter-spacing: 0.2px;
   }
 
+  /* Classic Main Grid */
   .main-grid {
     display: grid;
     grid-template-columns: 90px 1fr 1.2fr;
@@ -251,6 +253,7 @@ function t(t,e,i,a){var n,o=arguments.length,s=o<3?e:null===a?a=Object.getOwnPro
     text-overflow: ellipsis;
   }
 
+  /* Classic Weather Bar */
   .weather-bar {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -291,6 +294,223 @@ function t(t,e,i,a){var n,o=arguments.length,s=o<3?e:null===a?a=Object.getOwnPro
     text-overflow: ellipsis;
   }
 
+  /* ========================================================
+     Modern Layout Styles
+     ======================================================== */
+  .card-container.modern-layout {
+    padding: 16px;
+    box-sizing: border-box;
+  }
+
+  .card-container.modern-layout.no-title {
+    padding: 12px;
+  }
+
+  .modern-header {
+    font-size: 1.35rem;
+    font-weight: 700;
+    text-align: center;
+    color: var(--primary-text-color, #111111);
+    letter-spacing: -0.2px;
+    margin: 0 0 14px 0;
+    line-height: 1.25;
+  }
+
+  .modern-box {
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 10px 28px -4px var(--aqi-glow, rgba(0, 0, 0, 0.12));
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+  }
+
+  .modern-colored-section {
+    padding: 18px 20px 16px;
+    transition: background-color 0.4s ease;
+    box-sizing: border-box;
+  }
+
+  .modern-top-grid {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .modern-top-grid.no-face {
+    grid-template-columns: auto 1fr;
+  }
+
+  .modern-top-grid.no-aqi {
+    grid-template-columns: 1fr auto;
+  }
+
+  .modern-top-grid.only-status {
+    grid-template-columns: 1fr;
+  }
+
+  .modern-aqi-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.1);
+    color: inherit;
+    border-radius: 12px;
+    padding: 8px 14px;
+    min-width: 64px;
+    box-sizing: border-box;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.15s ease, background-color 0.2s ease;
+  }
+
+  .modern-box[data-font="light"] .modern-aqi-badge {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .modern-aqi-badge:hover {
+    background-color: rgba(0, 0, 0, 0.15);
+  }
+
+  .modern-box[data-font="light"] .modern-aqi-badge:hover {
+    background-color: rgba(255, 255, 255, 0.28);
+  }
+
+  .modern-aqi-badge:active {
+    transform: scale(0.96);
+  }
+
+  .modern-aqi-val {
+    font-size: 1.85rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.5px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .modern-aqi-lbl {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-top: 4px;
+    opacity: 0.9;
+    white-space: nowrap;
+  }
+
+  .modern-status-section {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    min-width: 0;
+  }
+
+  .modern-status-text {
+    font-size: 1.6rem;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.2px;
+    word-break: break-word;
+  }
+
+  .modern-face-section {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.15s ease;
+  }
+
+  .modern-face-section:active {
+    transform: scale(0.95);
+  }
+
+  .modern-face-section svg {
+    display: block;
+    width: 52px;
+    height: 52px;
+    color: inherit;
+  }
+
+  .modern-divider {
+    height: 1px;
+    background-color: currentColor;
+    opacity: 0.12;
+    margin: 16px 0 14px;
+  }
+
+  .modern-pollutant-grid {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.15rem;
+    line-height: 1.25;
+    cursor: pointer;
+  }
+
+  .modern-pollutant-name {
+    font-weight: 400;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .modern-pollutant-bold {
+    font-weight: 700;
+  }
+
+  .modern-pollutant-val {
+    font-weight: 600;
+    white-space: nowrap;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .modern-weather-bar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+    justify-items: center;
+    background-color: var(--ha-card-background, var(--card-background-color, #ffffff));
+    color: var(--primary-text-color, #212121);
+    padding: 14px 16px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .modern-weather-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 4px 6px;
+    transition: transform 0.15s ease;
+  }
+
+  .modern-weather-item:hover {
+    transform: translateY(-1px);
+  }
+
+  .modern-weather-item svg {
+    flex-shrink: 0;
+    display: inline-block;
+  }
+
+  .modern-weather-item.humidity-item svg {
+    color: #29b6f6;
+  }
+
+  .modern-weather-item span {
+    white-space: nowrap;
+  }
+
   .warning {
     padding: 16px;
     color: var(--error-color, #db4437);
@@ -298,87 +518,181 @@ function t(t,e,i,a){var n,o=arguments.length,s=o<3?e:null===a?a=Object.getOwnPro
     text-align: center;
     font-size: 0.9rem;
   }
-`;class Dt{constructor(t){}get _$AU(){return this._$AM._$AU}_$AT(t,e,i){this._$Ct=t,this._$AM=e,this._$Ci=i}_$AS(t,e){return this.update(t,e)}update(t,e){return this.render(...e)}}const jt=(t,e,i)=>{mt(t,e,i)},Vt="ontouchstart"in window||navigator.maxTouchPoints>0||"msMaxTouchPoints"in navigator&&navigator.msMaxTouchPoints>0,Qt=()=>{const t=document.body,e=t.querySelector(".action-handler-air-visual-card");if(e)return e;const i=document.createElement("div");i.className="action-handler-air-visual-card",i.style.position="absolute",i.style.width=Vt?"100px":"50px",i.style.height=Vt?"100px":"50px",i.style.transform="translate(-50%, -50%) scale(0)",i.style.pointerEvents="none",i.style.zIndex="999",i.style.transition="transform 0.1s ease-out",i.style.borderRadius="50%",i.style.background="rgba(var(--rgb-primary-color), 0.3)";const a=i;a.holdTime=500,a.cancelled=!1,a.held=!1,a.timer=void 0,a.dblClickTimeout=void 0,a.isRepeating=!1,a.repeatTimeout=void 0,t.appendChild(i);const n=(t=>{const e=t;return e.startAnimation=(t,i)=>{Object.assign(e.style,{left:`${t}px`,top:`${i}px`,transform:"translate(-50%, -50%) scale(1)"})},e.stopAnimation=()=>{Object.assign(e.style,{left:"",top:"",transform:"translate(-50%, -50%) scale(0)"})},e.bind=(t,i={})=>{if(t.actionHandler&&vt(i,t.actionHandler.options))return;if(t.actionHandler?(t.removeEventListener("touchstart",t.actionHandler.start),t.removeEventListener("touchend",t.actionHandler.end),t.removeEventListener("touchcancel",t.actionHandler.end),t.removeEventListener("mousedown",t.actionHandler.start),t.removeEventListener("click",t.actionHandler.end),t.removeEventListener("keydown",t.actionHandler.handleKeyDown),t.actionHandler.handleTouchMove&&t.removeEventListener("touchmove",t.actionHandler.handleTouchMove)):t.addEventListener("contextmenu",t=>{const e=t||window.event;return e.preventDefault&&e.preventDefault(),e.stopPropagation&&e.stopPropagation(),e.cancelBubble=!0,e.returnValue=!1,!1}),t.actionHandler={options:i},i.disabled)return;t.actionHandler.start=a=>{if(a.detail?.ignore)return;let n,o;e.cancelled=!1,e.held=!1,a.touches?(n=a.touches[0].clientX,o=a.touches[0].clientY):(n=a.clientX,o=a.clientY),i.hasHold&&(e.timer=window.setTimeout(()=>{if(e.startAnimation(n,o),e.held=!0,jt(t,"action",{action:"hold"}),i.repeat&&i.repeat>0){let a=0;e.isRepeating=!0,e.repeatTimeout=window.setInterval(()=>{a++,jt(t,"action",{action:"hold"}),i.repeatLimit&&a>=i.repeatLimit&&(window.clearInterval(e.repeatTimeout),e.isRepeating=!1)},i.repeat)}},e.holdTime))},t.actionHandler.end=a=>{if(!a.detail?.ignore)return["touchend","touchcancel"].includes(a.type)&&e.cancelled?(e.isRepeating&&e.repeatTimeout&&(window.clearInterval(e.repeatTimeout),e.isRepeating=!1),void(i.isMomentary&&jt(t,"action",{action:"release"}))):void("touchcancel"!==a.type&&(["touchend","touchcancel","mouseup"].includes(a.type)&&e.stopAnimation(),e.isRepeating&&e.repeatTimeout&&(window.clearInterval(e.repeatTimeout),e.isRepeating=!1),e.timer&&(clearTimeout(e.timer),e.timer=void 0),e.held||(i.hasDoubleClick?"click"===a.type&&a.detail<2||!e.dblClickTimeout?e.dblClickTimeout=window.setTimeout(()=>{e.dblClickTimeout=void 0,jt(t,"action",{action:"tap"})},250):(clearTimeout(e.dblClickTimeout),e.dblClickTimeout=void 0,jt(t,"action",{action:"double_tap"})):jt(t,"action",{action:"tap"})),i.isMomentary&&jt(t,"action",{action:"release"})))},i.disableKbd||(t.actionHandler.handleKeyDown=e=>{"Enter"!==e.key&&" "!==e.key||(e.preventDefault(),t.click())});const a=i=>{if(!i.touches)return;const a=i.touches[0],n=t.getBoundingClientRect(),o=a.clientX-n.left,s=a.clientY-n.top;(o<0||s<0||o>=n.width||s>=n.height)&&(e.cancelled=!0)};t.actionHandler.handleTouchMove=a,t.addEventListener("touchstart",t.actionHandler.start,{passive:!0}),t.addEventListener("touchmove",a,{passive:!0}),t.addEventListener("touchend",t.actionHandler.end),t.addEventListener("touchcancel",t.actionHandler.end),t.addEventListener("mousedown",t.actionHandler.start,{passive:!0}),t.addEventListener("click",t.actionHandler.end),i.disableKbd||t.addEventListener("keydown",t.actionHandler.handleKeyDown)},["touchcancel","mouseout","mouseup","touchmove","mousewheel","wheel","scroll"].forEach(t=>{document.addEventListener(t,()=>{e.cancelled=!0,e.timer&&(e.stopAnimation(),clearTimeout(e.timer),e.timer=void 0,e.isRepeating&&e.repeatTimeout&&(window.clearInterval(e.repeatTimeout),e.isRepeating=!1))},{passive:!0})}),e})(i);return n};const Wt=(t=>(...e)=>({_$litDirective$:t,values:e}))(class extends Dt{constructor(t){super(t)}render(t){}update(t,[e]){return vt(e,this.previousOptions)||(((t,e)=>{const i=Qt();i&&i.bind(t,e)})(t.element,e),this.previousOptions=e?{...e}:void 0),this.render(e)}});console.info("%c  AIR-VISUAL-CARD  \n%c  Version 3.0.9    ","color: #279b48; font-weight: bold; background: #eafaf1; padding: 2px 6px; border-radius: 4px;","color: #333; font-weight: bold; background: #f0f0f0; padding: 2px 6px; border-radius: 4px;");const Ft=window;Ft.customCards=Ft.customCards||[],Ft.customCards.push({type:"air-visual-card",name:"Air Visual Card",description:"A modern, responsive Lovelace card displaying Air Quality Index (AQI) and weather data.",preview:!0});let Kt=class extends rt{static async getConfigElement(){return await Promise.resolve().then(function(){return Xt}),document.createElement("air-visual-card-editor")}static getStubConfig(){return{air_quality_index:"sensor.u_s_air_quality_index",air_pollution_level:"sensor.u_s_air_pollution_level",main_pollutant:"sensor.u_s_main_pollutant",city:"San Francisco",country:"US",unit_of_measurement:"AQI",hide_title:!1,hide_face:!1,hide_weather:!1}}setConfig(t){if(!t)throw new Error("Invalid configuration");if(!t.air_quality_index&&!t.air_pollution_level)throw new Error("Please define at least one air quality sensor entity (air_quality_index or air_pollution_level).");this._config={unit_of_measurement:"AQI",...t,tap_action:t.tap_action||{action:"more-info"},hold_action:t.hold_action||{action:"more-info"}}}get config(){return this._config}shouldUpdate(t){if(!this._config)return!1;if(t.has("_config"))return!0;const e=t.get("hass");if(!e||!this.hass)return!0;const i=[this._config.air_quality_index,this._config.air_pollution_level,this._config.main_pollutant,this._config.main_pollutant_value,this._config.weather].filter(Boolean);return 0===i.length||i.some(t=>e.states[t]!==this.hass.states[t])}getCardSize(){return this._config?.hide_weather?2:3}getLayoutOptions(){return{grid_columns:2,grid_rows:this._config?.hide_weather?2:3,grid_min_columns:1,grid_min_rows:2}}_openMoreInfo(t){t&&this.hass&&mt(this,"hass-more-info",{entityId:t})}_handleCardAction(t){if(this.hass&&this._config&&t.detail.action){const e={entity:this._config.air_quality_index||this._config.air_pollution_level||this._config.main_pollutant||this._config.main_pollutant_value,...this._config};((t,e,i,a)=>{let n;"double_tap"===a&&i.double_tap_action?n=i.double_tap_action:"hold"===a&&i.hold_action?n=i.hold_action:"tap"===a&&i.tap_action&&(n=i.tap_action),wt(t,e,i,n)})(this,this.hass,e,t.detail.action)}}render(){if(!this.hass||!this._config)return j``;const t=this._config.air_quality_index?this.hass.states[this._config.air_quality_index]:void 0,e=this._config.air_pollution_level?this.hass.states[this._config.air_pollution_level]:void 0,i=this._config.main_pollutant?this.hass.states[this._config.main_pollutant]:void 0,a=this._config.main_pollutant_value?this.hass.states[this._config.main_pollutant_value]:void 0,n=this._config.weather?this.hass.states[this._config.weather]:void 0;let o=NaN;if(t)o=parseInt(t.state,10);else if(e){const t=parseInt(e.state,10);isNaN(t)||(o=t)}const s=!isNaN(o);let r=s?(l=o)<=50?1:l<=100?2:l<=150?3:l<=200?4:l<=300?5:6:1;var l;!s&&e&&Et[e.state.toLowerCase()]&&(r=Et[e.state.toLowerCase()]);const c=$t[r];let h=c.label;if(e&&isNaN(parseInt(e.state,10))){const t=this.hass.formatEntityState?.(e);h=t||e.state.replace(/_/g," ").replace(/\b\w/g,t=>t.toUpperCase())}let d="",u="",p="";if(i){const t=i.state.toLowerCase(),e=i.attributes?.pollutant_symbol?.toLowerCase()||t;d=At[e]||At[t]||i.state,u=i.attributes?.pollutant_unit||Ct[e]||Ct[t]||""}if(a&&(p=a.state,!u&&a.attributes?.unit_of_measurement&&(u=a.attributes.unit_of_measurement),!d)){const t=a.attributes?.device_class,e=(this._config.main_pollutant_value||"").toLowerCase(),i=String(a.attributes?.friendly_name||"").toLowerCase();"pm25"===t||e.includes("pm2_5")||e.includes("pm25")||i.includes("pm2.5")||i.includes("pm 2.5")||i.includes("pm2_5")||i.includes("particulate matter 2.5")?d="PM2.5":"pm10"===t||e.includes("pm10")||i.includes("pm10")?d="PM10":"o3"===t||e.includes("ozone")||i.includes("ozone")?d="Ozone":"co"===t||e.includes("carbon_monoxide")?d="Carbon Monoxide":"no2"===t||e.includes("nitrogen_dioxide")?d="Nitrogen Dioxide":("so2"===t||e.includes("sulphur_dioxide")||e.includes("sulfur_dioxide"))&&(d="Sulfur Dioxide")}let _="";p&&u?_=`${p} ${u}`:p?_=p:u&&(_=u);const f=this._config.city||"",g=this._config.unit_of_measurement||"AQI",m=Boolean(this._config.hide_title||!f),v=Boolean(this._config.hide_face),y=Boolean(this._config.hide_aqi),w=Boolean(this._config.hide_apl),b=Boolean(this._config.hide_weather||!n);let $="",x="",A="",C="";if(n){C=n.state;const t=n.attributes?.temperature,e=this.hass.config?.unit_system?.temperature||"°";void 0!==t&&($=`${t}${e}`);const i=n.attributes?.humidity;void 0!==i&&(x=`${i}%`);const a=n.attributes?.wind_speed,o=this._config.speed_unit||n.attributes?.wind_speed_unit||("km"===this.hass.config?.unit_system?.length?"km/h":"mph");void 0!==a&&(A=`${a} ${o}`)}const E=["main-grid"];return v&&E.push("no-face"),w&&!v&&E.push("only-aqi"),j`
+`;class Ve{constructor(e){}get _$AU(){return this._$AM._$AU}_$AT(e,t,i){this._$Ct=e,this._$AM=t,this._$Ci=i}_$AS(e,t){return this.update(e,t)}update(e,t){return this.render(...t)}}const Qe=(e,t,i)=>{_e(e,t,i)},We="ontouchstart"in window||navigator.maxTouchPoints>0||"msMaxTouchPoints"in navigator&&navigator.msMaxTouchPoints>0,Fe=()=>{const e=document.body,t=e.querySelector(".action-handler-air-visual-card");if(t)return t;const i=document.createElement("div");i.className="action-handler-air-visual-card",i.style.position="absolute",i.style.width=We?"100px":"50px",i.style.height=We?"100px":"50px",i.style.transform="translate(-50%, -50%) scale(0)",i.style.pointerEvents="none",i.style.zIndex="999",i.style.transition="transform 0.1s ease-out",i.style.borderRadius="50%",i.style.background="rgba(var(--rgb-primary-color), 0.3)";const a=i;a.holdTime=500,a.cancelled=!1,a.held=!1,a.timer=void 0,a.dblClickTimeout=void 0,a.isRepeating=!1,a.repeatTimeout=void 0,e.appendChild(i);const n=(e=>{const t=e;return t.startAnimation=(e,i)=>{Object.assign(t.style,{left:`${e}px`,top:`${i}px`,transform:"translate(-50%, -50%) scale(1)"})},t.stopAnimation=()=>{Object.assign(t.style,{left:"",top:"",transform:"translate(-50%, -50%) scale(0)"})},t.bind=(e,i={})=>{if(e.actionHandler&&ve(i,e.actionHandler.options))return;if(e.actionHandler?(e.removeEventListener("touchstart",e.actionHandler.start),e.removeEventListener("touchend",e.actionHandler.end),e.removeEventListener("touchcancel",e.actionHandler.end),e.removeEventListener("mousedown",e.actionHandler.start),e.removeEventListener("click",e.actionHandler.end),e.removeEventListener("keydown",e.actionHandler.handleKeyDown),e.actionHandler.handleTouchMove&&e.removeEventListener("touchmove",e.actionHandler.handleTouchMove)):e.addEventListener("contextmenu",e=>{const t=e||window.event;return t.preventDefault&&t.preventDefault(),t.stopPropagation&&t.stopPropagation(),t.cancelBubble=!0,t.returnValue=!1,!1}),e.actionHandler={options:i},i.disabled)return;e.actionHandler.start=a=>{if(a.detail?.ignore)return;let n,o;t.cancelled=!1,t.held=!1,a.touches?(n=a.touches[0].clientX,o=a.touches[0].clientY):(n=a.clientX,o=a.clientY),i.hasHold&&(t.timer=window.setTimeout(()=>{if(t.startAnimation(n,o),t.held=!0,Qe(e,"action",{action:"hold"}),i.repeat&&i.repeat>0){let a=0;t.isRepeating=!0,t.repeatTimeout=window.setInterval(()=>{a++,Qe(e,"action",{action:"hold"}),i.repeatLimit&&a>=i.repeatLimit&&(window.clearInterval(t.repeatTimeout),t.isRepeating=!1)},i.repeat)}},t.holdTime))},e.actionHandler.end=a=>{if(!a.detail?.ignore)return["touchend","touchcancel"].includes(a.type)&&t.cancelled?(t.isRepeating&&t.repeatTimeout&&(window.clearInterval(t.repeatTimeout),t.isRepeating=!1),void(i.isMomentary&&Qe(e,"action",{action:"release"}))):void("touchcancel"!==a.type&&(["touchend","touchcancel","mouseup"].includes(a.type)&&t.stopAnimation(),t.isRepeating&&t.repeatTimeout&&(window.clearInterval(t.repeatTimeout),t.isRepeating=!1),t.timer&&(clearTimeout(t.timer),t.timer=void 0),t.held||(i.hasDoubleClick?"click"===a.type&&a.detail<2||!t.dblClickTimeout?t.dblClickTimeout=window.setTimeout(()=>{t.dblClickTimeout=void 0,Qe(e,"action",{action:"tap"})},250):(clearTimeout(t.dblClickTimeout),t.dblClickTimeout=void 0,Qe(e,"action",{action:"double_tap"})):Qe(e,"action",{action:"tap"})),i.isMomentary&&Qe(e,"action",{action:"release"})))},i.disableKbd||(e.actionHandler.handleKeyDown=t=>{"Enter"!==t.key&&" "!==t.key||(t.preventDefault(),e.click())});const a=i=>{if(!i.touches)return;const a=i.touches[0],n=e.getBoundingClientRect(),o=a.clientX-n.left,r=a.clientY-n.top;(o<0||r<0||o>=n.width||r>=n.height)&&(t.cancelled=!0)};e.actionHandler.handleTouchMove=a,e.addEventListener("touchstart",e.actionHandler.start,{passive:!0}),e.addEventListener("touchmove",a,{passive:!0}),e.addEventListener("touchend",e.actionHandler.end),e.addEventListener("touchcancel",e.actionHandler.end),e.addEventListener("mousedown",e.actionHandler.start,{passive:!0}),e.addEventListener("click",e.actionHandler.end),i.disableKbd||e.addEventListener("keydown",e.actionHandler.handleKeyDown)},["touchcancel","mouseout","mouseup","touchmove","mousewheel","wheel","scroll"].forEach(e=>{document.addEventListener(e,()=>{t.cancelled=!0,t.timer&&(t.stopAnimation(),clearTimeout(t.timer),t.timer=void 0,t.isRepeating&&t.repeatTimeout&&(window.clearInterval(t.repeatTimeout),t.isRepeating=!1))},{passive:!0})}),t})(i);return n};const Ke=(e=>(...t)=>({_$litDirective$:e,values:t}))(class extends Ve{constructor(e){super(e)}render(e){}update(e,[t]){return ve(t,this.previousOptions)||(((e,t)=>{const i=Fe();i&&i.bind(e,t)})(e.element,t),this.previousOptions=t?{...t}:void 0),this.render(t)}});console.info("%c  AIR-VISUAL-CARD  \n%c  Version 3.1.0    ","color: #279b48; font-weight: bold; background: #eafaf1; padding: 2px 6px; border-radius: 4px;","color: #333; font-weight: bold; background: #f0f0f0; padding: 2px 6px; border-radius: 4px;");const Ge=window;Ge.customCards=Ge.customCards||[],Ge.customCards.push({type:"air-visual-card",name:"Air Visual Card",description:"A modern, responsive Lovelace card displaying Air Quality Index (AQI) and weather data.",preview:!0});let Ye=class extends se{static async getConfigElement(){return await Promise.resolve().then(function(){return Je}),document.createElement("air-visual-card-editor")}static getStubConfig(){return{air_quality_index:"sensor.u_s_air_quality_index",air_pollution_level:"sensor.u_s_air_pollution_level",main_pollutant:"sensor.u_s_main_pollutant",city:"San Francisco",country:"US",unit_of_measurement:"AQI",layout:"modern",hide_title:!1,hide_face:!1,hide_weather:!1}}setConfig(e){if(!e)throw new Error("Invalid configuration");if(!e.air_quality_index&&!e.air_pollution_level)throw new Error("Please define at least one air quality sensor entity (air_quality_index or air_pollution_level).");this._config={unit_of_measurement:"AQI",...e,tap_action:e.tap_action||{action:"more-info"},hold_action:e.hold_action||{action:"more-info"}}}get config(){return this._config}shouldUpdate(e){if(!this._config)return!1;if(e.has("_config"))return!0;const t=e.get("hass");if(!t||!this.hass)return!0;const i=[this._config.air_quality_index,this._config.air_pollution_level,this._config.main_pollutant,this._config.main_pollutant_value,this._config.weather].filter(Boolean);return 0===i.length||i.some(e=>t.states[e]!==this.hass.states[e])}getCardSize(){return this._config?.hide_weather?2:3}getLayoutOptions(){return{grid_columns:2,grid_rows:this._config?.hide_weather?2:3,grid_min_columns:1,grid_min_rows:2}}_openMoreInfo(e){e&&this.hass&&_e(this,"hass-more-info",{entityId:e})}_handleCardAction(e){if(this.hass&&this._config&&e.detail.action){const t={entity:this._config.air_quality_index||this._config.air_pollution_level||this._config.main_pollutant||this._config.main_pollutant_value,...this._config};((e,t,i,a)=>{let n;"double_tap"===a&&i.double_tap_action?n=i.double_tap_action:"hold"===a&&i.hold_action?n=i.hold_action:"tap"===a&&i.tap_action&&(n=i.tap_action),we(e,t,i,n)})(this,this.hass,t,e.detail.action)}}render(){if(!this.hass||!this._config)return D``;const e=this._config.air_quality_index?this.hass.states[this._config.air_quality_index]:void 0,t=this._config.air_pollution_level?this.hass.states[this._config.air_pollution_level]:void 0,i=this._config.main_pollutant?this.hass.states[this._config.main_pollutant]:void 0,a=this._config.main_pollutant_value?this.hass.states[this._config.main_pollutant_value]:void 0,n=this._config.weather?this.hass.states[this._config.weather]:void 0;let o=NaN;if(e)o=parseInt(e.state,10);else if(t){const e=parseInt(t.state,10);isNaN(e)||(o=e)}const r=!isNaN(o);let s=r?(l=o)<=50?1:l<=100?2:l<=150?3:l<=200?4:l<=300?5:6:1;var l;!r&&t&&Ee[t.state.toLowerCase()]&&(s=Ee[t.state.toLowerCase()]);const c=$e[s];let d=c.label;if(t&&isNaN(parseInt(t.state,10))){const e=this.hass.formatEntityState?.(t);d=e||t.state.replace(/_/g," ").replace(/\b\w/g,e=>e.toUpperCase())}let h="",u="",p="";if(i){const e=i.state.toLowerCase(),t=i.attributes?.pollutant_symbol?.toLowerCase()||e;h=Ae[t]||Ae[e]||i.state,u=i.attributes?.pollutant_unit||Ce[t]||Ce[e]||""}if(a&&(p=a.state,!u&&a.attributes?.unit_of_measurement&&(u=a.attributes.unit_of_measurement),!h)){const e=a.attributes?.device_class,t=(this._config.main_pollutant_value||"").toLowerCase(),i=String(a.attributes?.friendly_name||"").toLowerCase();"pm25"===e||t.includes("pm2_5")||t.includes("pm25")||i.includes("pm2.5")||i.includes("pm 2.5")||i.includes("pm2_5")||i.includes("particulate matter 2.5")?h="PM2.5":"pm10"===e||t.includes("pm10")||i.includes("pm10")?h="PM10":"o3"===e||t.includes("ozone")||i.includes("ozone")?h="Ozone":"co"===e||t.includes("carbon_monoxide")?h="Carbon Monoxide":"no2"===e||t.includes("nitrogen_dioxide")?h="Nitrogen Dioxide":("so2"===e||t.includes("sulphur_dioxide")||t.includes("sulfur_dioxide"))&&(h="Sulfur Dioxide")}const g=u?u.replace(/ug/gi,"µg").replace(/m3/gi,"m³"):"";let m="";p&&g?m=`${p} ${g}`:p?m=p:g&&(m=g);const f=this._config.city||"",_=this._config.unit_of_measurement||"AQI",v=Boolean(this._config.hide_title||!f),y=Boolean(this._config.hide_face),w=Boolean(this._config.hide_aqi),b=Boolean(this._config.hide_apl),$=Boolean(this._config.hide_weather||!n),x="modern"===this._config.layout||"new"===this._config.layout||Boolean(this._config.modern_layout);let A="",C="",E="",M="",S="";if(n){S=n.state;const e=n.attributes?.temperature,t=this.hass.config?.unit_system?.temperature||"°";void 0!==e&&(A=`${e}${t}`);const i=n.attributes?.humidity;void 0!==i&&(C=`${i}%`,E=`${i} %`);const a=n.attributes?.wind_speed,o=this._config.speed_unit||n.attributes?.wind_speed_unit||("km"===this.hass.config?.unit_system?.length?"km/h":"mph");void 0!==a&&(M=`${a} ${o}`)}if(x){const e=["modern-top-grid"];y&&!w&&e.push("no-face"),w&&!y&&e.push("no-aqi"),y&&w&&e.push("only-status");const t=f?`${f} air quality index (${_})`:`Air quality index (${_})`;return D`
+        <ha-card
+          .actionHandler=${Ke({hasHold:be(this._config.hold_action),hasDoubleClick:be(this._config.double_tap_action)})}
+          @action=${this._handleCardAction}
+        >
+          <div class="card-container modern-layout ${v?"no-title":""}">
+            ${v?D``:D`<div class="modern-header">${t}</div>`}
+
+            <div
+              class="modern-box"
+              data-font="${"#ffffff"===c.fontColor.toLowerCase()?"light":"dark"}"
+              style="--aqi-glow: ${c.bgColor}55;"
+            >
+              <div
+                class="modern-colored-section"
+                style="background-color: ${c.bgColor}; color: ${c.fontColor};"
+              >
+                <div class="${e.join(" ")}">
+                  ${w?D``:D`
+                        <div
+                          class="modern-aqi-badge"
+                          @click=${()=>this._openMoreInfo(this._config.air_quality_index)}
+                          title="AQI: ${r?o:"N/A"}"
+                        >
+                          <div class="modern-aqi-val">${r?o:"—"}</div>
+                          <div class="modern-aqi-lbl">
+                            ${this._config.country?`${this._config.country} `:""}${_}
+                          </div>
+                        </div>
+                      `}
+
+                  ${b?D``:D`
+                        <div
+                          class="modern-status-section"
+                          @click=${()=>this._openMoreInfo(this._config.main_pollutant_value||this._config.main_pollutant||this._config.air_pollution_level)}
+                          title="${d}"
+                        >
+                          <div class="modern-status-text">${d}</div>
+                        </div>
+                      `}
+
+                  ${y?D``:D`
+                        <div
+                          class="modern-face-section"
+                          @click=${()=>this._openMoreInfo(this._config.air_quality_index||this._config.air_pollution_level)}
+                          title="Air Quality: ${c.label}"
+                        >
+                          ${Pe(s)}
+                        </div>
+                      `}
+                </div>
+
+                ${b||!h&&!m?D``:D`
+                      <div class="modern-divider"></div>
+                      <div
+                        class="modern-pollutant-grid"
+                        @click=${()=>this._openMoreInfo(this._config.main_pollutant_value||this._config.main_pollutant||this._config.air_pollution_level)}
+                        title="${h}: ${m}"
+                      >
+                        <div class="modern-pollutant-name">
+                          Main pollutant: <span class="modern-pollutant-bold">${h||"PM2.5"}</span>
+                        </div>
+                        ${m?D`<div class="modern-pollutant-val">${m}</div>`:D``}
+                      </div>
+                    `}
+              </div>
+
+              ${!$&&n?D`
+                    <div
+                      class="modern-weather-bar"
+                      @click=${()=>this._openMoreInfo(this._config.weather)}
+                      title="Weather: ${S}"
+                    >
+                      <div class="modern-weather-item">
+                        ${je(S)}
+                        <span>${A}</span>
+                      </div>
+                      <div class="modern-weather-item">
+                        <span
+                          style="display: inline-flex; ${void 0!==n.attributes?.wind_bearing?`transform: rotate(${n.attributes.wind_bearing}deg);`:""}"
+                        >
+                          ${Oe}
+                        </span>
+                        <span>${M}</span>
+                      </div>
+                      <div class="modern-weather-item humidity-item">
+                        ${Le}
+                        <span>${E}</span>
+                      </div>
+                    </div>
+                  `:D``}
+            </div>
+          </div>
+        </ha-card>
+      `}const k=["main-grid"];return y&&k.push("no-face"),b&&!y&&k.push("only-aqi"),D`
       <ha-card
-        .actionHandler=${Wt({hasHold:bt(this._config.hold_action),hasDoubleClick:bt(this._config.double_tap_action)})}
+        .actionHandler=${Ke({hasHold:be(this._config.hold_action),hasDoubleClick:be(this._config.double_tap_action)})}
         @action=${this._handleCardAction}
       >
         <div class="card-container">
-          ${m?j``:j`<div class="header">${f} Air Quality Index</div>`}
+          ${v?D``:D`<div class="header">${f} Air Quality Index</div>`}
 
           <div
-            class="${E.join(" ")}"
+            class="${k.join(" ")}"
             style="background-color: ${c.bgColor}; color: ${c.fontColor};"
           >
-            ${v?j``:j`
+            ${y?D``:D`
                   <div
                     class="face-section"
                     style="background-color: ${c.faceColor}; color: ${c.fontColor};"
                     @click=${()=>this._openMoreInfo(this._config.air_quality_index||this._config.air_pollution_level)}
                     title="Air Quality: ${c.label}"
                   >
-                    ${(t=>{switch(t){case 1:default:return Mt;case 2:return St;case 3:return kt;case 4:return Ht;case 5:return zt;case 6:return Pt}})(r)}
+                    ${Pe(s)}
                   </div>
                 `}
-            ${y?j``:j`
+            ${w?D``:D`
                   <div
                     class="aqi-section"
                     @click=${()=>this._openMoreInfo(this._config.air_quality_index)}
-                    title="AQI: ${s?o:"N/A"}"
+                    title="AQI: ${r?o:"N/A"}"
                   >
-                    <div class="aqi-value">${s?o:"—"}</div>
-                    <div class="aqi-unit">${this._config.country?`${this._config.country} `:""}${g}</div>
+                    <div class="aqi-value">${r?o:"—"}</div>
+                    <div class="aqi-unit">${this._config.country?`${this._config.country} `:""}${_}</div>
                   </div>
                 `}
-            ${w?j``:j`
+            ${b?D``:D`
                   <div
                     class="apl-section"
                     @click=${()=>this._openMoreInfo(this._config.main_pollutant_value||this._config.main_pollutant||this._config.air_pollution_level)}
-                    title="${h}"
+                    title="${d}"
                   >
-                    <div class="apl-badge">${h}</div>
-                    ${d||_?j`
+                    <div class="apl-badge">${d}</div>
+                    ${h||m?D`
                           <div class="pollutant-badge">
-                            ${[d,_].filter(Boolean).join(" | ")}
+                            ${[h,m].filter(Boolean).join(" | ")}
                           </div>
-                        `:j``}
+                        `:D``}
                   </div>
                 `}
           </div>
 
-          ${!b&&n?j`
+          ${!$&&n?D`
                 <div
                   class="weather-bar"
                   @click=${()=>this._openMoreInfo(this._config.weather)}
-                  title="Weather: ${C}"
+                  title="Weather: ${S}"
                 >
                   <div class="weather-item">
-                    ${(t=>{if(!t)return Lt;switch(xt[t.toLowerCase()]||t){case"night-clear-sky":return Tt;case"new-clouds":return Ut;case"scattered-clouds":return Bt;case"rain":return It;case"snow":return Rt;default:return Lt}})(C)}
-                    <span>${$}</span>
-                  </div>
-                  <div class="weather-item">
-                    ${Ot}
-                    <span>${x}</span>
-                  </div>
-                  <div class="weather-item">
-                    ${qt}
+                    ${je(S)}
                     <span>${A}</span>
                   </div>
+                  <div class="weather-item">
+                    ${Oe}
+                    <span>${M}</span>
+                  </div>
+                  <div class="weather-item">
+                    ${Le}
+                    <span>${C}</span>
+                  </div>
                 </div>
-              `:j``}
+              `:D``}
         </div>
       </ha-card>
-    `}static get styles(){return Nt}};t([ut({attribute:!1})],Kt.prototype,"hass",void 0),t([pt()],Kt.prototype,"_config",void 0),Kt=t([ct("air-visual-card")],Kt);let Gt=class extends rt{constructor(){super(...arguments),this._computeLabel=t=>({integration_preset:"Integration Preset / Auto-Fill",air_quality_index:"Air Quality Index Sensor",air_pollution_level:"Air Pollution Level Sensor",main_pollutant:"Main Pollutant Sensor",main_pollutant_value:"Main Pollutant Value Sensor",weather:"Weather Entity (Optional)",city:"City Name",country:"Country / Standard Label",unit_of_measurement:"AQI Unit (Default: AQI)",speed_unit:"Wind Speed Unit Override",hide_title:"Hide City Title",hide_face:"Hide Face Icon",hide_weather:"Hide Weather Forecast Bar",hide_aqi:"Hide AQI Value Badge",hide_apl:"Hide Pollution Level & Pollutant"}[t.name]||t.name),this._computeHelper=t=>({integration_preset:"Select an integration to automatically detect and pre-fill linked sensors from your Home Assistant setup"}[t.name]||"")}setConfig(t){this._config=t}get _schema(){const t=this._config?.integration_preset,e=Boolean(t&&"manual"!==t)?{entity:{domain:"sensor",integration:t}}:{entity:{domain:"sensor"}};return[{name:"integration_preset",required:!1,selector:{select:{mode:"dropdown",options:[{label:"Manual / Custom",value:"manual"},{label:"Google Air Quality",value:"google_air_quality"},{label:"OpenWeatherMap",value:"openweathermap"},{label:"AirVisual (IQAir)",value:"airvisual"},{label:"WAQI (World Air Quality Index)",value:"waqi"}]}}},{name:"air_quality_index",required:!1,selector:e},{name:"air_pollution_level",required:!1,selector:e},{name:"main_pollutant",required:!1,selector:e},{name:"main_pollutant_value",required:!1,selector:e},{name:"weather",required:!1,selector:"openweathermap"===t?{entity:{domain:"weather",integration:"openweathermap"}}:{entity:{domain:"weather"}}},{type:"grid",name:"",schema:[{name:"city",selector:{text:{}}},{name:"country",selector:{text:{}}}]},{type:"grid",name:"",schema:[{name:"unit_of_measurement",selector:{text:{}}},{name:"speed_unit",selector:{text:{}}}]},{type:"grid",name:"",schema:[{name:"hide_title",selector:{boolean:{}}},{name:"hide_face",selector:{boolean:{}}},{name:"hide_weather",selector:{boolean:{}}},{name:"hide_aqi",selector:{boolean:{}}},{name:"hide_apl",selector:{boolean:{}}}]}]}render(){if(!this.hass||!this._config)return j``;const t={integration_preset:this._config.integration_preset||"manual",...this._config,air_quality_index:this._config.air_quality_index||"",air_pollution_level:this._config.air_pollution_level||"",main_pollutant:this._config.main_pollutant||"",main_pollutant_value:this._config.main_pollutant_value||"",weather:this._config.weather||"",hide_title:this._config.hide_title??!1,hide_face:this._config.hide_face??!1,hide_weather:this._config.hide_weather??!1,hide_aqi:this._config.hide_aqi??!1,hide_apl:this._config.hide_apl??!1,unit_of_measurement:this._config.unit_of_measurement||"AQI",country:this._config.country||"",city:this._config.city||""};return j`
+    `}static get styles(){return De}};e([ue({attribute:!1})],Ye.prototype,"hass",void 0),e([pe()],Ye.prototype,"_config",void 0),Ye=e([ce("air-visual-card")],Ye);let Xe=class extends se{constructor(){super(...arguments),this._computeLabel=e=>({integration_preset:"Integration Preset / Auto-Fill",layout:"Card Layout",air_quality_index:"Air Quality Index Sensor",air_pollution_level:"Air Pollution Level Sensor",main_pollutant:"Main Pollutant Sensor",main_pollutant_value:"Main Pollutant Value Sensor",weather:"Weather Entity (Optional)",city:"City Name",country:"Country / Standard Label",unit_of_measurement:"AQI Unit (Default: AQI)",speed_unit:"Wind Speed Unit Override",hide_title:"Hide City Title",hide_face:"Hide Face Icon",hide_weather:"Hide Weather Forecast Bar",hide_aqi:"Hide AQI Value Badge",hide_apl:"Hide Pollution Level & Pollutant"}[e.name]||e.name),this._computeHelper=e=>({integration_preset:"Select an integration to automatically detect and pre-fill linked sensors from your Home Assistant setup",layout:"Choose between the classic original layout and the new modern layout"}[e.name]||"")}setConfig(e){this._config=e}get _schema(){const e=this._config?.integration_preset,t=Boolean(e&&"manual"!==e)?{entity:{domain:"sensor",integration:e}}:{entity:{domain:"sensor"}};return[{name:"integration_preset",required:!1,selector:{select:{mode:"dropdown",options:[{label:"Manual / Custom",value:"manual"},{label:"Google Air Quality",value:"google_air_quality"},{label:"OpenWeatherMap",value:"openweathermap"},{label:"AirVisual (IQAir)",value:"airvisual"},{label:"WAQI (World Air Quality Index)",value:"waqi"}]}}},{name:"layout",required:!1,selector:{select:{mode:"dropdown",options:[{label:"Classic (Original)",value:"classic"},{label:"Modern (New)",value:"modern"}]}}},{name:"air_quality_index",required:!1,selector:t},{name:"air_pollution_level",required:!1,selector:t},{name:"main_pollutant",required:!1,selector:t},{name:"main_pollutant_value",required:!1,selector:t},{name:"weather",required:!1,selector:"openweathermap"===e?{entity:{domain:"weather",integration:"openweathermap"}}:{entity:{domain:"weather"}}},{type:"grid",name:"",schema:[{name:"city",selector:{text:{}}},{name:"country",selector:{text:{}}}]},{type:"grid",name:"",schema:[{name:"unit_of_measurement",selector:{text:{}}},{name:"speed_unit",selector:{text:{}}}]},{type:"grid",name:"",schema:[{name:"hide_title",selector:{boolean:{}}},{name:"hide_face",selector:{boolean:{}}},{name:"hide_weather",selector:{boolean:{}}},{name:"hide_aqi",selector:{boolean:{}}},{name:"hide_apl",selector:{boolean:{}}}]}]}render(){if(!this.hass||!this._config)return D``;const e={integration_preset:this._config.integration_preset||"manual",layout:this._config.layout||"classic",...this._config,air_quality_index:this._config.air_quality_index||"",air_pollution_level:this._config.air_pollution_level||"",main_pollutant:this._config.main_pollutant||"",main_pollutant_value:this._config.main_pollutant_value||"",weather:this._config.weather||"",hide_title:this._config.hide_title??!1,hide_face:this._config.hide_face??!1,hide_weather:this._config.hide_weather??!1,hide_aqi:this._config.hide_aqi??!1,hide_apl:this._config.hide_apl??!1,unit_of_measurement:this._config.unit_of_measurement||"AQI",country:this._config.country||"",city:this._config.city||""};return D`
       <ha-form
         .hass=${this.hass}
-        .data=${t}
+        .data=${e}
         .schema=${this._schema}
         .computeLabel=${this._computeLabel}
         .computeHelper=${this._computeHelper}
         @value-changed=${this._valueChanged}
       ></ha-form>
-    `}_valueChanged(t){if(!this._config||!this.hass)return;const e=this._config.integration_preset||"manual",i=t.detail.value.integration_preset,a={...this._config,...t.detail.value};i&&i!==e&&(delete a.air_quality_index,delete a.air_pollution_level,delete a.main_pollutant,delete a.main_pollutant_value,delete a.weather,delete a.city,"manual"!==i&&this._applyIntegrationPreset(i,a)),Object.keys(a).forEach(t=>{""!==a[t]&&void 0!==a[t]||delete a[t]}),this._config=a,mt(this,"config-changed",{config:this._config})}_applyIntegrationPreset(t,e){if(!this.hass)return;const i=this.hass.entities,a=this.hass.states,n=Object.keys(a),o=n.filter(e=>{const n=i?.[e],o=String(a[e]?.attributes?.attribution||"").toLowerCase();return n?.platform===t||e.toLowerCase().includes(t)||o.includes(t)});if("google_air_quality"===t){const t=o.find(t=>{const e=a[t];return t.includes("universal_air_quality_index")||t.includes("local_air_quality_index")||"aqi"===e?.attributes?.device_class||t.includes("air_quality_index")||t.includes("aqi")});t&&(e.air_quality_index=t);const n=o.find(t=>t.includes("category")||t.includes("air_pollution_level"));n&&(e.air_pollution_level=n);const s=o.find(t=>t.includes("dominant_pollutant")||t.includes("main_pollutant")&&!t.includes("value"));s&&(e.main_pollutant=s);const r=o.find(t=>{const e=a[t],n=String(e?.attributes?.friendly_name||"").toLowerCase(),o=i?.[t]?.translation_key;return"pm25"===e?.attributes?.device_class||"pm25"===o||"pm2_5"===o||"particulate_matter_2_5"===o||n.includes("pm2.5")||n.includes("pm 2.5")||n.includes("pm2_5")||n.includes("particulate matter 2.5")||t.includes("particulate_matter_2_5")||t.includes("pm25")||t.includes("pm2_5")});if(r&&(e.main_pollutant_value=r),!e.city&&t){const i=a[t]?.attributes?.friendly_name;if(i){const t=i.replace(/google\s*air\s*quality/gi,"").replace(/universal\s*air\s*quality\s*index/gi,"").replace(/local\s*air\s*quality\s*index/gi,"").replace(/air\s*quality\s*index/gi,"").replace(/^[-_\s:]+|[-_\s:]+$/g,"");t&&(e.city=t)}}}else if("openweathermap"===t){const t=o.find(t=>{const e=a[t];return"aqi"===e?.attributes?.device_class||t.includes("air_quality_index")||t.includes("air_pollution")||t.includes("aqi")});t&&(e.air_quality_index=t),delete e.air_pollution_level,delete e.main_pollutant;const s=n.find(t=>{if(!t.startsWith("weather."))return!1;const e=i?.[t];return"openweathermap"===e?.platform||t.toLowerCase().includes("openweathermap")||String(a[t]?.attributes?.attribution||"").toLowerCase().includes("openweathermap")});s&&(e.weather=s);const r=o.find(t=>{const e=a[t],n=String(e?.attributes?.friendly_name||"").toLowerCase(),o=i?.[t]?.translation_key;return"pm25"===e?.attributes?.device_class||"particulate_matter_2_5"===o||"pm2_5"===o||"pm25"===o||n.includes("pm2.5")||n.includes("pm 2.5")||n.includes("pm2_5")||n.includes("particulate matter 2.5")||t.includes("particulate_matter_2_5")||t.includes("pm2_5")||t.includes("pm25")});if(r&&(e.main_pollutant_value=r),!e.city){const i=s&&a[s]?.attributes?.friendly_name||t&&a[t]?.attributes?.friendly_name;if(i){const t=i.replace(/open\s*weather\s*map/gi,"").replace(/^[-_\s]+|[-_\s]+$/g,"");t&&(e.city=t)}}}else if("airvisual"===t){const t=o.find(t=>"aqi"===a[t]?.attributes?.device_class||t.includes("air_quality_index"));t&&(e.air_quality_index=t);const i=o.find(t=>t.includes("air_pollution_level"));i&&(e.air_pollution_level=i);const n=o.find(t=>t.includes("main_pollutant")&&!t.includes("value"));if(n&&(e.main_pollutant=n),!e.city&&t){const i=a[t]?.attributes?.city;i&&(e.city=String(i))}}else if("waqi"===t){const t=o.find(t=>"aqi"===a[t]?.attributes?.device_class||t.includes("air_quality")||t.includes("aqi"));t&&(e.air_quality_index=t);const i=o.find(t=>"pm25"===a[t]?.attributes?.device_class||t.includes("pm2_5")||t.includes("pm25"));i&&(e.main_pollutant_value=i)}}static get styles(){return s`
+    `}_valueChanged(e){if(!this._config||!this.hass)return;const t=this._config.integration_preset||"manual",i=e.detail.value.integration_preset,a={...this._config,...e.detail.value};i&&i!==t&&(delete a.air_quality_index,delete a.air_pollution_level,delete a.main_pollutant,delete a.main_pollutant_value,delete a.weather,delete a.city,"manual"!==i&&this._applyIntegrationPreset(i,a)),Object.keys(a).forEach(e=>{""!==a[e]&&void 0!==a[e]||delete a[e]}),this._config=a,_e(this,"config-changed",{config:this._config})}_applyIntegrationPreset(e,t){if(!this.hass)return;const i=this.hass.entities,a=this.hass.states,n=Object.keys(a),o=n.filter(t=>{const n=i?.[t],o=String(a[t]?.attributes?.attribution||"").toLowerCase();return n?.platform===e||t.toLowerCase().includes(e)||o.includes(e)});if("google_air_quality"===e){const e=o.find(e=>{const t=a[e];return e.includes("universal_air_quality_index")||e.includes("local_air_quality_index")||"aqi"===t?.attributes?.device_class||e.includes("air_quality_index")||e.includes("aqi")});e&&(t.air_quality_index=e);const n=o.find(e=>e.includes("category")||e.includes("air_pollution_level"));n&&(t.air_pollution_level=n);const r=o.find(e=>e.includes("dominant_pollutant")||e.includes("main_pollutant")&&!e.includes("value"));r&&(t.main_pollutant=r);const s=o.find(e=>{const t=a[e],n=String(t?.attributes?.friendly_name||"").toLowerCase(),o=i?.[e]?.translation_key;return"pm25"===t?.attributes?.device_class||"pm25"===o||"pm2_5"===o||"particulate_matter_2_5"===o||n.includes("pm2.5")||n.includes("pm 2.5")||n.includes("pm2_5")||n.includes("particulate matter 2.5")||e.includes("particulate_matter_2_5")||e.includes("pm25")||e.includes("pm2_5")});if(s&&(t.main_pollutant_value=s),!t.city&&e){const i=a[e]?.attributes?.friendly_name;if(i){const e=i.replace(/google\s*air\s*quality/gi,"").replace(/universal\s*air\s*quality\s*index/gi,"").replace(/local\s*air\s*quality\s*index/gi,"").replace(/air\s*quality\s*index/gi,"").replace(/^[-_\s:]+|[-_\s:]+$/g,"");e&&(t.city=e)}}}else if("openweathermap"===e){const e=o.find(e=>{const t=a[e];return"aqi"===t?.attributes?.device_class||e.includes("air_quality_index")||e.includes("air_pollution")||e.includes("aqi")});e&&(t.air_quality_index=e),delete t.air_pollution_level,delete t.main_pollutant;const r=n.find(e=>{if(!e.startsWith("weather."))return!1;const t=i?.[e];return"openweathermap"===t?.platform||e.toLowerCase().includes("openweathermap")||String(a[e]?.attributes?.attribution||"").toLowerCase().includes("openweathermap")});r&&(t.weather=r);const s=o.find(e=>{const t=a[e],n=String(t?.attributes?.friendly_name||"").toLowerCase(),o=i?.[e]?.translation_key;return"pm25"===t?.attributes?.device_class||"particulate_matter_2_5"===o||"pm2_5"===o||"pm25"===o||n.includes("pm2.5")||n.includes("pm 2.5")||n.includes("pm2_5")||n.includes("particulate matter 2.5")||e.includes("particulate_matter_2_5")||e.includes("pm2_5")||e.includes("pm25")});if(s&&(t.main_pollutant_value=s),!t.city){const i=r&&a[r]?.attributes?.friendly_name||e&&a[e]?.attributes?.friendly_name;if(i){const e=i.replace(/open\s*weather\s*map/gi,"").replace(/^[-_\s]+|[-_\s]+$/g,"");e&&(t.city=e)}}}else if("airvisual"===e){const e=o.find(e=>"aqi"===a[e]?.attributes?.device_class||e.includes("air_quality_index"));e&&(t.air_quality_index=e);const i=o.find(e=>e.includes("air_pollution_level"));i&&(t.air_pollution_level=i);const n=o.find(e=>e.includes("main_pollutant")&&!e.includes("value"));if(n&&(t.main_pollutant=n),!t.city&&e){const i=a[e]?.attributes?.city;i&&(t.city=String(i))}}else if("waqi"===e){const e=o.find(e=>"aqi"===a[e]?.attributes?.device_class||e.includes("air_quality")||e.includes("aqi"));e&&(t.air_quality_index=e);const i=o.find(e=>"pm25"===a[e]?.attributes?.device_class||e.includes("pm2_5")||e.includes("pm25"));i&&(t.main_pollutant_value=i)}}static get styles(){return r`
       ha-form {
         display: block;
       }
-    `}};t([ut({attribute:!1})],Gt.prototype,"hass",void 0),t([pt()],Gt.prototype,"_config",void 0),Gt=t([ct("air-visual-card-editor")],Gt);var Xt=Object.freeze({__proto__:null,get AirVisualCardEditor(){return Gt}});export{Kt as AirVisualCard};
+    `}};e([ue({attribute:!1})],Xe.prototype,"hass",void 0),e([pe()],Xe.prototype,"_config",void 0),Xe=e([ce("air-visual-card-editor")],Xe);var Je=Object.freeze({__proto__:null,get AirVisualCardEditor(){return Xe}});export{Ye as AirVisualCard};

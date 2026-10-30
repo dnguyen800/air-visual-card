@@ -2,6 +2,8 @@ import { ActionConfig, LovelaceCardConfig } from 'custom-card-helpers';
 
 export interface AirVisualCardConfig extends LovelaceCardConfig {
   type: string;
+  layout?: 'classic' | 'modern' | 'old' | 'new';
+  modern_layout?: boolean;
   integration_preset?: string;
   air_quality_index?: string;
   air_pollution_level?: string;

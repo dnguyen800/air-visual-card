@@ -50,6 +50,19 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
         },
       },
       {
+        name: 'layout',
+        required: false,
+        selector: {
+          select: {
+            mode: 'dropdown',
+            options: [
+              { label: 'Classic (Original)', value: 'classic' },
+              { label: 'Modern (New)', value: 'modern' },
+            ],
+          },
+        },
+      },
+      {
         name: 'air_quality_index',
         required: false,
         selector: sensorSelector,
@@ -111,6 +124,7 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
 
     const data = {
       integration_preset: this._config.integration_preset || 'manual',
+      layout: this._config.layout || 'classic',
       ...this._config,
       air_quality_index: this._config.air_quality_index || '',
       air_pollution_level: this._config.air_pollution_level || '',
@@ -142,6 +156,7 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
   private _computeLabel = (schema: { name: string }): string => {
     const labels: Record<string, string> = {
       integration_preset: 'Integration Preset / Auto-Fill',
+      layout: 'Card Layout',
       air_quality_index: 'Air Quality Index Sensor',
       air_pollution_level: 'Air Pollution Level Sensor',
       main_pollutant: 'Main Pollutant Sensor',
@@ -164,6 +179,7 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
     const helpers: Record<string, string> = {
       integration_preset:
         'Select an integration to automatically detect and pre-fill linked sensors from your Home Assistant setup',
+      layout: 'Choose between the classic original layout and the new modern layout',
     };
     return helpers[schema.name] || '';
   };

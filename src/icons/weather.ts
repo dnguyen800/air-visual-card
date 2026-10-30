@@ -7,7 +7,7 @@ export const humiditySvg: TemplateResult = html`
       <path d="M0 72h72V0H0z"/>
       <g stroke="currentColor" stroke-linejoin="round" stroke-width="3">
         <path stroke-linecap="round" d="M36 49.5a6.758 6.758 0 0 1-6.75-6.75"/>
-        <path d="M47.678 36c-2.931-5.077-11.68-20.25-11.68-20.25L24.324 36a13.454 13.454 0 0 0-1.824 6.75c0 7.454 6.045 13.5 13.5 13.5 7.458 0 13.5-6.046 13.5-13.5 0-2.46-.672-4.762-1.821-6.75z"/>
+        <path fill="currentColor" d="M47.678 36c-2.931-5.077-11.68-20.25-11.68-20.25L24.324 36a13.454 13.454 0 0 0-1.824 6.75c0 7.454 6.045 13.5 13.5 13.5 7.458 0 13.5-6.046 13.5-13.5 0-2.46-.672-4.762-1.821-6.75z"/>
       </g>
     </g>
   </svg>
@@ -17,7 +17,7 @@ export const windSvg: TemplateResult = html`
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="13" viewBox="0 0 16 13">
     <g fill="none" fill-rule="evenodd">
       <path d="M-4 19h24V-5H-4z"/>
-      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M8 13l7.236-12L8 6.118.764 1z"/>
+      <path fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M8 13l7.236-12L8 6.118.764 1z"/>
     </g>
   </svg>
 `;
