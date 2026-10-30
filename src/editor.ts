@@ -34,6 +34,19 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
 
     return [
       {
+        name: 'layout',
+        required: false,
+        selector: {
+          select: {
+            mode: 'dropdown',
+            options: [
+              { label: 'Classic (Original)', value: 'classic' },
+              { label: 'Modern (New)', value: 'modern' },
+            ],
+          },
+        },
+      },
+      {
         name: 'integration_preset',
         required: false,
         selector: {
@@ -111,6 +124,7 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
 
     const data = {
       integration_preset: this._config.integration_preset || 'manual',
+      layout: this._config.layout || 'classic',
       ...this._config,
       air_quality_index: this._config.air_quality_index || '',
       air_pollution_level: this._config.air_pollution_level || '',
@@ -141,11 +155,12 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
 
   private _computeLabel = (schema: { name: string }): string => {
     const labels: Record<string, string> = {
+      layout: 'Card Layout',
       integration_preset: 'Integration Preset / Auto-Fill',
-      air_quality_index: 'Air Quality Index Sensor',
+      air_quality_index: 'Air Quality Index (AQI) Value',
       air_pollution_level: 'Air Pollution Level Sensor',
-      main_pollutant: 'Main Pollutant Sensor',
-      main_pollutant_value: 'Main Pollutant Value Sensor',
+      main_pollutant: 'Main/Dominant Pollutant Sensor',
+      main_pollutant_value: 'Main/Dominant Pollutant Value',
       weather: 'Weather Entity (Optional)',
       city: 'City Name',
       country: 'Country / Standard Label',
@@ -162,8 +177,11 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
 
   private _computeHelper = (schema: { name: string }): string => {
     const helpers: Record<string, string> = {
+      layout: 'Choose between the classic original layout and the new modern layout',
       integration_preset:
         'Select an integration to automatically detect and pre-fill linked sensors from your Home Assistant setup',
+      air_quality_index: 'Required. This is a number that represents the AQI in your location',
+      air_pollution_level: 'Optional. Description of the air quality based on the AQI value.',
     };
     return helpers[schema.name] || '';
   };
@@ -381,9 +399,27 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
       );
       if (aqiSensor) config.air_quality_index = aqiSensor;
 
-      const pm25Sensor = platformEntities.find(
-        (id) => states[id]?.attributes?.device_class === 'pm25' || id.includes('pm2_5') || id.includes('pm25')
-      );
+      // WAQI has no Air Pollution Level text sensor - leave blank
+      delete config.air_pollution_level;
+
+      const pm25Sensor = platformEntities.find((id) => {
+        const state = states[id];
+        const friendly = String(state?.attributes?.friendly_name || '').toLowerCase();
+        const translationKey = entityRegistry?.[id]?.translation_key;
+        return (
+          state?.attributes?.device_class === 'pm25' ||
+          translationKey === 'pm25' ||
+          translationKey === 'pm2_5' ||
+          translationKey === 'particulate_matter_2_5' ||
+          friendly.includes('pm2.5') ||
+          friendly.includes('pm 2.5') ||
+          friendly.includes('pm2_5') ||
+          friendly.includes('particulate matter 2.5') ||
+          id.includes('particulate_matter_2_5') ||
+          id.includes('pm2_5') ||
+          id.includes('pm25')
+        );
+      });
       if (pm25Sensor) config.main_pollutant_value = pm25Sensor;
     }
   }

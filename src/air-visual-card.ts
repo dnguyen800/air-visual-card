@@ -66,6 +66,7 @@ export class AirVisualCard extends LitElement {
       city: 'San Francisco',
       country: 'US',
       unit_of_measurement: 'AQI',
+      layout: 'modern',
       hide_title: false,
       hide_face: false,
       hide_weather: false,
@@ -262,13 +263,14 @@ export class AirVisualCard extends LitElement {
       }
     }
 
+    const formattedUnit = pollutantUnit ? pollutantUnit.replace(/ug/gi, 'µg').replace(/m3/gi, 'm³') : '';
     let pollutantDetails = '';
-    if (pollutantValue && pollutantUnit) {
-      pollutantDetails = `${pollutantValue} ${pollutantUnit}`;
+    if (pollutantValue && formattedUnit) {
+      pollutantDetails = `${pollutantValue} ${formattedUnit}`;
     } else if (pollutantValue) {
       pollutantDetails = pollutantValue;
-    } else if (pollutantUnit) {
-      pollutantDetails = pollutantUnit;
+    } else if (formattedUnit) {
+      pollutantDetails = formattedUnit;
     }
 
     const cityName = this._config.city || '';
@@ -278,10 +280,15 @@ export class AirVisualCard extends LitElement {
     const hideAQI = Boolean(this._config.hide_aqi);
     const hideAPL = Boolean(this._config.hide_apl);
     const hideWeather = Boolean(this._config.hide_weather || !weatherEntity);
+    const isModern =
+      this._config.layout === 'modern' ||
+      this._config.layout === 'new' ||
+      Boolean(this._config.modern_layout);
 
     // Weather details
     let temp = '';
     let humidity = '';
+    let humidityModern = '';
     let wind = '';
     let condition = '';
     if (weatherEntity) {
@@ -291,7 +298,10 @@ export class AirVisualCard extends LitElement {
       if (t !== undefined) temp = `${t}${tempUnit}`;
 
       const h = weatherEntity.attributes?.humidity;
-      if (h !== undefined) humidity = `${h}%`;
+      if (h !== undefined) {
+        humidity = `${h}%`;
+        humidityModern = `${h} %`;
+      }
 
       const w = weatherEntity.attributes?.wind_speed;
       const speedUnit =
@@ -301,6 +311,144 @@ export class AirVisualCard extends LitElement {
       if (w !== undefined) wind = `${w} ${speedUnit}`;
     }
 
+    if (isModern) {
+      const modernTopClasses = ['modern-top-grid'];
+      if (hideFace && !hideAQI) modernTopClasses.push('no-face');
+      if (hideAQI && !hideFace) modernTopClasses.push('no-aqi');
+      if (hideFace && hideAQI) modernTopClasses.push('only-status');
+
+      const modernHeader = cityName
+        ? `${cityName} air quality index (${unit})`
+        : `Air quality index (${unit})`;
+
+      return html`
+        <ha-card
+          .actionHandler=${actionHandler({
+            hasHold: hasAction(this._config.hold_action),
+            hasDoubleClick: hasAction(this._config.double_tap_action),
+          })}
+          @action=${this._handleCardAction}
+        >
+          <div class="card-container modern-layout ${hideTitle ? 'no-title' : ''}">
+            ${!hideTitle
+              ? html`<div class="modern-header">${modernHeader}</div>`
+              : html``}
+
+            <div
+              class="modern-box"
+              data-font="${aqiInfo.fontColor.toLowerCase() === '#ffffff' ? 'light' : 'dark'}"
+              style="--aqi-glow: ${aqiInfo.bgColor}55;"
+            >
+              <div
+                class="modern-colored-section"
+                style="background-color: ${aqiInfo.bgColor}; color: ${aqiInfo.fontColor};"
+              >
+                <div class="${modernTopClasses.join(' ')}">
+                  ${!hideAQI
+                    ? html`
+                        <div
+                          class="modern-aqi-badge"
+                          @click=${() => this._openMoreInfo(this._config.air_quality_index)}
+                          title="AQI: ${validAQI ? aqiNum : 'N/A'}"
+                        >
+                          <div class="modern-aqi-val">${validAQI ? aqiNum : '—'}</div>
+                          <div class="modern-aqi-lbl">
+                            ${this._config.country ? `${this._config.country} ` : ''}${unit}
+                          </div>
+                        </div>
+                      `
+                    : html``}
+
+                  ${!hideAPL
+                    ? html`
+                        <div
+                          class="modern-status-section"
+                          @click=${() =>
+                            this._openMoreInfo(
+                              this._config.main_pollutant_value ||
+                              this._config.main_pollutant ||
+                              this._config.air_pollution_level
+                            )}
+                          title="${aplText}"
+                        >
+                          <div class="modern-status-text">${aplText}</div>
+                        </div>
+                      `
+                    : html``}
+
+                  ${!hideFace
+                    ? html`
+                        <div
+                          class="modern-face-section"
+                          @click=${() =>
+                            this._openMoreInfo(
+                              this._config.air_quality_index || this._config.air_pollution_level
+                            )}
+                          title="Air Quality: ${aqiInfo.label}"
+                        >
+                          ${getFaceSvg(aqiLevel)}
+                        </div>
+                      `
+                    : html``}
+                </div>
+
+                ${!hideAPL && (pollutantName || pollutantDetails)
+                  ? html`
+                      <div class="modern-divider"></div>
+                      <div
+                        class="modern-pollutant-grid"
+                        @click=${() =>
+                          this._openMoreInfo(
+                            this._config.main_pollutant_value ||
+                            this._config.main_pollutant ||
+                            this._config.air_pollution_level
+                          )}
+                        title="${pollutantName}: ${pollutantDetails}"
+                      >
+                        <div class="modern-pollutant-name">
+                          Main pollutant: <span class="modern-pollutant-bold">${pollutantName || 'PM2.5'}</span>
+                        </div>
+                        ${pollutantDetails
+                          ? html`<div class="modern-pollutant-val">${pollutantDetails}</div>`
+                          : html``}
+                      </div>
+                    `
+                  : html``}
+              </div>
+
+              ${!hideWeather && weatherEntity
+                ? html`
+                    <div
+                      class="modern-weather-bar"
+                      @click=${() => this._openMoreInfo(this._config.weather)}
+                      title="Weather: ${condition}"
+                    >
+                      <div class="modern-weather-item">
+                        ${getWeatherSvg(condition)}
+                        <span>${temp}</span>
+                      </div>
+                      <div class="modern-weather-item">
+                        <span
+                          style="display: inline-flex; ${weatherEntity.attributes?.wind_bearing !== undefined ? `transform: rotate(${weatherEntity.attributes.wind_bearing}deg);` : ''}"
+                        >
+                          ${windSvg}
+                        </span>
+                        <span>${wind}</span>
+                      </div>
+                      <div class="modern-weather-item humidity-item">
+                        ${humiditySvg}
+                        <span>${humidityModern}</span>
+                      </div>
+                    </div>
+                  `
+                : html``}
+            </div>
+          </div>
+        </ha-card>
+      `;
+    }
+
+    // Classic Layout
     const gridClasses = ['main-grid'];
     if (hideFace) gridClasses.push('no-face');
     if (hideAPL && !hideFace) gridClasses.push('only-aqi');
@@ -383,12 +531,12 @@ export class AirVisualCard extends LitElement {
                     <span>${temp}</span>
                   </div>
                   <div class="weather-item">
-                    ${humiditySvg}
-                    <span>${humidity}</span>
-                  </div>
-                  <div class="weather-item">
                     ${windSvg}
                     <span>${wind}</span>
+                  </div>
+                  <div class="weather-item">
+                    ${humiditySvg}
+                    <span>${humidity}</span>
                   </div>
                 </div>
               `
