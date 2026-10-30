@@ -1,6 +1,6 @@
 import { AQILevel, AQILevelInfo } from './types';
 
-export const CARD_VERSION = '3.1.0';
+export const CARD_VERSION = '3.2.0';
 
 export const AQI_LEVEL_DATA: Record<AQILevel, AQILevelInfo> = {
   1: {
@@ -68,28 +68,44 @@ export const WEATHER_ICON_MAP: Record<string, string> = {
 export const POLLUTANT_NAMES: Record<string, string> = {
   p2: 'PM2.5',
   pm25: 'PM2.5',
+  'pm2.5': 'PM2.5',
+  pm2_5: 'PM2.5',
   pm10: 'PM10',
+  pm_10: 'PM10',
   p1: 'PM10',
   o3: 'Ozone',
+  ozone: 'Ozone',
   no2: 'Nitrogen Dioxide',
   n2: 'Nitrogen Dioxide',
+  nitrogen_dioxide: 'Nitrogen Dioxide',
   so2: 'Sulfur Dioxide',
   s2: 'Sulfur Dioxide',
+  sulfur_dioxide: 'Sulfur Dioxide',
+  sulphur_dioxide: 'Sulfur Dioxide',
   co: 'Carbon Monoxide',
+  carbon_monoxide: 'Carbon Monoxide',
   neph: 'Nephelometry',
 };
 
 export const POLLUTANT_UNITS: Record<string, string> = {
   pm25: 'µg/m³',
+  'pm2.5': 'µg/m³',
+  pm2_5: 'µg/m³',
   pm10: 'µg/m³',
+  pm_10: 'µg/m³',
   p2: 'µg/m³',
   p1: 'µg/m³',
-  o3: 'ppb',
+  o3: 'ppm',
+  ozone: 'ppm',
   no2: 'ppb',
   n2: 'ppb',
+  nitrogen_dioxide: 'ppb',
   so2: 'ppb',
   s2: 'ppb',
+  sulfur_dioxide: 'ppb',
+  sulphur_dioxide: 'ppb',
   co: 'ppm',
+  carbon_monoxide: 'ppm',
   neph: '1/Mm',
 };
 

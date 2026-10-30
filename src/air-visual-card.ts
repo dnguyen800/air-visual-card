@@ -27,6 +27,7 @@ import { getFaceSvg } from './icons/faces';
 import { getWeatherSvg, humiditySvg, windSvg } from './icons/weather';
 import { cardStyles } from './styles';
 import { actionHandler } from './action-handler-directive';
+import { calculatePollutantConcentration } from './aqi-calculator';
 
 console.info(
   `%c  AIR-VISUAL-CARD  \n%c  Version ${CARD_VERSION}    `,
@@ -260,6 +261,25 @@ export class AirVisualCard extends LitElement {
         } else if (deviceClass === 'so2' || entityId.includes('sulphur_dioxide') || entityId.includes('sulfur_dioxide')) {
           pollutantName = 'Sulfur Dioxide';
         }
+      }
+    }
+
+    // Calculate pollutant concentration from AQI if pollutant sensor is selected but value is empty
+    const isPollutantValueEmpty =
+      !pollutantValue ||
+      pollutantValue === 'unknown' ||
+      pollutantValue === 'unavailable';
+
+    if (pollutantEntity && isPollutantValueEmpty && validAQI) {
+      const calcTarget =
+        pollutantEntity.attributes?.pollutant_symbol ||
+        pollutantEntity.state ||
+        pollutantName;
+      const entityUnit = pollutantEntity.attributes?.pollutant_unit;
+      const calcResult = calculatePollutantConcentration(calcTarget, aqiNum, entityUnit);
+      if (calcResult) {
+        pollutantValue = calcResult.value;
+        pollutantUnit = calcResult.unit;
       }
     }
 
