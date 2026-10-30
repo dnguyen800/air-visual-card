@@ -34,6 +34,19 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
 
     return [
       {
+        name: 'layout',
+        required: false,
+        selector: {
+          select: {
+            mode: 'dropdown',
+            options: [
+              { label: 'Classic (Original)', value: 'classic' },
+              { label: 'Modern (New)', value: 'modern' },
+            ],
+          },
+        },
+      },
+      {
         name: 'integration_preset',
         required: false,
         selector: {
@@ -45,19 +58,6 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
               { label: 'OpenWeatherMap', value: 'openweathermap' },
               { label: 'AirVisual (IQAir)', value: 'airvisual' },
               { label: 'WAQI (World Air Quality Index)', value: 'waqi' },
-            ],
-          },
-        },
-      },
-      {
-        name: 'layout',
-        required: false,
-        selector: {
-          select: {
-            mode: 'dropdown',
-            options: [
-              { label: 'Classic (Original)', value: 'classic' },
-              { label: 'Modern (New)', value: 'modern' },
             ],
           },
         },
@@ -155,12 +155,12 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
 
   private _computeLabel = (schema: { name: string }): string => {
     const labels: Record<string, string> = {
-      integration_preset: 'Integration Preset / Auto-Fill',
       layout: 'Card Layout',
-      air_quality_index: 'Air Quality Index Sensor',
+      integration_preset: 'Integration Preset / Auto-Fill',
+      air_quality_index: 'Air Quality Index (AQI) Value',
       air_pollution_level: 'Air Pollution Level Sensor',
-      main_pollutant: 'Main Pollutant Sensor',
-      main_pollutant_value: 'Main Pollutant Value Sensor',
+      main_pollutant: 'Main/Dominant Pollutant Sensor',
+      main_pollutant_value: 'Main/Dominant Pollutant Value',
       weather: 'Weather Entity (Optional)',
       city: 'City Name',
       country: 'Country / Standard Label',
@@ -177,9 +177,11 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
 
   private _computeHelper = (schema: { name: string }): string => {
     const helpers: Record<string, string> = {
+      layout: 'Choose between the classic original layout and the new modern layout',
       integration_preset:
         'Select an integration to automatically detect and pre-fill linked sensors from your Home Assistant setup',
-      layout: 'Choose between the classic original layout and the new modern layout',
+      air_quality_index: 'Required. This is a number that represents the AQI in your location',
+      air_pollution_level: 'Optional. Description of the air quality based on the AQI value.',
     };
     return helpers[schema.name] || '';
   };
