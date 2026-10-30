@@ -113,6 +113,11 @@ export const cardStyles: CSSResultGroup = css`
     padding: 2px 4px;
   }
 
+  .apl-badge.long-text {
+    font-size: 0.8rem;
+    line-height: 1.15;
+  }
+
   .pollutant-badge {
     display: inline-flex;
     align-items: center;
@@ -175,29 +180,31 @@ export const cardStyles: CSSResultGroup = css`
      Modern Layout Styles
      ======================================================== */
   .card-container.modern-layout {
-    padding: 16px;
+    padding: 0;
     box-sizing: border-box;
   }
 
   .card-container.modern-layout.no-title {
-    padding: 12px;
+    padding: 0;
   }
 
   .modern-header {
-    font-size: 1.35rem;
+    font-size: 1.25rem;
     font-weight: 700;
     text-align: center;
     color: var(--primary-text-color, #111111);
     letter-spacing: -0.2px;
-    margin: 0 0 14px 0;
+    padding: 14px 16px 12px;
+    margin: 0;
     line-height: 1.25;
   }
 
   .modern-box {
-    border-radius: 18px;
+    border-radius: 0;
     overflow: hidden;
-    box-shadow: 0 10px 28px -4px var(--aqi-glow, rgba(0, 0, 0, 0.12));
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: none;
+    border: none;
+    width: 100%;
     transition: all 0.3s ease;
   }
 
@@ -290,6 +297,17 @@ export const cardStyles: CSSResultGroup = css`
     line-height: 1.2;
     letter-spacing: -0.2px;
     word-break: break-word;
+  }
+
+  .modern-status-text.medium-text {
+    font-size: 1.35rem;
+    line-height: 1.2;
+  }
+
+  .modern-status-text.long-text {
+    font-size: 1.1rem;
+    line-height: 1.15;
+    letter-spacing: -0.1px;
   }
 
   .modern-face-section {

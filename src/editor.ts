@@ -182,6 +182,8 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
         'Select an integration to automatically detect and pre-fill linked sensors from your Home Assistant setup',
       air_quality_index: 'Required. This is a number that represents the AQI in your location',
       air_pollution_level: 'Optional. Description of the air quality based on the AQI value.',
+      main_pollutant_value:
+        'Optional. If left blank, pollutant concentration is calculated from the AQI using EPA breakpoints.',
     };
     return helpers[schema.name] || '';
   };

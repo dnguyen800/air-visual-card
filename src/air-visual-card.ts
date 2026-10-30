@@ -27,6 +27,7 @@ import { getFaceSvg } from './icons/faces';
 import { getWeatherSvg, humiditySvg, windSvg } from './icons/weather';
 import { cardStyles } from './styles';
 import { actionHandler } from './action-handler-directive';
+import { calculatePollutantConcentration } from './aqi-calculator';
 
 console.info(
   `%c  AIR-VISUAL-CARD  \n%c  Version ${CARD_VERSION}    `,
@@ -213,6 +214,10 @@ export class AirVisualCard extends LitElement {
       }
     }
 
+    // Resolve APL label size based on string length (e.g. "Unhealthy for sensitive groups")
+    const aplLength = aplText ? aplText.trim().length : 0;
+    const aplSizeClass = aplLength > 20 ? 'long-text' : aplLength > 12 ? 'medium-text' : '';
+
     // Resolve Main Pollutant & Unit
     let pollutantName = '';
     let pollutantUnit = '';
@@ -260,6 +265,25 @@ export class AirVisualCard extends LitElement {
         } else if (deviceClass === 'so2' || entityId.includes('sulphur_dioxide') || entityId.includes('sulfur_dioxide')) {
           pollutantName = 'Sulfur Dioxide';
         }
+      }
+    }
+
+    // Calculate pollutant concentration from AQI if pollutant sensor is selected but value is empty
+    const isPollutantValueEmpty =
+      !pollutantValue ||
+      pollutantValue === 'unknown' ||
+      pollutantValue === 'unavailable';
+
+    if (pollutantEntity && isPollutantValueEmpty && validAQI) {
+      const calcTarget =
+        pollutantEntity.attributes?.pollutant_symbol ||
+        pollutantEntity.state ||
+        pollutantName;
+      const entityUnit = pollutantEntity.attributes?.pollutant_unit;
+      const calcResult = calculatePollutantConcentration(calcTarget, aqiNum, entityUnit);
+      if (calcResult) {
+        pollutantValue = calcResult.value;
+        pollutantUnit = calcResult.unit;
       }
     }
 
@@ -337,7 +361,6 @@ export class AirVisualCard extends LitElement {
             <div
               class="modern-box"
               data-font="${aqiInfo.fontColor.toLowerCase() === '#ffffff' ? 'light' : 'dark'}"
-              style="--aqi-glow: ${aqiInfo.bgColor}55;"
             >
               <div
                 class="modern-colored-section"
@@ -371,7 +394,7 @@ export class AirVisualCard extends LitElement {
                             )}
                           title="${aplText}"
                         >
-                          <div class="modern-status-text">${aplText}</div>
+                          <div class="modern-status-text ${aplSizeClass}">${aplText}</div>
                         </div>
                       `
                     : html``}
@@ -506,7 +529,7 @@ export class AirVisualCard extends LitElement {
                       )}
                     title="${aplText}"
                   >
-                    <div class="apl-badge">${aplText}</div>
+                    <div class="apl-badge ${aplSizeClass}">${aplText}</div>
                     ${pollutantName || pollutantDetails
                       ? html`
                           <div class="pollutant-badge">
