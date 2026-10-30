@@ -303,29 +303,31 @@ function e(e,t,i,a){var n,o=arguments.length,r=o<3?t:null===a?a=Object.getOwnPro
      Modern Layout Styles
      ======================================================== */
   .card-container.modern-layout {
-    padding: 16px;
+    padding: 0;
     box-sizing: border-box;
   }
 
   .card-container.modern-layout.no-title {
-    padding: 12px;
+    padding: 0;
   }
 
   .modern-header {
-    font-size: 1.35rem;
+    font-size: 1.25rem;
     font-weight: 700;
     text-align: center;
     color: var(--primary-text-color, #111111);
     letter-spacing: -0.2px;
-    margin: 0 0 14px 0;
+    padding: 14px 16px 12px;
+    margin: 0;
     line-height: 1.25;
   }
 
   .modern-box {
-    border-radius: 18px;
+    border-radius: 0;
     overflow: hidden;
     box-shadow: none;
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    border: none;
+    width: 100%;
     transition: all 0.3s ease;
   }
 
