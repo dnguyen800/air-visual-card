@@ -196,7 +196,7 @@ export const cardStyles: CSSResultGroup = css`
   .modern-box {
     border-radius: 18px;
     overflow: hidden;
-    box-shadow: 0 10px 28px -4px var(--aqi-glow, rgba(0, 0, 0, 0.12));
+    box-shadow: none;
     border: 1px solid rgba(0, 0, 0, 0.05);
     transition: all 0.3s ease;
   }

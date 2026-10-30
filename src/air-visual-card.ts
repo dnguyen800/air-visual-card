@@ -357,7 +357,6 @@ export class AirVisualCard extends LitElement {
             <div
               class="modern-box"
               data-font="${aqiInfo.fontColor.toLowerCase() === '#ffffff' ? 'light' : 'dark'}"
-              style="--aqi-glow: ${aqiInfo.bgColor}55;"
             >
               <div
                 class="modern-colored-section"
