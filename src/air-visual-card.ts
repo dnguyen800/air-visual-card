@@ -214,6 +214,10 @@ export class AirVisualCard extends LitElement {
       }
     }
 
+    // Resolve APL label size based on string length (e.g. "Unhealthy for sensitive groups")
+    const aplLength = aplText ? aplText.trim().length : 0;
+    const aplSizeClass = aplLength > 20 ? 'long-text' : aplLength > 12 ? 'medium-text' : '';
+
     // Resolve Main Pollutant & Unit
     let pollutantName = '';
     let pollutantUnit = '';
@@ -390,7 +394,7 @@ export class AirVisualCard extends LitElement {
                             )}
                           title="${aplText}"
                         >
-                          <div class="modern-status-text">${aplText}</div>
+                          <div class="modern-status-text ${aplSizeClass}">${aplText}</div>
                         </div>
                       `
                     : html``}
@@ -525,7 +529,7 @@ export class AirVisualCard extends LitElement {
                       )}
                     title="${aplText}"
                   >
-                    <div class="apl-badge">${aplText}</div>
+                    <div class="apl-badge ${aplSizeClass}">${aplText}</div>
                     ${pollutantName || pollutantDetails
                       ? html`
                           <div class="pollutant-badge">

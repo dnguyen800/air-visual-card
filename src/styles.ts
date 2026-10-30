@@ -113,6 +113,11 @@ export const cardStyles: CSSResultGroup = css`
     padding: 2px 4px;
   }
 
+  .apl-badge.long-text {
+    font-size: 0.8rem;
+    line-height: 1.15;
+  }
+
   .pollutant-badge {
     display: inline-flex;
     align-items: center;
@@ -290,6 +295,17 @@ export const cardStyles: CSSResultGroup = css`
     line-height: 1.2;
     letter-spacing: -0.2px;
     word-break: break-word;
+  }
+
+  .modern-status-text.medium-text {
+    font-size: 1.35rem;
+    line-height: 1.2;
+  }
+
+  .modern-status-text.long-text {
+    font-size: 1.1rem;
+    line-height: 1.15;
+    letter-spacing: -0.1px;
   }
 
   .modern-face-section {
