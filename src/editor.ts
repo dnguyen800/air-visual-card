@@ -58,6 +58,7 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
               { label: 'OpenWeatherMap', value: 'openweathermap' },
               { label: 'AirVisual (IQAir)', value: 'airvisual' },
               { label: 'WAQI (World Air Quality Index)', value: 'waqi' },
+              { label: 'openSenseMap', value: 'opensensemap' },
             ],
           },
         },
@@ -234,10 +235,12 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
     const platformEntities = allEntityIds.filter((id) => {
       const reg = entityRegistry?.[id];
       const attribution = String(states[id]?.attributes?.attribution || '').toLowerCase();
+      const entityPlatform = reg?.platform?.toLowerCase();
       return (
-        reg?.platform === preset ||
+        entityPlatform === preset ||
         id.toLowerCase().includes(preset) ||
-        attribution.includes(preset)
+        attribution.includes(preset) ||
+        (preset === 'opensensemap' && (id.toLowerCase().includes('sensebox') || attribution.includes('sensebox')))
       );
     });
 
@@ -423,6 +426,48 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
         );
       });
       if (pm25Sensor) config.main_pollutant_value = pm25Sensor;
+    } else if (preset === 'opensensemap') {
+      delete config.air_quality_index;
+      delete config.air_pollution_level;
+      delete config.main_pollutant;
+
+      const pm25Sensor = platformEntities.find((id) => {
+        const state = states[id];
+        const friendly = String(state?.attributes?.friendly_name || '').toLowerCase();
+        const translationKey = entityRegistry?.[id]?.translation_key;
+        return (
+          state?.attributes?.device_class === 'pm25' ||
+          translationKey === 'pm25' ||
+          translationKey === 'pm2_5' ||
+          translationKey === 'particulate_matter_2_5' ||
+          friendly.includes('pm2.5') ||
+          friendly.includes('pm 2.5') ||
+          friendly.includes('pm2_5') ||
+          friendly.includes('particulate matter 2.5') ||
+          id.includes('particulate_matter_2_5') ||
+          id.includes('pm2_5') ||
+          id.includes('pm25') ||
+          id.includes('pm_2_5') ||
+          id.includes('pm2')
+        );
+      });
+      if (pm25Sensor) config.main_pollutant_value = pm25Sensor;
+
+      if (!config.city && pm25Sensor) {
+        const friendly = states[pm25Sensor]?.attributes?.friendly_name;
+        if (friendly) {
+          const cleanCity = friendly
+            .replace(/opensensemap/gi, '')
+            .replace(/sensebox/gi, '')
+            .replace(/particulate\s*matter\s*2\.5/gi, '')
+            .replace(/particulate\s*matter/gi, '')
+            .replace(/pm\s*2\.5/gi, '')
+            .replace(/pm25/gi, '')
+            .replace(/pm2_5/gi, '')
+            .replace(/^[\-_\s:]+|[\-_\s:]+$/g, '');
+          if (cleanCity) config.city = cleanCity;
+        }
+      }
     }
   }
 

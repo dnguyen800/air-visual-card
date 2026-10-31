@@ -220,6 +220,7 @@ export class AirVisualCard extends LitElement {
           translationKey === 'pm2_5' ||
           translationKey === 'particulate_matter_2_5' ||
           entityId.includes('pm2_5') ||
+          entityId.includes('pm_2_5') ||
           entityId.includes('pm25') ||
           friendlyName.includes('pm2.5') ||
           friendlyName.includes('pm 2.5') ||
