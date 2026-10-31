@@ -148,7 +148,7 @@ function e(e,t,i,a){var n,o=arguments.length,s=o<3?t:null===a?a=Object.getOwnPro
 
   /* Classic Layout Header */
   .header {
-    padding: 12px 16px 8px;
+    padding: 8px 16px 6px;
     font-size: 1.15rem;
     font-weight: 600;
     color: var(--primary-text-color);
@@ -176,7 +176,7 @@ function e(e,t,i,a){var n,o=arguments.length,s=o<3?t:null===a?a=Object.getOwnPro
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 12px;
+    padding: 6px 8px;
     cursor: pointer;
     transition: transform 0.15s ease, opacity 0.2s;
   }
@@ -187,8 +187,8 @@ function e(e,t,i,a){var n,o=arguments.length,s=o<3?t:null===a?a=Object.getOwnPro
 
   .face-section svg {
     display: block;
-    width: 58px;
-    height: 58px;
+    width: 69.6px;
+    height: 69.6px;
   }
 
   .aqi-section {
@@ -196,7 +196,7 @@ function e(e,t,i,a){var n,o=arguments.length,s=o<3?t:null===a?a=Object.getOwnPro
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 8px 12px;
+    padding: 6px 10px;
     cursor: pointer;
     text-align: center;
   }
@@ -214,7 +214,7 @@ function e(e,t,i,a){var n,o=arguments.length,s=o<3?t:null===a?a=Object.getOwnPro
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    margin-top: 4px;
+    margin-top: 2px;
     opacity: 0.9;
   }
 
@@ -223,8 +223,8 @@ function e(e,t,i,a){var n,o=arguments.length,s=o<3?t:null===a?a=Object.getOwnPro
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 8px 14px;
-    gap: 6px;
+    padding: 6px 10px;
+    gap: 4px;
     cursor: pointer;
   }
 
@@ -233,7 +233,7 @@ function e(e,t,i,a){var n,o=arguments.length,s=o<3?t:null===a?a=Object.getOwnPro
     font-weight: 700;
     text-align: center;
     line-height: 1.2;
-    padding: 2px 4px;
+    padding: 0 4px;
   }
 
   .apl-badge.long-text {
@@ -247,7 +247,7 @@ function e(e,t,i,a){var n,o=arguments.length,s=o<3?t:null===a?a=Object.getOwnPro
     justify-content: center;
     background-color: rgba(255, 255, 255, 0.9);
     color: #333333;
-    padding: 4px 10px;
+    padding: 3px 8px;
     border-radius: 6px;
     font-size: 0.78rem;
     font-weight: 600;
@@ -274,7 +274,7 @@ function e(e,t,i,a){var n,o=arguments.length,s=o<3?t:null===a?a=Object.getOwnPro
     align-items: center;
     justify-content: center;
     gap: 6px;
-    padding: 9px 6px;
+    padding: 6px 6px;
     box-sizing: border-box;
     cursor: pointer;
     transition: background-color 0.15s ease;
@@ -317,7 +317,7 @@ function e(e,t,i,a){var n,o=arguments.length,s=o<3?t:null===a?a=Object.getOwnPro
     text-align: center;
     color: var(--primary-text-color, #111111);
     letter-spacing: -0.2px;
-    padding: 14px 16px 12px;
+    padding: 10px 16px 8px;
     margin: 0;
     line-height: 1.25;
   }
@@ -332,7 +332,7 @@ function e(e,t,i,a){var n,o=arguments.length,s=o<3?t:null===a?a=Object.getOwnPro
   }
 
   .modern-colored-section {
-    padding: 18px 20px 16px;
+    padding: 12px 18px 10px;
     transition: background-color 0.4s ease;
     box-sizing: border-box;
   }
@@ -364,8 +364,8 @@ function e(e,t,i,a){var n,o=arguments.length,s=o<3?t:null===a?a=Object.getOwnPro
     background-color: rgba(0, 0, 0, 0.1);
     color: inherit;
     border-radius: 12px;
-    padding: 8px 14px;
-    min-width: 64px;
+    padding: 6px 12px;
+    min-width: 60px;
     box-sizing: border-box;
     cursor: pointer;
     user-select: none;
@@ -448,8 +448,8 @@ function e(e,t,i,a){var n,o=arguments.length,s=o<3?t:null===a?a=Object.getOwnPro
 
   .modern-face-section svg {
     display: block;
-    width: 52px;
-    height: 52px;
+    width: 62.4px;
+    height: 62.4px;
     color: inherit;
   }
 
@@ -457,7 +457,7 @@ function e(e,t,i,a){var n,o=arguments.length,s=o<3?t:null===a?a=Object.getOwnPro
     height: 1px;
     background-color: currentColor;
     opacity: 0.12;
-    margin: 16px 0 14px;
+    margin: 8px 0 8px;
   }
 
   .modern-pollutant-grid {
@@ -466,7 +466,7 @@ function e(e,t,i,a){var n,o=arguments.length,s=o<3?t:null===a?a=Object.getOwnPro
     align-items: center;
     gap: 12px;
     font-size: 1.15rem;
-    line-height: 1.25;
+    line-height: 1.2;
     cursor: pointer;
   }
 
@@ -495,7 +495,7 @@ function e(e,t,i,a){var n,o=arguments.length,s=o<3?t:null===a?a=Object.getOwnPro
     justify-items: center;
     background-color: var(--ha-card-background, var(--card-background-color, #ffffff));
     color: var(--primary-text-color, #212121);
-    padding: 14px 16px;
+    padding: 9px 16px;
     font-size: 1.1rem;
     font-weight: 500;
     box-sizing: border-box;
