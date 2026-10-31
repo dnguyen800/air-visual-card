@@ -1,3 +1,5 @@
 {
-  "name": "Air Visual Card"
+  "name": "Air Visual Card",
+  "render_readme": true,
+  "filename": "air-visual-card.js"
 }

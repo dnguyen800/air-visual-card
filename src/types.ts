@@ -1,0 +1,41 @@
+import { ActionConfig, LovelaceCardConfig, HomeAssistant } from 'custom-card-helpers';
+
+export interface HassWithEntities extends HomeAssistant {
+  entities?: Record<string, { platform?: string; device_id?: string; translation_key?: string }>;
+}
+
+export interface AirVisualCardConfig extends LovelaceCardConfig {
+  type: string;
+  layout?: 'classic' | 'modern' | 'old' | 'new';
+  modern_layout?: boolean;
+  integration_preset?: string;
+  air_quality_index?: string;
+  air_pollution_level?: string;
+  main_pollutant?: string;
+  main_pollutant_value?: string;
+  weather?: string;
+  title?: string;
+  city?: string;
+  country?: string;
+  unit_of_measurement?: string;
+  speed_unit?: string;
+  icons?: string;
+  hide_title?: boolean;
+  hide_face?: boolean;
+  hide_weather?: boolean;
+  hide_aqi?: boolean;
+  hide_apl?: boolean;
+  tap_action?: ActionConfig;
+  hold_action?: ActionConfig;
+  double_tap_action?: ActionConfig;
+}
+
+export type AQILevel = 1 | 2 | 3 | 4 | 5 | 6;
+
+export interface AQILevelInfo {
+  level: AQILevel;
+  label: string;
+  bgColor: string;
+  faceColor: string;
+  fontColor: string;
+}

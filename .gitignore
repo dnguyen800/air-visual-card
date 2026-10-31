@@ -1,0 +1,9 @@
+node_modules/
+.yarn/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+*.tsbuildinfo
+dist/air-visual-card.js.map
+deno.lock

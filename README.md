@@ -2,6 +2,8 @@
 
 A modern, responsive Home Assistant Lovelace card that displays Air Quality Index (AQI), pollution levels, and weather data in the style of iqair.com. Version 3 is a refactored version that should fix the bugs the users reported in version 2.
 
+![example](images/example.png)
+
 [![GitHub Release](https://img.shields.io/github/v/release/dnguyen800/air-visual-card?style=flat-square)](https://github.com/dnguyen800/air-visual-card/releases)
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg?style=flat-square)](https://github.com/hacs/default)
 [![License](https://img.shields.io/github/license/dnguyen800/air-visual-card?style=flat-square)](LICENSE)
@@ -14,7 +16,7 @@ A modern, responsive Home Assistant Lovelace card that displays Air Quality Inde
 - 🎨 **Two Card Layouts**:
   - **Modern Layout** (*Default*): The current layout used on iqair.com. Features a sleek, cohesive design with full-width colored air quality status, numerical AQI badge, dynamic font scaling, pollutant grid, and weather metrics bar.
   - **Classic Layout**: The beloved original AirVisual layout with traditional face badges, large numerical AQI, and pill badges.
-- Multiple cards supportd:
+- Multiple cards supported:
   - Previously adding more than one Air Visual Card would result in an error. That has been fixed now.
 - ⚡ **Bi-Directional EPA AQI & Pollutant Interpolation**:
   - **Pollutant $\to$ AQI**: When an AQI sensor is omitted or empty, the card automatically computes the AQI from the **Main Pollutant Value** ($PM_{2.5}$, $PM_{10}$, $O_3$, $NO_2$, $CO$, $SO_2$) using official U.S. EPA linear interpolation. Ideal for direct particulate sensors like openSenseMap, SenseBox, and PurpleAir!
