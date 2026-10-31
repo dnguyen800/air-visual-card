@@ -14,8 +14,9 @@ export interface AirVisualCardConfig extends LovelaceCardConfig {
   main_pollutant?: string;
   main_pollutant_value?: string;
   weather?: string;
-  country?: string;
+  title?: string;
   city?: string;
+  country?: string;
   unit_of_measurement?: string;
   speed_unit?: string;
   icons?: string;

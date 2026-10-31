@@ -69,7 +69,7 @@ export class AirVisualCard extends LitElement {
       air_quality_index: 'sensor.u_s_air_quality_index',
       air_pollution_level: 'sensor.u_s_air_pollution_level',
       main_pollutant: 'sensor.u_s_main_pollutant',
-      city: 'San Francisco',
+      title: 'San Francisco',
       country: 'US',
       unit_of_measurement: 'AQI',
       layout: 'modern',
@@ -385,9 +385,9 @@ export class AirVisualCard extends LitElement {
       pollutantDetails = formattedUnit;
     }
 
-    const cityName = this._config.city || '';
+    const cardTitle = this._config.title ?? this._config.city ?? '';
     const unit = this._config.unit_of_measurement || 'AQI';
-    const hideTitle = Boolean(this._config.hide_title || !cityName);
+    const hideTitle = Boolean(this._config.hide_title || !cardTitle);
     const hideFace = Boolean(this._config.hide_face);
     const hideAQI = Boolean(this._config.hide_aqi);
     const hideAPL = Boolean(this._config.hide_apl);
@@ -429,10 +429,6 @@ export class AirVisualCard extends LitElement {
       if (hideAQI && !hideFace) modernTopClasses.push('no-aqi');
       if (hideFace && hideAQI) modernTopClasses.push('only-status');
 
-      const modernHeader = cityName
-        ? `${cityName} air quality index (${unit})`
-        : `Air quality index (${unit})`;
-
       return html`
         <ha-card
           .actionHandler=${actionHandler({
@@ -443,7 +439,7 @@ export class AirVisualCard extends LitElement {
         >
           <div class="card-container modern-layout ${hideTitle ? 'no-title' : ''}">
             ${!hideTitle
-              ? html`<div class="modern-header">${modernHeader}</div>`
+              ? html`<div class="modern-header">${cardTitle}</div>`
               : html``}
 
             <div
@@ -574,7 +570,7 @@ export class AirVisualCard extends LitElement {
       >
         <div class="card-container">
           ${!hideTitle
-            ? html`<div class="header">${cityName} Air Quality Index</div>`
+            ? html`<div class="header">${cardTitle}</div>`
             : html``}
 
           <div

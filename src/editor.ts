@@ -95,7 +95,7 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
         type: 'grid',
         name: '',
         schema: [
-          { name: 'city', selector: { text: {} } },
+          { name: 'title', selector: { text: {} } },
           { name: 'country', selector: { text: {} } },
         ],
       },
@@ -142,7 +142,7 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
       hide_apl: this._config.hide_apl ?? false,
       unit_of_measurement: this._config.unit_of_measurement || 'AQI',
       country: this._config.country || '',
-      city: this._config.city || '',
+      title: this._config.title ?? this._config.city ?? '',
     };
 
     return html`
@@ -166,11 +166,12 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
       main_pollutant: 'Main/Dominant Pollutant Sensor',
       main_pollutant_value: 'Main/Dominant Pollutant Value',
       weather: 'Weather Entity (Optional)',
-      city: 'City Name',
+      title: 'Title',
+      city: 'Title',
       country: 'Country / Standard Label',
       unit_of_measurement: 'AQI Unit (Default: AQI)',
       speed_unit: 'Wind Speed Unit Override',
-      hide_title: 'Hide City Title',
+      hide_title: 'Hide Title',
       hide_face: 'Hide Face Icon',
       hide_weather: 'Hide Weather Forecast Bar',
       hide_aqi: 'Hide AQI Value Badge',
@@ -201,6 +202,9 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
     const selectedPreset = ev.detail.value.integration_preset;
 
     const newConfig = { ...this._config, ...ev.detail.value };
+    if (newConfig.title !== undefined && newConfig.city !== undefined) {
+      delete newConfig.city;
+    }
 
     // When changing between preset options, clear out previous sensor selector values
     if (selectedPreset && selectedPreset !== currentPreset) {
@@ -209,6 +213,7 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
       delete newConfig.main_pollutant;
       delete newConfig.main_pollutant_value;
       delete newConfig.weather;
+      delete newConfig.title;
       delete newConfig.city;
 
       if (selectedPreset !== 'manual') {
@@ -308,7 +313,7 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
       }
 
       // 5. Default City Name (from location name in friendly name)
-      if (!config.city && aqiSensor) {
+      if (!config.title && !config.city && aqiSensor) {
         const friendly = states[aqiSensor]?.attributes?.friendly_name;
         if (friendly) {
           const cleanCity = friendly
@@ -317,7 +322,7 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
             .replace(/local\s*air\s*quality\s*index/gi, '')
             .replace(/air\s*quality\s*index/gi, '')
             .replace(/^[-_\s:]+|[-_\s:]+$/g, '');
-          if (cleanCity) config.city = cleanCity;
+          if (cleanCity) { config.title = cleanCity; delete config.city; }
         }
       }
     } else if (preset === 'tomorrowio') {
@@ -452,7 +457,7 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
       }
 
       // 6. Default City Name (from location name in friendly name if available)
-      if (!config.city) {
+      if (!config.title && !config.city) {
         const friendly =
           (weatherEntity && states[weatherEntity]?.attributes?.friendly_name) ||
           (aqiSensor && states[aqiSensor]?.attributes?.friendly_name);
@@ -465,7 +470,7 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
             .replace(/hourly/gi, '')
             .replace(/nowcast/gi, '')
             .replace(/^[\-_\s:]+|[\-_\s:]+$/g, '');
-          if (cleanCity) config.city = cleanCity;
+          if (cleanCity) { config.title = cleanCity; delete config.city; }
         }
       }
     } else if (preset === 'openweathermap') {
@@ -525,13 +530,13 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
       }
 
       // 4. Default City Name (if not set)
-      if (!config.city) {
+      if (!config.title && !config.city) {
         const friendly =
           (weatherEntity && states[weatherEntity]?.attributes?.friendly_name) ||
           (aqiSensor && states[aqiSensor]?.attributes?.friendly_name);
         if (friendly) {
           const cleanCity = friendly.replace(/open\s*weather\s*map/gi, '').replace(/^[-_\s]+|[-_\s]+$/g, '');
-          if (cleanCity) config.city = cleanCity;
+          if (cleanCity) { config.title = cleanCity; delete config.city; }
         }
       }
     } else if (preset === 'airvisual') {
@@ -546,9 +551,9 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
       const mpSensor = platformEntities.find((id) => id.includes('main_pollutant') && !id.includes('value'));
       if (mpSensor) config.main_pollutant = mpSensor;
 
-      if (!config.city && aqiSensor) {
+      if (!config.title && !config.city && aqiSensor) {
         const cityAttr = states[aqiSensor]?.attributes?.city;
-        if (cityAttr) config.city = String(cityAttr);
+        if (cityAttr) { config.title = String(cityAttr); delete config.city; }
       }
     } else if (preset === 'waqi') {
       const aqiSensor = platformEntities.find(
@@ -605,7 +610,7 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
       });
       if (pm25Sensor) config.main_pollutant_value = pm25Sensor;
 
-      if (!config.city && pm25Sensor) {
+      if (!config.title && !config.city && pm25Sensor) {
         const friendly = states[pm25Sensor]?.attributes?.friendly_name;
         if (friendly) {
           const cleanCity = friendly
@@ -617,7 +622,7 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
             .replace(/pm25/gi, '')
             .replace(/pm2_5/gi, '')
             .replace(/^[\-_\s:]+|[\-_\s:]+$/g, '');
-          if (cleanCity) config.city = cleanCity;
+          if (cleanCity) { config.title = cleanCity; delete config.city; }
         }
       }
     }
