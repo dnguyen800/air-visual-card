@@ -180,10 +180,10 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
       layout: 'Choose between the classic original layout and the new modern layout',
       integration_preset:
         'Select an integration to automatically detect and pre-fill linked sensors from your Home Assistant setup',
-      air_quality_index: 'Required. This is a number that represents the AQI in your location',
+      air_quality_index: 'Optional. This is a number that represents the AQI in your location. If left blank, it will be calculated from the Main/Dominant Pollutant Value.',
       air_pollution_level: 'Optional. Description of the air quality based on the AQI value.',
       main_pollutant_value:
-        'Optional. If left blank, pollutant concentration is calculated from the AQI using EPA breakpoints.',
+        'Optional. Value/concentration of the dominant pollutant. If defined without an AQI sensor, the AQI is calculated from this value. If left blank, this value is calculated from the AQI using EPA breakpoints.',
     };
     return helpers[schema.name] || '';
   };

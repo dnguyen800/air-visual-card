@@ -187,3 +187,55 @@ export function calculatePollutantConcentration(
   return { value, unit };
 }
 
+/**
+ * Calculates AQI index value from a pollutant concentration using EPA linear interpolation:
+ * I = ((I_Hi - I_Lo) / (BP_Hi - BP_Lo)) * (Cp - BP_Lo) + I_Lo
+ *
+ * @param pollutant Pollutant identifier, symbol, or name (e.g. 'PM2.5', 'pm25', 'Ozone', 'co')
+ * @param concentration Numeric pollutant concentration
+ * @param inputUnit Optional unit of the input concentration (e.g. 'ppb' vs 'ppm')
+ */
+export function calculateAQIFromConcentration(
+  pollutant: string,
+  concentration: number,
+  inputUnit?: string,
+): number | null {
+  const key = normalizePollutantKey(pollutant);
+  if (!key || !EPA_BREAKPOINTS[key]) return null;
+  if (isNaN(concentration) || concentration < 0) return null;
+
+  const config = EPA_BREAKPOINTS[key];
+  let cp = concentration;
+
+  // Handle unit conversions
+  const cleanUnit = inputUnit?.toLowerCase().trim();
+  if (cleanUnit) {
+    if (key === 'o3') {
+      if (cleanUnit === 'ppb') cp = cp / 1000;
+    } else if (key === 'co') {
+      if (cleanUnit === 'ppb') cp = cp / 1000;
+    } else if (key === 'no2' || key === 'so2') {
+      if (cleanUnit === 'ppm') cp = cp * 1000;
+    }
+  }
+
+  // EPA truncation rules before finding breakpoints
+  if (config.decimals === 0) {
+    cp = Math.floor(cp);
+  } else if (config.decimals === 1) {
+    cp = Math.floor(cp * 10) / 10;
+  } else if (config.decimals === 3) {
+    cp = Math.floor(cp * 1000) / 1000;
+  }
+
+  const { breakpoints } = config;
+  const bp =
+    breakpoints.find((b) => cp <= b.bpHigh) ||
+    breakpoints[breakpoints.length - 1];
+
+  const { aqiLow, aqiHigh, bpLow, bpHigh } = bp;
+  const aqi = ((aqiHigh - aqiLow) / (bpHigh - bpLow)) * (cp - bpLow) + aqiLow;
+
+  return Math.round(aqi);
+}
+

@@ -1,4 +1,8 @@
-import { ActionConfig, LovelaceCardConfig } from 'custom-card-helpers';
+import { ActionConfig, LovelaceCardConfig, HomeAssistant } from 'custom-card-helpers';
+
+export interface HassWithEntities extends HomeAssistant {
+  entities?: Record<string, { platform?: string; device_id?: string; translation_key?: string }>;
+}
 
 export interface AirVisualCardConfig extends LovelaceCardConfig {
   type: string;
