@@ -1,20 +1,21 @@
 # Air Visual Card
 
-A modern, responsive Home Assistant Lovelace card that displays Air Quality Index (AQI), pollution levels, and weather data in the style of AirVisual.
+A modern, responsive Home Assistant Lovelace card that displays Air Quality Index (AQI), pollution levels, and weather data in the style of iqair.com. Version 3 is a refactored version that should fix the bugs the users reported in version 2.
 
 [![GitHub Release](https://img.shields.io/github/v/release/dnguyen800/air-visual-card?style=flat-square)](https://github.com/dnguyen800/air-visual-card/releases)
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg?style=flat-square)](https://github.com/hacs/default)
 [![License](https://img.shields.io/github/license/dnguyen800/air-visual-card?style=flat-square)](LICENSE)
 
-Built with **Lit 3** and **TypeScript 5**, following Home Assistant Lovelace card best practices.
 
 ---
 
 ## Features
 
 - 🎨 **Two Card Layouts**:
-  - **Modern Layout** (*Default*): Features a sleek, cohesive design with full-width colored air quality status, numerical AQI badge, dynamic font scaling, pollutant grid, and weather metrics bar.
+  - **Modern Layout** (*Default*): The current layout used on iqair.com. Features a sleek, cohesive design with full-width colored air quality status, numerical AQI badge, dynamic font scaling, pollutant grid, and weather metrics bar.
   - **Classic Layout**: The beloved original AirVisual layout with traditional face badges, large numerical AQI, and pill badges.
+- Multiple cards supported:
+  - Previously adding more than one Air Visual Card would result in an error. That has been fixed now.
 - ⚡ **Bi-Directional EPA AQI & Pollutant Interpolation**:
   - **Pollutant $\to$ AQI**: When an AQI sensor is omitted or empty, the card automatically computes the AQI from the **Main Pollutant Value** ($PM_{2.5}$, $PM_{10}$, $O_3$, $NO_2$, $CO$, $SO_2$) using official U.S. EPA linear interpolation. Ideal for direct particulate sensors like openSenseMap, SenseBox, and PurpleAir!
   - **AQI $\to$ Pollutant**: If an integration reports dominant pollutant identity without a numeric concentration sensor, the card calculates the concentration directly from the AQI using EPA concentration breakpoints.
@@ -28,18 +29,16 @@ Built with **Lit 3** and **TypeScript 5**, following Home Assistant Lovelace car
     - **OpenWeatherMap**
     - **AirVisual (IQAir)**
     - **WAQI (World Air Quality Index)**
-- 🏷️ **Custom Title**:
-  - Enter any custom title (e.g. `Downtown`, `Home Office`, `Backyard`). The title renders cleanly without unwanted prefixes or suffixes.
 - 🌈 **Dynamic Theming**:
   - Card background and face graphics dynamically adjust across the 6 official EPA AQI hazard tiers (Good, Moderate, Unhealthy for Sensitive Groups, Unhealthy, Very Unhealthy, Hazardous).
-- 📏 **Adaptive Typography**:
-  - Long pollution level strings (e.g., *"Unhealthy for sensitive groups"*) automatically scale down to avoid text clipping.
 - 📦 **100% Self-Contained**:
   - Face and weather vector SVGs are embedded directly in the bundle—no external CDN requests or broken icon paths.
 - 📐 **Sections & Grid Ready**:
   - Full `getLayoutOptions()` support for Home Assistant's Sections dashboard layout.
 - 👆 **Interactive Gestures**:
   - Configurable `tap_action`, `hold_action`, and `double_tap_action` with automatic fallbacks to sensor `more-info` dialogs.
+-  **Visual Editor**:
+  - Fixed visual editor (previous version had broken it)
 
 ---
 
@@ -81,25 +80,6 @@ air_pollution_level: sensor.u_s_air_pollution_level
 main_pollutant: sensor.u_s_main_pollutant
 main_pollutant_value: sensor.particulate_matter_2_5
 weather: weather.home
-```
-
-#### 2. Auto-Calculated AQI from Pollutant Sensor (No AQI Sensor Required)
-```yaml
-type: custom:air-visual-card
-layout: modern
-title: Backyard SenseBox
-main_pollutant_value: sensor.sensebox_home_pm2_5
-# AQI value, hazard tier colors, face icon, and level text are auto-calculated from PM2.5!
-```
-
-#### 3. Classic Layout
-```yaml
-type: custom:air-visual-card
-layout: classic
-title: Living Room
-air_quality_index: sensor.waqi_air_quality
-main_pollutant: sensor.waqi_dominant_pollutant
-country: US
 ```
 
 ---
@@ -168,5 +148,6 @@ npm run watch
 ## Credits
 
 - [custom-cards/boilerplate-card](https://github.com/custom-cards/boilerplate-card) for modern Home Assistant Lovelace card boilerplate and patterns.
-- [AirVisual.com](https://www.airvisual.com/) for the original visual card styling and color scales.
+- [iqair.com](https://www.iqair.com/) for the original visual card styling and color scales.
 - [U.S. EPA Air Quality System](https://aqs.epa.gov/aqsweb/documents/codetables/aqi_breakpoints.html) for air quality index breakpoints and conversion standards.
+- Google Gemini used to refactor this card.
