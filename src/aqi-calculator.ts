@@ -102,12 +102,12 @@ export function normalizePollutantKey(raw: string): string | null {
     .trim()
     .replace(/[\s\-_.]/g, '');
 
-  if (s === 'pm25' || s === 'p2' || s === 'particulatematter25') return 'pm25';
-  if (s === 'pm10' || s === 'p1' || s === 'particulatematter10') return 'pm10';
-  if (s === 'co' || s === 'carbonmonoxide') return 'co';
-  if (s === 'no2' || s === 'n2' || s === 'nitrogendioxide') return 'no2';
-  if (s === 'so2' || s === 's2' || s === 'sulfurdioxide' || s === 'sulphurdioxide') return 'so2';
-  if (s === 'o3' || s === 'ozone') return 'o3';
+  if (s === 'pm25' || s === 'p2' || s === 'particulatematter25' || s === '0') return 'pm25';
+  if (s === 'pm10' || s === 'p1' || s === 'particulatematter10' || s === '1') return 'pm10';
+  if (s === 'o3' || s === 'ozone' || s === '2') return 'o3';
+  if (s === 'no2' || s === 'n2' || s === 'nitrogendioxide' || s === '3') return 'no2';
+  if (s === 'co' || s === 'carbonmonoxide' || s === '4') return 'co';
+  if (s === 'so2' || s === 's2' || s === 'sulfurdioxide' || s === 'sulphurdioxide' || s === '5') return 'so2';
 
   // Fallback checks for substring inclusion
   if (s.includes('pm25') || s.includes('pm2.5') || s.includes('particulate25')) return 'pm25';
