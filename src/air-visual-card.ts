@@ -27,7 +27,12 @@ import { getFaceSvg } from './icons/faces';
 import { getWeatherSvg, humiditySvg, windSvg } from './icons/weather';
 import { cardStyles } from './styles';
 import { actionHandler } from './action-handler-directive';
-import { calculatePollutantConcentration, calculateAQIFromConcentration } from './aqi-calculator';
+import {
+  calculatePollutantConcentration,
+  calculateAQIFromConcentration,
+  EPA_BREAKPOINTS,
+  normalizePollutantKey,
+} from './aqi-calculator';
 
 console.info(
   `%c  AIR-VISUAL-CARD  \n%c  Version ${CARD_VERSION}    `,
@@ -275,6 +280,24 @@ export class AirVisualCard extends LitElement {
           friendlyName.includes('sulphur dioxide')
         ) {
           pollutantName = 'Sulfur Dioxide';
+        }
+      }
+
+      // If unit of measurement is not defined on the sensor, look up unit in EPA_BREAKPOINTS
+      if (!pollutantUnit) {
+        const sensorIdentifier =
+          pollutantValueEntity.attributes?.friendly_name ||
+          this._config.main_pollutant_value ||
+          pollutantName;
+        const pollutantKey =
+          normalizePollutantKey(pollutantName) ||
+          normalizePollutantKey(sensorIdentifier) ||
+          normalizePollutantKey(this._config.main_pollutant_value || '');
+        if (pollutantKey && EPA_BREAKPOINTS[pollutantKey]) {
+          pollutantUnit = EPA_BREAKPOINTS[pollutantKey].unit;
+          if (!pollutantName) {
+            pollutantName = POLLUTANT_NAMES[pollutantKey] || pollutantKey.toUpperCase();
+          }
         }
       }
     }

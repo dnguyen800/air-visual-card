@@ -110,12 +110,24 @@ export function normalizePollutantKey(raw: string): string | null {
   if (s === 'so2' || s === 's2' || s === 'sulfurdioxide' || s === 'sulphurdioxide' || s === '5') return 'so2';
 
   // Fallback checks for substring inclusion
-  if (s.includes('pm25') || s.includes('pm2.5') || s.includes('particulate25')) return 'pm25';
-  if (s.includes('pm10') || s.includes('particulate10')) return 'pm10';
-  if (s.includes('carbonmonoxide')) return 'co';
-  if (s.includes('nitrogendioxide')) return 'no2';
-  if (s.includes('sulfurdioxide') || s.includes('sulphurdioxide')) return 'so2';
-  if (s.includes('ozone')) return 'o3';
+  if (
+    s.includes('pm25') ||
+    s.includes('pm2.5') ||
+    s.includes('pm2') ||
+    (s.includes('particulate') && (s.includes('25') || s.includes('2')))
+  ) {
+    return 'pm25';
+  }
+  if (
+    s.includes('pm10') ||
+    (s.includes('particulate') && s.includes('10'))
+  ) {
+    return 'pm10';
+  }
+  if (s.includes('carbonmonoxide') || s.includes('carbon_monoxide')) return 'co';
+  if (s.includes('nitrogendioxide') || s.includes('nitrogen_dioxide') || s.includes('no2')) return 'no2';
+  if (s.includes('sulfurdioxide') || s.includes('sulphurdioxide') || s.includes('so2')) return 'so2';
+  if (s.includes('ozone') || s.includes('o3')) return 'o3';
 
   return null;
 }
