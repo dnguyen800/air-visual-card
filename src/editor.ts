@@ -30,6 +30,8 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
     const weatherSelector =
       preset === 'openweathermap'
         ? { entity: { domain: 'weather', integration: 'openweathermap' } }
+        : preset === 'tomorrowio'
+        ? { entity: { domain: 'weather', integration: 'tomorrowio' } }
         : { entity: { domain: 'weather' } };
 
     return [
@@ -58,6 +60,8 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
               { label: 'OpenWeatherMap', value: 'openweathermap' },
               { label: 'AirVisual (IQAir)', value: 'airvisual' },
               { label: 'WAQI (World Air Quality Index)', value: 'waqi' },
+              { label: 'openSenseMap', value: 'opensensemap' },
+              { label: 'Tomorrow.io', value: 'tomorrowio' },
             ],
           },
         },
@@ -91,7 +95,7 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
         type: 'grid',
         name: '',
         schema: [
-          { name: 'city', selector: { text: {} } },
+          { name: 'title', selector: { text: {} } },
           { name: 'country', selector: { text: {} } },
         ],
       },
@@ -138,7 +142,7 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
       hide_apl: this._config.hide_apl ?? false,
       unit_of_measurement: this._config.unit_of_measurement || 'AQI',
       country: this._config.country || '',
-      city: this._config.city || '',
+      title: this._config.title ?? this._config.city ?? '',
     };
 
     return html`
@@ -162,11 +166,12 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
       main_pollutant: 'Main/Dominant Pollutant Sensor',
       main_pollutant_value: 'Main/Dominant Pollutant Value',
       weather: 'Weather Entity (Optional)',
-      city: 'City Name',
+      title: 'Title',
+      city: 'Title',
       country: 'Country / Standard Label',
       unit_of_measurement: 'AQI Unit (Default: AQI)',
       speed_unit: 'Wind Speed Unit Override',
-      hide_title: 'Hide City Title',
+      hide_title: 'Hide Title',
       hide_face: 'Hide Face Icon',
       hide_weather: 'Hide Weather Forecast Bar',
       hide_aqi: 'Hide AQI Value Badge',
@@ -180,10 +185,10 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
       layout: 'Choose between the classic original layout and the new modern layout',
       integration_preset:
         'Select an integration to automatically detect and pre-fill linked sensors from your Home Assistant setup',
-      air_quality_index: 'Required. This is a number that represents the AQI in your location',
+      air_quality_index: 'Optional. This is a number that represents the AQI in your location. If left blank, it will be calculated from the Main/Dominant Pollutant Value.',
       air_pollution_level: 'Optional. Description of the air quality based on the AQI value.',
       main_pollutant_value:
-        'Optional. If left blank, pollutant concentration is calculated from the AQI using EPA breakpoints.',
+        'Optional. Value/concentration of the dominant pollutant. If defined without an AQI sensor, the AQI is calculated from this value. If left blank, this value is calculated from the AQI using EPA breakpoints.',
     };
     return helpers[schema.name] || '';
   };
@@ -197,6 +202,9 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
     const selectedPreset = ev.detail.value.integration_preset;
 
     const newConfig = { ...this._config, ...ev.detail.value };
+    if (newConfig.title !== undefined && newConfig.city !== undefined) {
+      delete newConfig.city;
+    }
 
     // When changing between preset options, clear out previous sensor selector values
     if (selectedPreset && selectedPreset !== currentPreset) {
@@ -205,6 +213,7 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
       delete newConfig.main_pollutant;
       delete newConfig.main_pollutant_value;
       delete newConfig.weather;
+      delete newConfig.title;
       delete newConfig.city;
 
       if (selectedPreset !== 'manual') {
@@ -234,10 +243,13 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
     const platformEntities = allEntityIds.filter((id) => {
       const reg = entityRegistry?.[id];
       const attribution = String(states[id]?.attributes?.attribution || '').toLowerCase();
+      const entityPlatform = reg?.platform?.toLowerCase();
       return (
-        reg?.platform === preset ||
+        entityPlatform === preset ||
         id.toLowerCase().includes(preset) ||
-        attribution.includes(preset)
+        attribution.includes(preset) ||
+        (preset === 'opensensemap' && (id.toLowerCase().includes('sensebox') || attribution.includes('sensebox'))) ||
+        (preset === 'tomorrowio' && (id.toLowerCase().includes('tomorrow_io') || attribution.includes('tomorrow.io')))
       );
     });
 
@@ -301,7 +313,7 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
       }
 
       // 5. Default City Name (from location name in friendly name)
-      if (!config.city && aqiSensor) {
+      if (!config.title && !config.city && aqiSensor) {
         const friendly = states[aqiSensor]?.attributes?.friendly_name;
         if (friendly) {
           const cleanCity = friendly
@@ -310,7 +322,155 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
             .replace(/local\s*air\s*quality\s*index/gi, '')
             .replace(/air\s*quality\s*index/gi, '')
             .replace(/^[-_\s:]+|[-_\s:]+$/g, '');
-          if (cleanCity) config.city = cleanCity;
+          if (cleanCity) { config.title = cleanCity; delete config.city; }
+        }
+      }
+    } else if (preset === 'tomorrowio') {
+      // 1. Air Quality (AQI) Value -> 'US EPA air quality index' or closest equivalent
+      const aqiSensor =
+        platformEntities.find((id) => {
+          const state = states[id];
+          const friendly = String(state?.attributes?.friendly_name || '').toLowerCase();
+          const translationKey = String(entityRegistry?.[id]?.translation_key || '').toLowerCase();
+          return (
+            id.includes('us_epa_air_quality_index') ||
+            id.includes('epa_air_quality_index') ||
+            id.includes('epa_index') ||
+            translationKey === 'us_epa_air_quality_index' ||
+            translationKey === 'epa_index' ||
+            translationKey === 'epa_aqi' ||
+            friendly.includes('us epa air quality index') ||
+            friendly.includes('epa air quality index') ||
+            friendly.includes('epa air quality')
+          );
+        }) ||
+        platformEntities.find((id) => {
+          const state = states[id];
+          const friendly = String(state?.attributes?.friendly_name || '').toLowerCase();
+          return (
+            state?.attributes?.device_class === 'aqi' ||
+            id.includes('air_quality_index') ||
+            id.includes('air_quality') ||
+            id.includes('aqi') ||
+            friendly.includes('air quality index') ||
+            friendly.includes('aqi')
+          );
+        });
+      if (aqiSensor) {
+        config.air_quality_index = aqiSensor;
+      }
+
+      // 2. Air Pollution Level -> 'US EPA health concern' or closest equivalent
+      const aplSensor = platformEntities.find((id) => {
+        const state = states[id];
+        const friendly = String(state?.attributes?.friendly_name || '').toLowerCase();
+        const translationKey = String(entityRegistry?.[id]?.translation_key || '').toLowerCase();
+        return (
+          id.includes('us_epa_health_concern') ||
+          id.includes('epa_health_concern') ||
+          id.includes('health_concern') ||
+          translationKey.includes('health_concern') ||
+          friendly.includes('us epa health concern') ||
+          friendly.includes('epa health concern') ||
+          friendly.includes('health concern') ||
+          id.includes('air_pollution_level') ||
+          friendly.includes('air pollution level')
+        );
+      });
+      if (aplSensor) {
+        config.air_pollution_level = aplSensor;
+      } else {
+        delete config.air_pollution_level;
+      }
+
+      // 3. Main/Dominant Pollutant Sensor -> 'US EPA primary pollutant' or closest equivalent
+      const mpSensor =
+        platformEntities.find((id) => {
+          const state = states[id];
+          const friendly = String(state?.attributes?.friendly_name || '').toLowerCase();
+          const translationKey = String(entityRegistry?.[id]?.translation_key || '').toLowerCase();
+          return (
+            id.includes('us_epa_primary_pollutant') ||
+            id.includes('epa_primary_pollutant') ||
+            translationKey === 'us_epa_primary_pollutant' ||
+            translationKey === 'epa_primary_pollutant' ||
+            friendly.includes('us epa primary pollutant') ||
+            friendly.includes('epa primary pollutant') ||
+            friendly.includes('primary pollutant')
+          );
+        }) ||
+        platformEntities.find((id) => {
+          const state = states[id];
+          const friendly = String(state?.attributes?.friendly_name || '').toLowerCase();
+          return (
+            (id.includes('primary_pollutant') ||
+              id.includes('dominant_pollutant') ||
+              id.includes('main_pollutant') ||
+              friendly.includes('primary pollutant') ||
+              friendly.includes('dominant pollutant')) &&
+            !id.includes('value')
+          );
+        });
+      if (mpSensor) {
+        config.main_pollutant = mpSensor;
+      }
+
+      // 4. Main Pollutant Value -> PM2.5 sensor
+      const pm25Sensor = platformEntities.find((id) => {
+        const state = states[id];
+        const friendly = String(state?.attributes?.friendly_name || '').toLowerCase();
+        const translationKey = String(entityRegistry?.[id]?.translation_key || '').toLowerCase();
+        return (
+          state?.attributes?.device_class === 'pm25' ||
+          translationKey === 'particulate_matter_2_5' ||
+          translationKey === 'particulate_matter_25' ||
+          translationKey === 'pm25' ||
+          translationKey === 'pm2_5' ||
+          friendly.includes('pm2.5') ||
+          friendly.includes('pm 2.5') ||
+          friendly.includes('pm2_5') ||
+          friendly.includes('particulate matter 2.5') ||
+          id.includes('particulate_matter_2_5') ||
+          id.includes('particulate_matter_25') ||
+          id.includes('pm2_5') ||
+          id.includes('pm_2_5') ||
+          id.includes('pm25')
+        );
+      });
+      if (pm25Sensor) {
+        config.main_pollutant_value = pm25Sensor;
+      }
+
+      // 5. Weather Entity
+      const weatherEntity = allEntityIds.find((id) => {
+        if (!id.startsWith('weather.')) return false;
+        const reg = entityRegistry?.[id];
+        return (
+          reg?.platform === 'tomorrowio' ||
+          id.toLowerCase().includes('tomorrowio') ||
+          id.toLowerCase().includes('tomorrow_io') ||
+          String(states[id]?.attributes?.attribution || '').toLowerCase().includes('tomorrow.io')
+        );
+      });
+      if (weatherEntity) {
+        config.weather = weatherEntity;
+      }
+
+      // 6. Default City Name (from location name in friendly name if available)
+      if (!config.title && !config.city) {
+        const friendly =
+          (weatherEntity && states[weatherEntity]?.attributes?.friendly_name) ||
+          (aqiSensor && states[aqiSensor]?.attributes?.friendly_name);
+        if (friendly) {
+          const cleanCity = friendly
+            .replace(/tomorrow\.?io/gi, '')
+            .replace(/us\s*epa\s*air\s*quality\s*index/gi, '')
+            .replace(/air\s*quality\s*index/gi, '')
+            .replace(/daily/gi, '')
+            .replace(/hourly/gi, '')
+            .replace(/nowcast/gi, '')
+            .replace(/^[\-_\s:]+|[\-_\s:]+$/g, '');
+          if (cleanCity) { config.title = cleanCity; delete config.city; }
         }
       }
     } else if (preset === 'openweathermap') {
@@ -370,13 +530,13 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
       }
 
       // 4. Default City Name (if not set)
-      if (!config.city) {
+      if (!config.title && !config.city) {
         const friendly =
           (weatherEntity && states[weatherEntity]?.attributes?.friendly_name) ||
           (aqiSensor && states[aqiSensor]?.attributes?.friendly_name);
         if (friendly) {
           const cleanCity = friendly.replace(/open\s*weather\s*map/gi, '').replace(/^[-_\s]+|[-_\s]+$/g, '');
-          if (cleanCity) config.city = cleanCity;
+          if (cleanCity) { config.title = cleanCity; delete config.city; }
         }
       }
     } else if (preset === 'airvisual') {
@@ -391,9 +551,9 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
       const mpSensor = platformEntities.find((id) => id.includes('main_pollutant') && !id.includes('value'));
       if (mpSensor) config.main_pollutant = mpSensor;
 
-      if (!config.city && aqiSensor) {
+      if (!config.title && !config.city && aqiSensor) {
         const cityAttr = states[aqiSensor]?.attributes?.city;
-        if (cityAttr) config.city = String(cityAttr);
+        if (cityAttr) { config.title = String(cityAttr); delete config.city; }
       }
     } else if (preset === 'waqi') {
       const aqiSensor = platformEntities.find(
@@ -423,6 +583,48 @@ export class AirVisualCardEditor extends LitElement implements LovelaceCardEdito
         );
       });
       if (pm25Sensor) config.main_pollutant_value = pm25Sensor;
+    } else if (preset === 'opensensemap') {
+      delete config.air_quality_index;
+      delete config.air_pollution_level;
+      delete config.main_pollutant;
+
+      const pm25Sensor = platformEntities.find((id) => {
+        const state = states[id];
+        const friendly = String(state?.attributes?.friendly_name || '').toLowerCase();
+        const translationKey = entityRegistry?.[id]?.translation_key;
+        return (
+          state?.attributes?.device_class === 'pm25' ||
+          translationKey === 'pm25' ||
+          translationKey === 'pm2_5' ||
+          translationKey === 'particulate_matter_2_5' ||
+          friendly.includes('pm2.5') ||
+          friendly.includes('pm 2.5') ||
+          friendly.includes('pm2_5') ||
+          friendly.includes('particulate matter 2.5') ||
+          id.includes('particulate_matter_2_5') ||
+          id.includes('pm2_5') ||
+          id.includes('pm25') ||
+          id.includes('pm_2_5') ||
+          id.includes('pm2')
+        );
+      });
+      if (pm25Sensor) config.main_pollutant_value = pm25Sensor;
+
+      if (!config.title && !config.city && pm25Sensor) {
+        const friendly = states[pm25Sensor]?.attributes?.friendly_name;
+        if (friendly) {
+          const cleanCity = friendly
+            .replace(/opensensemap/gi, '')
+            .replace(/sensebox/gi, '')
+            .replace(/particulate\s*matter\s*2\.5/gi, '')
+            .replace(/particulate\s*matter/gi, '')
+            .replace(/pm\s*2\.5/gi, '')
+            .replace(/pm25/gi, '')
+            .replace(/pm2_5/gi, '')
+            .replace(/^[\-_\s:]+|[\-_\s:]+$/g, '');
+          if (cleanCity) { config.title = cleanCity; delete config.city; }
+        }
+      }
     }
   }
 

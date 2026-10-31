@@ -102,20 +102,32 @@ export function normalizePollutantKey(raw: string): string | null {
     .trim()
     .replace(/[\s\-_.]/g, '');
 
-  if (s === 'pm25' || s === 'p2' || s === 'particulatematter25') return 'pm25';
-  if (s === 'pm10' || s === 'p1' || s === 'particulatematter10') return 'pm10';
-  if (s === 'co' || s === 'carbonmonoxide') return 'co';
-  if (s === 'no2' || s === 'n2' || s === 'nitrogendioxide') return 'no2';
-  if (s === 'so2' || s === 's2' || s === 'sulfurdioxide' || s === 'sulphurdioxide') return 'so2';
-  if (s === 'o3' || s === 'ozone') return 'o3';
+  if (s === 'pm25' || s === 'p2' || s === 'particulatematter25' || s === '0') return 'pm25';
+  if (s === 'pm10' || s === 'p1' || s === 'particulatematter10' || s === '1') return 'pm10';
+  if (s === 'o3' || s === 'ozone' || s === '2') return 'o3';
+  if (s === 'no2' || s === 'n2' || s === 'nitrogendioxide' || s === '3') return 'no2';
+  if (s === 'co' || s === 'carbonmonoxide' || s === '4') return 'co';
+  if (s === 'so2' || s === 's2' || s === 'sulfurdioxide' || s === 'sulphurdioxide' || s === '5') return 'so2';
 
   // Fallback checks for substring inclusion
-  if (s.includes('pm25') || s.includes('pm2.5') || s.includes('particulate25')) return 'pm25';
-  if (s.includes('pm10') || s.includes('particulate10')) return 'pm10';
-  if (s.includes('carbonmonoxide')) return 'co';
-  if (s.includes('nitrogendioxide')) return 'no2';
-  if (s.includes('sulfurdioxide') || s.includes('sulphurdioxide')) return 'so2';
-  if (s.includes('ozone')) return 'o3';
+  if (
+    s.includes('pm25') ||
+    s.includes('pm2.5') ||
+    s.includes('pm2') ||
+    (s.includes('particulate') && (s.includes('25') || s.includes('2')))
+  ) {
+    return 'pm25';
+  }
+  if (
+    s.includes('pm10') ||
+    (s.includes('particulate') && s.includes('10'))
+  ) {
+    return 'pm10';
+  }
+  if (s.includes('carbonmonoxide') || s.includes('carbon_monoxide')) return 'co';
+  if (s.includes('nitrogendioxide') || s.includes('nitrogen_dioxide') || s.includes('no2')) return 'no2';
+  if (s.includes('sulfurdioxide') || s.includes('sulphurdioxide') || s.includes('so2')) return 'so2';
+  if (s.includes('ozone') || s.includes('o3')) return 'o3';
 
   return null;
 }
@@ -185,5 +197,57 @@ export function calculatePollutantConcentration(
 
   const value = decimals > 0 ? cp.toFixed(decimals) : Math.round(cp).toString();
   return { value, unit };
+}
+
+/**
+ * Calculates AQI index value from a pollutant concentration using EPA linear interpolation:
+ * I = ((I_Hi - I_Lo) / (BP_Hi - BP_Lo)) * (Cp - BP_Lo) + I_Lo
+ *
+ * @param pollutant Pollutant identifier, symbol, or name (e.g. 'PM2.5', 'pm25', 'Ozone', 'co')
+ * @param concentration Numeric pollutant concentration
+ * @param inputUnit Optional unit of the input concentration (e.g. 'ppb' vs 'ppm')
+ */
+export function calculateAQIFromConcentration(
+  pollutant: string,
+  concentration: number,
+  inputUnit?: string,
+): number | null {
+  const key = normalizePollutantKey(pollutant);
+  if (!key || !EPA_BREAKPOINTS[key]) return null;
+  if (isNaN(concentration) || concentration < 0) return null;
+
+  const config = EPA_BREAKPOINTS[key];
+  let cp = concentration;
+
+  // Handle unit conversions
+  const cleanUnit = inputUnit?.toLowerCase().trim();
+  if (cleanUnit) {
+    if (key === 'o3') {
+      if (cleanUnit === 'ppb') cp = cp / 1000;
+    } else if (key === 'co') {
+      if (cleanUnit === 'ppb') cp = cp / 1000;
+    } else if (key === 'no2' || key === 'so2') {
+      if (cleanUnit === 'ppm') cp = cp * 1000;
+    }
+  }
+
+  // EPA truncation rules before finding breakpoints
+  if (config.decimals === 0) {
+    cp = Math.floor(cp);
+  } else if (config.decimals === 1) {
+    cp = Math.floor(cp * 10) / 10;
+  } else if (config.decimals === 3) {
+    cp = Math.floor(cp * 1000) / 1000;
+  }
+
+  const { breakpoints } = config;
+  const bp =
+    breakpoints.find((b) => cp <= b.bpHigh) ||
+    breakpoints[breakpoints.length - 1];
+
+  const { aqiLow, aqiHigh, bpLow, bpHigh } = bp;
+  const aqi = ((aqiHigh - aqiLow) / (bpHigh - bpLow)) * (cp - bpLow) + aqiLow;
+
+  return Math.round(aqi);
 }
 

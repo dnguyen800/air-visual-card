@@ -14,7 +14,7 @@ interface HassWithFormat extends HomeAssistant {
   formatEntityState?: (stateObj: HassEntity) => string;
 }
 
-import { AirVisualCardConfig, AQILevel } from './types';
+import { AirVisualCardConfig, AQILevel, HassWithEntities } from './types';
 import {
   CARD_VERSION,
   AQI_LEVEL_DATA,
@@ -27,7 +27,12 @@ import { getFaceSvg } from './icons/faces';
 import { getWeatherSvg, humiditySvg, windSvg } from './icons/weather';
 import { cardStyles } from './styles';
 import { actionHandler } from './action-handler-directive';
-import { calculatePollutantConcentration } from './aqi-calculator';
+import {
+  calculatePollutantConcentration,
+  calculateAQIFromConcentration,
+  EPA_BREAKPOINTS,
+  normalizePollutantKey,
+} from './aqi-calculator';
 
 console.info(
   `%c  AIR-VISUAL-CARD  \n%c  Version ${CARD_VERSION}    `,
@@ -64,7 +69,7 @@ export class AirVisualCard extends LitElement {
       air_quality_index: 'sensor.u_s_air_quality_index',
       air_pollution_level: 'sensor.u_s_air_pollution_level',
       main_pollutant: 'sensor.u_s_main_pollutant',
-      city: 'San Francisco',
+      title: 'San Francisco',
       country: 'US',
       unit_of_measurement: 'AQI',
       layout: 'modern',
@@ -79,8 +84,8 @@ export class AirVisualCard extends LitElement {
       throw new Error('Invalid configuration');
     }
 
-    if (!config.air_quality_index && !config.air_pollution_level) {
-      throw new Error('Please define at least one air quality sensor entity (air_quality_index or air_pollution_level).');
+    if (!config.air_quality_index && !config.air_pollution_level && !config.main_pollutant_value) {
+      throw new Error('Please define at least one air quality or pollutant sensor entity (air_quality_index, air_pollution_level, or main_pollutant_value).');
     }
 
     this._config = {
@@ -184,40 +189,6 @@ export class AirVisualCard extends LitElement {
       ? this.hass.states[this._config.weather]
       : undefined;
 
-    // Resolve AQI Value & Level
-    let aqiNum = NaN;
-    if (aqiEntity) {
-      aqiNum = parseInt(aqiEntity.state, 10);
-    } else if (aplEntity) {
-      const parsed = parseInt(aplEntity.state, 10);
-      if (!isNaN(parsed)) aqiNum = parsed;
-    }
-
-    const validAQI = !isNaN(aqiNum);
-    let aqiLevel: AQILevel = validAQI ? getAQILevel(aqiNum) : 1;
-    if (!validAQI && aplEntity && STATE_TO_AQI_LEVEL[aplEntity.state.toLowerCase()]) {
-      aqiLevel = STATE_TO_AQI_LEVEL[aplEntity.state.toLowerCase()];
-    }
-    const aqiInfo = AQI_LEVEL_DATA[aqiLevel];
-
-    // Resolve APL label
-    let aplText = aqiInfo.label;
-    if (aplEntity && isNaN(parseInt(aplEntity.state, 10))) {
-      // Try Home Assistant native formatEntityState, then clean fallback
-      const formatted = (this.hass as HassWithFormat).formatEntityState?.(aplEntity);
-      if (formatted) {
-        aplText = formatted;
-      } else {
-        aplText = aplEntity.state
-          .replace(/_/g, ' ')
-          .replace(/\b\w/g, (char) => char.toUpperCase());
-      }
-    }
-
-    // Resolve APL label size based on string length (e.g. "Unhealthy for sensitive groups")
-    const aplLength = aplText ? aplText.trim().length : 0;
-    const aplSizeClass = aplLength > 20 ? 'long-text' : aplLength > 12 ? 'medium-text' : '';
-
     // Resolve Main Pollutant & Unit
     let pollutantName = '';
     let pollutantUnit = '';
@@ -244,9 +215,17 @@ export class AirVisualCard extends LitElement {
         const deviceClass = pollutantValueEntity.attributes?.device_class;
         const entityId = (this._config.main_pollutant_value || '').toLowerCase();
         const friendlyName = String(pollutantValueEntity.attributes?.friendly_name || '').toLowerCase();
+        const translationKey = String(
+          (this.hass as HassWithEntities)?.entities?.[this._config.main_pollutant_value || '']?.translation_key || ''
+        ).toLowerCase();
+
         if (
           deviceClass === 'pm25' ||
+          translationKey === 'pm25' ||
+          translationKey === 'pm2_5' ||
+          translationKey === 'particulate_matter_2_5' ||
           entityId.includes('pm2_5') ||
+          entityId.includes('pm_2_5') ||
           entityId.includes('pm25') ||
           friendlyName.includes('pm2.5') ||
           friendlyName.includes('pm 2.5') ||
@@ -254,19 +233,128 @@ export class AirVisualCard extends LitElement {
           friendlyName.includes('particulate matter 2.5')
         ) {
           pollutantName = 'PM2.5';
-        } else if (deviceClass === 'pm10' || entityId.includes('pm10') || friendlyName.includes('pm10')) {
+        } else if (
+          deviceClass === 'pm10' ||
+          translationKey === 'pm10' ||
+          entityId.includes('pm10') ||
+          friendlyName.includes('pm10')
+        ) {
           pollutantName = 'PM10';
-        } else if (deviceClass === 'o3' || entityId.includes('ozone') || friendlyName.includes('ozone')) {
+        } else if (
+          deviceClass === 'o3' ||
+          translationKey === 'ozone' ||
+          translationKey === 'o3' ||
+          entityId.includes('ozone') ||
+          entityId.includes('o3') ||
+          friendlyName.includes('ozone') ||
+          friendlyName.includes('o3')
+        ) {
           pollutantName = 'Ozone';
-        } else if (deviceClass === 'co' || entityId.includes('carbon_monoxide')) {
+        } else if (
+          deviceClass === 'co' ||
+          translationKey === 'carbon_monoxide' ||
+          translationKey === 'co' ||
+          entityId.includes('carbon_monoxide') ||
+          entityId.includes('_co') ||
+          friendlyName.includes('carbon monoxide')
+        ) {
           pollutantName = 'Carbon Monoxide';
-        } else if (deviceClass === 'no2' || entityId.includes('nitrogen_dioxide')) {
+        } else if (
+          deviceClass === 'no2' ||
+          translationKey === 'nitrogen_dioxide' ||
+          translationKey === 'no2' ||
+          entityId.includes('nitrogen_dioxide') ||
+          entityId.includes('_no2') ||
+          friendlyName.includes('nitrogen dioxide')
+        ) {
           pollutantName = 'Nitrogen Dioxide';
-        } else if (deviceClass === 'so2' || entityId.includes('sulphur_dioxide') || entityId.includes('sulfur_dioxide')) {
+        } else if (
+          deviceClass === 'so2' ||
+          translationKey === 'sulfur_dioxide' ||
+          translationKey === 'sulphur_dioxide' ||
+          translationKey === 'so2' ||
+          entityId.includes('sulphur_dioxide') ||
+          entityId.includes('sulfur_dioxide') ||
+          entityId.includes('_so2') ||
+          friendlyName.includes('sulfur dioxide') ||
+          friendlyName.includes('sulphur dioxide')
+        ) {
           pollutantName = 'Sulfur Dioxide';
         }
       }
+
+      // If unit of measurement is not defined on the sensor, look up unit in EPA_BREAKPOINTS
+      if (!pollutantUnit) {
+        const sensorIdentifier =
+          pollutantValueEntity.attributes?.friendly_name ||
+          this._config.main_pollutant_value ||
+          pollutantName;
+        const pollutantKey =
+          normalizePollutantKey(pollutantName) ||
+          normalizePollutantKey(sensorIdentifier) ||
+          normalizePollutantKey(this._config.main_pollutant_value || '');
+        if (pollutantKey && EPA_BREAKPOINTS[pollutantKey]) {
+          pollutantUnit = EPA_BREAKPOINTS[pollutantKey].unit;
+          if (!pollutantName) {
+            pollutantName = POLLUTANT_NAMES[pollutantKey] || pollutantKey.toUpperCase();
+          }
+        }
+      }
     }
+
+    // Resolve AQI Value & Level
+    let aqiNum = NaN;
+    if (aqiEntity) {
+      aqiNum = parseInt(aqiEntity.state, 10);
+    } else if (aplEntity) {
+      const parsed = parseInt(aplEntity.state, 10);
+      if (!isNaN(parsed)) aqiNum = parsed;
+    }
+
+    // If AQI value is not defined, calculate AQI from Main/Dominant Pollutant Value
+    if (
+      isNaN(aqiNum) &&
+      pollutantValue &&
+      pollutantValue !== 'unknown' &&
+      pollutantValue !== 'unavailable'
+    ) {
+      const concNum = parseFloat(pollutantValue);
+      if (!isNaN(concNum)) {
+        const calcTarget =
+          pollutantEntity?.attributes?.pollutant_symbol ||
+          pollutantEntity?.state ||
+          pollutantName;
+        const calcAQI = calculateAQIFromConcentration(calcTarget, concNum, pollutantUnit);
+        if (calcAQI !== null) {
+          aqiNum = calcAQI;
+        }
+      }
+    }
+
+    const validAQI = !isNaN(aqiNum);
+    let aqiLevel: AQILevel = validAQI ? getAQILevel(aqiNum) : 1;
+    if (!validAQI && aplEntity && STATE_TO_AQI_LEVEL[aplEntity.state.toLowerCase()]) {
+      aqiLevel = STATE_TO_AQI_LEVEL[aplEntity.state.toLowerCase()];
+    }
+    const aqiInfo = AQI_LEVEL_DATA[aqiLevel];
+
+    // Resolve APL label
+    let aplText = aqiInfo.label;
+    if (aplEntity && isNaN(parseInt(aplEntity.state, 10))) {
+      // Try Home Assistant native formatEntityState, then clean fallback
+      const formatted = (this.hass as HassWithFormat).formatEntityState?.(aplEntity);
+      if (formatted) {
+        aplText = formatted;
+      } else {
+        aplText = aplEntity.state
+          .replace(/_/g, ' ')
+          .replace(/\b\w/g, (char) => char.toUpperCase());
+      }
+    }
+
+    // Resolve APL label size based on string length (e.g. "Unhealthy for sensitive groups")
+    const aplLength = aplText ? aplText.trim().length : 0;
+    const aplSizeClass = aplLength > 20 ? 'long-text' : aplLength > 12 ? 'medium-text' : '';
 
     // Calculate pollutant concentration from AQI if pollutant sensor is selected but value is empty
     const isPollutantValueEmpty =
@@ -297,9 +385,9 @@ export class AirVisualCard extends LitElement {
       pollutantDetails = formattedUnit;
     }
 
-    const cityName = this._config.city || '';
+    const cardTitle = this._config.title ?? this._config.city ?? '';
     const unit = this._config.unit_of_measurement || 'AQI';
-    const hideTitle = Boolean(this._config.hide_title || !cityName);
+    const hideTitle = Boolean(this._config.hide_title || !cardTitle);
     const hideFace = Boolean(this._config.hide_face);
     const hideAQI = Boolean(this._config.hide_aqi);
     const hideAPL = Boolean(this._config.hide_apl);
@@ -341,10 +429,6 @@ export class AirVisualCard extends LitElement {
       if (hideAQI && !hideFace) modernTopClasses.push('no-aqi');
       if (hideFace && hideAQI) modernTopClasses.push('only-status');
 
-      const modernHeader = cityName
-        ? `${cityName} air quality index (${unit})`
-        : `Air quality index (${unit})`;
-
       return html`
         <ha-card
           .actionHandler=${actionHandler({
@@ -355,7 +439,7 @@ export class AirVisualCard extends LitElement {
         >
           <div class="card-container modern-layout ${hideTitle ? 'no-title' : ''}">
             ${!hideTitle
-              ? html`<div class="modern-header">${modernHeader}</div>`
+              ? html`<div class="modern-header">${cardTitle}</div>`
               : html``}
 
             <div
@@ -371,7 +455,7 @@ export class AirVisualCard extends LitElement {
                     ? html`
                         <div
                           class="modern-aqi-badge"
-                          @click=${() => this._openMoreInfo(this._config.air_quality_index)}
+                          @click=${() => this._openMoreInfo(this._config.air_quality_index || this._config.main_pollutant_value)}
                           title="AQI: ${validAQI ? aqiNum : 'N/A'}"
                         >
                           <div class="modern-aqi-val">${validAQI ? aqiNum : '—'}</div>
@@ -405,7 +489,7 @@ export class AirVisualCard extends LitElement {
                           class="modern-face-section"
                           @click=${() =>
                             this._openMoreInfo(
-                              this._config.air_quality_index || this._config.air_pollution_level
+                              this._config.air_quality_index || this._config.air_pollution_level || this._config.main_pollutant_value
                             )}
                           title="Air Quality: ${aqiInfo.label}"
                         >
@@ -486,7 +570,7 @@ export class AirVisualCard extends LitElement {
       >
         <div class="card-container">
           ${!hideTitle
-            ? html`<div class="header">${cityName} Air Quality Index</div>`
+            ? html`<div class="header">${cardTitle}</div>`
             : html``}
 
           <div
@@ -509,7 +593,7 @@ export class AirVisualCard extends LitElement {
               ? html`
                   <div
                     class="aqi-section"
-                    @click=${() => this._openMoreInfo(this._config.air_quality_index)}
+                    @click=${() => this._openMoreInfo(this._config.air_quality_index || this._config.main_pollutant_value)}
                     title="AQI: ${validAQI ? aqiNum : 'N/A'}"
                   >
                     <div class="aqi-value">${validAQI ? aqiNum : '—'}</div>

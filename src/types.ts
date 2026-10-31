@@ -1,4 +1,8 @@
-import { ActionConfig, LovelaceCardConfig } from 'custom-card-helpers';
+import { ActionConfig, LovelaceCardConfig, HomeAssistant } from 'custom-card-helpers';
+
+export interface HassWithEntities extends HomeAssistant {
+  entities?: Record<string, { platform?: string; device_id?: string; translation_key?: string }>;
+}
 
 export interface AirVisualCardConfig extends LovelaceCardConfig {
   type: string;
@@ -10,8 +14,9 @@ export interface AirVisualCardConfig extends LovelaceCardConfig {
   main_pollutant?: string;
   main_pollutant_value?: string;
   weather?: string;
-  country?: string;
+  title?: string;
   city?: string;
+  country?: string;
   unit_of_measurement?: string;
   speed_unit?: string;
   icons?: string;
